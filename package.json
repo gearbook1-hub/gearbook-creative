@@ -12,7 +12,8 @@
     "render": "node scripts/render-piece.mjs",
     "render:check": "node scripts/render-check.mjs",
     "scout": "node scripts/scout.mjs",
-    "transcribe": "python scripts/transcribe.py"
+    "transcribe": "node scripts/transcribe.mjs",
+    "setup:check": "node scripts/setup-check.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.135.0",
@@ -28,5 +29,8 @@
     "pngjs": "^7.0.0",
     "puppeteer-core": "^25.14.0",
     "typescript": "^5.9.0"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

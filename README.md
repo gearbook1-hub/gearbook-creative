@@ -68,7 +68,7 @@ data/
 lib/                     types, data helpers, brand tokens, Pulse decisions (localStorage)
 public/pieces/           the motion pieces: runtime.js, pieces.css (house style), topo.svg,
                          M18-click-trail/ (built here, three looks), M25-signup-explainer/ (preview of the real reel)
-scripts/                 transcribe.py, scout.mjs, motion.mjs (recorder), render-stills / render-piece /
+scripts/                 setup-check, transcribe, scout, motion.mjs (recorder), render-stills / render-piece /
                          render-check, apply-decisions
 .claude/skills/          one skill per mod, with its full prompt
 inbox/                   videos/ and transcripts/ (git-ignored), inspo/
@@ -76,13 +76,42 @@ docs/VIDEO_SPEC.md       what the source video shows, panel by panel
 screenshots/             the hub, for reference
 ```
 
-## Run it
+## Set up on a new machine
 
-Needs Node 20 or newer, and Edge or Chrome for recording pieces. Python with `openai-whisper` and ffmpeg are only needed for transcription and MP4 renders.
+Works on Windows, macOS and Linux. Needs Node 20+, git, and Edge or Chrome (for stills, renders and the render check). ffmpeg is needed for MP4 renders; Python 3 with `openai-whisper` only for transcribing reels.
 
 ```bash
-npm install
+git clone https://github.com/gearbook1-hub/gearbook-creative.git
 ```
+
+```bash
+cd gearbook-creative && npm install
+```
+
+```bash
+npm run setup:check
+```
+
+`setup:check` lists what this machine has and gives the install command for anything missing (winget on Windows, Homebrew on a Mac). It never installs anything itself.
+
+To push, sign in to GitHub as `gearbook1-hub` (or an account with write access) once:
+
+```bash
+gh auth login
+```
+
+```bash
+gh auth setup-git
+```
+
+Optional: copy `.env.example` to `.env.local` and add `ANTHROPIC_API_KEY` so `npm run scout` pitches for real.
+
+What isn't in the repo, on purpose:
+- **The source reel's research** (video, frames, full transcript). It stays private. To redo it: `yt-dlp --write-info-json --write-description https://www.instagram.com/reel/DeaJeKGKBHi/`, then Whisper and ffmpeg as in docs/VIDEO_SPEC.md. The spec itself is in the repo.
+- **M25's full-quality master** is in the GearBook Google Drive (Marketing/Reels/Signup Reel). The repo has a small preview.
+- **Raw reels and renders** (`inbox/videos/`, `renders/`) are git-ignored. Keep masters in Drive.
+
+## Run it
 
 ```bash
 npm run dev
@@ -100,7 +129,7 @@ This writes the static site to `out/`.
 npm run render:check
 ```
 
-This records frames from every look and checks them. `npm run render` records the MP4s (needs ffmpeg). To work on a piece, open `http://localhost:3000/pieces/M18-click-trail/?look=ledger` while `npm run dev` runs.
+This records frames from every look and checks them. `npm run render` records the MP4s (needs ffmpeg). To work on a piece, open `http://localhost:3000/pieces/M18-click-trail/index.html?look=ledger` while `npm run dev` runs.
 
 ## Connecting real data
 

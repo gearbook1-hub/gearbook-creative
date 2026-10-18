@@ -11,13 +11,15 @@ import puppeteer from "puppeteer-core";
 const ROOT = path.resolve("public");
 const TYPES = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".svg": "image/svg+xml", ".png": "image/png", ".mp4": "video/mp4", ".json": "application/json" };
 
-const BROWSERS = [
+export const BROWSERS = [
   process.env.BROWSER_PATH,
   "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
   "C:/Program Files/Google/Chrome/Application/chrome.exe",
   "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+  "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
   "/usr/bin/google-chrome",
   "/usr/bin/chromium",
+  "/usr/bin/chromium-browser",
 ].filter(Boolean);
 
 function serve() {
