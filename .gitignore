@@ -1,0 +1,18 @@
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+.env
+.env.local
+.env.*.local
+# Raw research, video, frames and transcripts never get committed
+_research/
+inbox/videos/*
+!inbox/videos/.gitkeep
+inbox/transcripts/*.json
+!inbox/transcripts/sample-*.json
+renders/
+stills/out/
+screenshots/raw/
+.DS_Store

@@ -1,0 +1,36 @@
+{
+  "name": "gearbook-creative",
+  "version": "0.1.0",
+  "private": true,
+  "description": "GearBook's creative mods: a Claude-run motion library that reads every reel, pitches what's missing, and builds only what Luke approves.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "tsc --noEmit",
+    "studio": "remotion studio remotion/index.ts",
+    "stills": "node scripts/render-stills.mjs",
+    "render": "node scripts/render-piece.mjs",
+    "render:check": "node scripts/render-check.mjs",
+    "scout": "node scripts/scout.mjs",
+    "transcribe": "python scripts/transcribe.py"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.135.0",
+    "@remotion/player": "4.0.536",
+    "next": "^16.4.2",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "remotion": "4.0.536",
+    "zod": "4.5.4"
+  },
+  "devDependencies": {
+    "@remotion/cli": "4.0.536",
+    "@remotion/renderer": "4.0.536",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "pngjs": "^7.0.0",
+    "typescript": "^5.9.0"
+  }
+}
