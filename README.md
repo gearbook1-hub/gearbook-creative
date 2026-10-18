@@ -114,7 +114,7 @@ Nothing needs keys to run; the hub shows the sample data in `data/`. Copy `.env.
 
 The repo is public, and every push to `main` deploys the static site to GitHub Pages (`.github/workflows/pages.yml`) at https://gearbook1-hub.github.io/gearbook-creative/. Everything on it is sample data or GearBook's own published marketing.
 
-Roca loads from Matt's Adobe Fonts web project `aac5uoe`. If headings ever show in a plain serif (Newsreader), add the site's domain to the project (steps in docs/ADOBE_FONTS.md).
+Roca loads from Matt's Adobe Fonts web project `aac5uoe`; checked on the live site 2026-10-18, no Adobe changes needed. If headings ever show in a plain serif (Newsreader), add the site's domain to the project (steps in docs/ADOBE_FONTS.md).
 
 ## Notes
 
