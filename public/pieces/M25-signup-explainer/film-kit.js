@@ -1,6 +1,8 @@
 // Plays M25, the signup reel, live. The reel was made as a Motion artifact on Matt's Claude
 // account ("GearBook Signup Reel"); film/ holds its own scenes, shared code, styles and images,
-// copied unchanged from that artifact. This file is a small stand-in for the artifact's player:
+// copied from that artifact. One change since: the phone's app bar and the share card use the
+// official one-colour logo (assets/logo-mono-*.svg, from the GearBook logo pack) instead of the
+// full-colour one, which stays on the backpack patch and the end card. This file is a small stand-in for the artifact's player:
 // it gives the scenes the few kit helpers they use and drives them from one clock, with the
 // same contract as public/pieces/runtime.js, so the hub, stills and `npm run render` treat it
 // like every other piece:
@@ -103,7 +105,7 @@
 
     const spec = JSON.parse(await fetchText("modules/scenes.json"));
     assetNames = new Set(["gear-belay.webp", "gear-binos.webp", "gear-camera.webp", "gear-duffel.webp", "gear-goggles.webp",
-      "gear-jacket.webp", "gear-rope.webp", "gear-shoes.webp", "share-logo-cutout.png", "share-photo.webp",
+      "gear-jacket.webp", "gear-rope.webp", "gear-shoes.webp", "share-logo-cutout.png", "logo-mono-bark.svg", "logo-mono-cream.svg", "share-photo.webp",
       ...Array.from({ length: 10 }, (_, i) => "pro-" + String(i + 1).padStart(2, "0") + ".webp")]);
     stage.style.background = spec.background;
 

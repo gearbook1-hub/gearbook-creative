@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { ContentIdea, FormatKey } from "@/lib/types";
+import { Mark } from "./Site";
 
 // The content idea bank, filterable by format. "Make this week" keeps a shortlist in this
 // browser only; when one is made, move it to Posted in the gearbook repo's content-idea-bank.md.
@@ -55,7 +56,7 @@ export function IdeaBank({ ideas, formats }: { ideas: ContentIdea[]; formats: { 
             </details>
             <div className="card-foot">
               <button className="star" aria-pressed={short.includes(i.id)} onClick={() => toggle(i.id)}>
-                {short.includes(i.id) ? "On this week's list" : "Make this week"}
+                <Mark kind="bookmark" /> {short.includes(i.id) ? "On this week's list" : "Make this week"}
               </button>
             </div>
           </article>

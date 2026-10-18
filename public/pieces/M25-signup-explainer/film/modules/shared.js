@@ -109,7 +109,7 @@ window.GB = (function () {
     },
     phone(inner) {
       return '<div class="phone"><div class="screen"><div class="notch"></div><div class="appbar"><span class="appbar-time">9:41</span>' +
-        '<img class="appbar-logo" alt="GearBook" src="' + kit.assets.url('share-logo-cutout.png') + '"><i class="appbar-menu"></i></div>' + inner + '</div></div>';
+        '<img class="appbar-logo" alt="GearBook" src="' + kit.assets.url('logo-mono-bark.svg') + '"><i class="appbar-menu"></i></div>' + inner + '</div></div>';
     },
     ripple(st, t, t0) {
       const p = kit.seg(t, t0, t0 + 0.5);
@@ -130,7 +130,7 @@ window.GB = (function () {
       return '<div class="gb-link me ' + cls + '" style="top:' + top + 'px"><div class="gb-link-img">' +
         '<img alt="" src="' + kit.assets.url('share-photo.webp') + '" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover">' +
         '<i class="gb-link-shade"></i><i class="gb-link-bar"><b style="flex:1;background:#34668a"></b><b style="width:52px;background:var(--main)"></b><b style="width:28px;background:var(--accent)"></b></i>' +
-        '<img alt="GearBook" src="' + kit.assets.url('share-logo-cutout.png') + '" style="position:absolute;left:86px;top:10px;width:64px">' +
+        '<img alt="GearBook" src="' + kit.assets.url('logo-mono-cream.svg') + '" style="position:absolute;left:86px;top:10px;width:64px">' +
         '<div class="gb-link-who"><b>Alex Rivera</b><span>My #1 pick</span><em>Sony Alpha a7R VI</em></div></div>' +
         '<div class="gb-link-meta"><p>Alex Rivera&#39;s Gear Picks: Real Recommendations | GearBook</p><span>gearbook.shop</span></div></div>';
     },

@@ -2,6 +2,20 @@ import Link from "next/link";
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
+/** An official one-colour logo from public/brand (the GearBook logo pack), drawn in the text colour. */
+export function Mark({ kind, label, className }: { kind: "full-length-bw" | "bookmark" | "lockup-bw"; label?: string; className?: string }) {
+  const url = `url("${BASE}/brand/gearbook-${kind}.svg")`;
+  return (
+    <span
+      className={`mark mark-${kind}${className ? ` ${className}` : ""}`}
+      role={label ? "img" : undefined}
+      aria-label={label}
+      aria-hidden={label ? undefined : true}
+      style={{ WebkitMaskImage: url, maskImage: url }}
+    />
+  );
+}
+
 export const PAGES = [
   { name: "Overview", href: "/" },
   { name: "Idea bank", href: "/ideas" },
@@ -17,8 +31,7 @@ export function TopBar({ current }: { current: PageHref }) {
     <header className="topbar">
       <div className="wrap topbar-in">
         <Link className="brand" href="/">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={`${BASE}/brand/gearbook-logo.svg`} alt="GearBook" />
+          <Mark kind="full-length-bw" label="GearBook" className="brand-mark" />
           <span>Creative</span>
         </Link>
         <nav aria-label="Pages">
@@ -68,7 +81,7 @@ export function Footer() {
   return (
     <footer className="footer">
       <div className="wrap">
-        <span>GearBook Creative · for Luke and Matt</span>
+        <span className="footer-brand"><Mark kind="bookmark" /> GearBook Creative · for Luke and Matt</span>
         <span>Social ideas from the gearbook repo&apos;s docs/marketing · anything marked sample is example data</span>
       </div>
     </footer>
