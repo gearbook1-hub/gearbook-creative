@@ -1,0 +1,117 @@
+# GearBook Creative
+
+GearBook's creative hub: a dashboard plus a set of Claude Code mods. Claude reads every reel Luke records, compares each moment against the library of motion graphics GearBook already has, pitches only what's missing, and builds nothing until Luke has approved it and picked a look.
+
+Internal, for Luke and Matt. Everything marked `sample` is example data until real reels go through it.
+
+## How it maps to the video
+
+It's rebuilt from Josh Blatchford's reel "How the motion mod thinks" (Instagram, 2026-10-12). The full panel-by-panel spec is in [docs/VIDEO_SPEC.md](docs/VIDEO_SPEC.md). His wellness brand (Attuned) and its motion graphics are swapped for GearBook's content and brand.
+
+| In the video | Here |
+|---|---|
+| "Claude Code Mods · Full Breakdown" tabs 01, 04, 07, 10, 11, 12, 13 | The same seven tabs, one page each: `/tokens`, `/pulse`, `/library`, `/video-breakdown`, `/` (11 Motion Breakdown), `/video-inbox`, `/find-your-mods` |
+| "How the motion mod *thinks*" plus 4 stats | `/`, with stats computed from `data/` |
+| 01 Where ideas come from (videos, inspo, asks) | `data/sources.json` (`kind`: video, inspo, request) |
+| 02 What it already has (M01 to M24 tiles) | `data/pieces.json`, the catalog every pitch is checked against |
+| 03 It reads every transcript, then FLAGGED | Whisper transcript, then the catalog check (`catalogCheck`, `whyNew`) |
+| 04 The idea log | `data/ideas.json` |
+| 05 Approve or pass | Pitch cards with Approve, Pass and Add a note (also on `/pulse`) |
+| 06 Stills before motion | 3 looks per idea. For M18 they're real frames from the engine |
+| 07 Built in code | `remotion/ClickTrail.tsx`, one engine with variables |
+| 08 It checks its own render | `npm run render:check` (blank frame, safe area, button rail) |
+| 09 Three looks, one engine | The three looks playing live in the browser (`@remotion/player`) |
+| 10 Open the gallery | `/library`: the reel, palette, motion voice and every piece |
+| 11 The loop | Same nine steps, with the same two human gates |
+| 12 Any library | `/find-your-mods`: decks, emails, ads, proposals |
+
+Colours are GearBook's: the dark appearance from the iOS app (page `#17140D`, surface `#241F15`), with cream text and amber where the video uses lemon. Sage stands in for the video's green and slate for its blue. Headings are Roca from Matt's Adobe kit.
+
+## The loop
+
+```
+Video, inspo or a request -> Check the catalog -> Log the idea -> [Approve or pass] -> 3 stills -> [Pick one]
+  -> Build in code -> Check the render -> Into the library
+```
+
+| Step | Mod (skill in `.claude/skills/`) | Command |
+|---|---|---|
+| A reel comes in | `video-inbox` (12) | `npm run transcribe` |
+| Read it, check the catalog, log and pitch | `motion-scout` (11) | `npm run scout -- S01` |
+| Approve or pass | `pulse` (04) | `/pulse`, then `node scripts/apply-decisions.mjs decisions.json` |
+| 3 stills, pick one | `motion-stills` | `npm run stills` |
+| Build in code | `motion-build` | `npm run studio` |
+| Check the render | `render-check` | `npm run render:check` |
+| Into the library | `motion-library` (07) | add to `data/pieces.json`, `npm run render` |
+| Per-video table | `video-breakdown` (10) | `/video-breakdown` |
+| Brand values | `tokens` (01) | `lib/brand.ts`, `app/globals.css` |
+| New libraries | `find-your-mods` (13) | `/find-your-mods` |
+
+In Claude Code, the skills load automatically in this folder. Say "scout S01", "apply these Pulse decisions" or "make stills for I09".
+
+## Structure
+
+```
+app/                     the hub (Next.js 16, static export)
+  page.tsx               11 Motion Breakdown, sections 01 to 12
+  library/  pulse/  video-inbox/  video-breakdown/  tokens/  find-your-mods/
+components/              PieceTile (animated library tiles), Trail (Remotion player and stills),
+                         IdeaCards (approve/pass), Section (scroll lighting), CountUp, ModsNav
+data/
+  pieces.json            the library: every motion graphic GearBook has (M01 to M24)
+  sources.json           videos, inspo and requests, with transcripts
+  ideas.json             every flagged moment: quote, catalog check, pitch, stills, build, render check
+lib/                     types, data helpers, brand tokens, Pulse decisions (localStorage)
+remotion/                pieces built in code: ClickTrail.tsx (M18, three looks), LibraryReel.tsx
+scripts/                 transcribe.py, scout.mjs, render-stills / render-piece / render-check, apply-decisions
+.claude/skills/          one skill per mod, with its full prompt
+inbox/                   videos/ and transcripts/ (git-ignored), inspo/
+docs/VIDEO_SPEC.md       what the source video shows, panel by panel
+screenshots/             the hub, for reference
+```
+
+## Run it
+
+Needs Node 20 or newer. Python with `openai-whisper` and ffmpeg are only needed for transcription.
+
+```bash
+npm install
+```
+
+```bash
+npm run dev
+```
+
+Open http://localhost:3000. Then:
+
+```bash
+npm run build
+```
+
+This writes the static site to `out/`.
+
+```bash
+npm run render:check
+```
+
+This renders frames from every look and checks them. `npm run studio` opens Remotion Studio to work on pieces.
+
+## Connecting real data
+
+Nothing needs keys to run; the hub shows the sample data in `data/`. Copy `.env.example` to `.env.local` for:
+
+- **Claude API** (`ANTHROPIC_API_KEY`): `npm run scout` pitches for real. Without it, the scout prints the exact prompt it would send.
+- **Real reels:** drop them in `inbox/videos/`, run `npm run transcribe`, and add each as a source (see `.claude/skills/video-inbox`). Replace the `sample: true` sources and ideas as real ones come in.
+- **Real numbers in pieces:** pass them as props (`npm run render -- ClickTrail-A-Switchback --props='{"values":[...]}'`). Wiring GearBook's Supabase (read-only anon key, `click_events` / `sale_events`) or Metricool for the reel list is planned; the variables are already in `.env.example`.
+
+## Hosting
+
+`.github/workflows/pages.yml` builds the static site and deploys it to GitHub Pages on every push to `main`, at `https://gearbook1-hub.github.io/gearbook-creative/`. Pages on a private repo needs a paid GitHub plan, and a Pages site is public to anyone with the URL (only Enterprise can restrict it). If that's a problem, deploy `out/` to Vercel with Deployment Protection instead.
+
+Roca only loads on domains listed in the Adobe kit's settings. Add `gearbook1-hub.github.io` (and `localhost`) to kit `aac5uoe`, or headings fall back to Newsreader.
+
+## Notes
+
+- Remotion is free for individuals and companies with up to 3 people. GearBook qualifies today; check the Remotion license if the team grows.
+- GearBook copy rules apply everywhere: no em or en dashes, never promise earnings or quote a rate, "outdoor professional" not "guide", links use https://www.gearbook.shop.
+- Never commit the source video, frames, transcripts or `.env.local`.
