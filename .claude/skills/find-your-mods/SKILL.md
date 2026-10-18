@@ -12,6 +12,6 @@ Any library GearBook rebuilds over and over can run this loop. It needs four par
 3. **Two gates.** Approve or pass on Pulse, then pick one of three looks before anything is built.
 4. **A build and a check.** One reusable engine with variables, and a check that runs before anything is delivered.
 
-To start one: copy `.claude/skills/motion-scout` and swap the nouns, add a catalog file to `data/`, and log pitches to `data/ideas.json` so they show on Pulse. Add the library to the cards on `/find-your-mods`.
+To start one: copy `.claude/skills/motion-scout` and swap the nouns, add a catalog file to `data/`, and log pitches to `data/ideas.json` so they show under "Approve or pass" on /library. Add the library to the cards on `/find-your-mods`.
 
 Keep GearBook's rules: no em or en dashes, money copy exact or silent (rates only from `/commission-rates`), links use https://www.gearbook.shop.

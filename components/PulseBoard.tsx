@@ -17,14 +17,14 @@ export function DecisionsExport({ ids }: { ids: string[] }) {
       <p><span className="k">decisions in this browser</span><br />{count ? `${count} idea(s) decided` : "none yet"}</p>
       {count > 0 && (
         <>
-          <pre style={{ margin: "0 0 14px", whiteSpace: "pre-wrap", color: "var(--ink-muted)" }}>{json}</pre>
+          <pre style={{ margin: "0 0 14px", whiteSpace: "pre-wrap", color: "var(--on-dark-2)" }}>{json}</pre>
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-            <button className="step gate" style={{ cursor: "pointer" }} onClick={async () => {
+            <button className="btn" onClick={async () => {
               try { await navigator.clipboard.writeText(json); setCopied(true); } catch { setCopied(false); }
             }}>{copied ? "Copied" : "Copy decisions"}</button>
-            <button className="step" style={{ cursor: "pointer" }} onClick={clear}>Clear</button>
+            <button className="btn ghost" style={{ color: "var(--on-dark)" }} onClick={clear}>Clear</button>
           </div>
-          <p style={{ marginTop: 14 }}><span className="k">then</span> save as decisions.json and run <span className="hl">node scripts/apply-decisions.mjs decisions.json</span>, or paste it to Claude and say &quot;apply these Pulse decisions&quot;.</p>
+          <p style={{ marginTop: 14 }}><span className="k">then</span> save as decisions.json and run <span>node scripts/apply-decisions.mjs decisions.json</span>, or paste it to Claude and say &quot;apply these Pulse decisions&quot;.</p>
         </>
       )}
     </div>

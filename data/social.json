@@ -1,0 +1,44 @@
+{
+  "source": "gearbook repo, docs/marketing/social-identity.md and content-idea-bank.md (drafts of 2026-10-16, seeded from the live feed, Luke corrects them)",
+  "channels": ["Instagram @gear.book", "Facebook"],
+  "audiences": [
+    { "name": "Outdoor professionals", "who": "Instructors, athletes, mountain guides and others who work outdoors, across every sport GearBook's partners cover.", "weight": "main" },
+    { "name": "Their clients and followers", "who": "People who buy through a member's page. Posts aimed only at them have done worst so far, so use them sparingly.", "weight": "second" }
+  ],
+  "sports": ["Climbing", "Ski and snow", "Mountain", "Water: diving, freediving, spearfishing, sailing"],
+  "sportsNote": "All of them, rotated across posts. Scuba.com and West Marine are partners, so don't let the account become mountain-only.",
+  "onCamera": [
+    { "who": "Luke (founder)", "role": "The default talent, in the presenter bit. Presented as GearBook's founder who uses the gear, never as a certified guide." },
+    { "who": "Friends and the crew", "role": "Trip montages and vibe reels, tagged in captions." },
+    { "who": "Members", "role": "An upgrade whenever one opts in, never relied on. Rare in October 2026." }
+  ],
+  "onCameraRule": "Anyone on camera gives their OK. Footage and photos are credited to whoever shot them.",
+  "formats": [
+    { "key": "A", "name": "Presenter bit", "what": "Luke in a suit, tie and handheld mic plays a deadpan presenter somewhere absurd for a suit: a desk on a cliff, rappelling, sitting in a creek, buried in ropes. Short script to camera, about 25 to 30 s.", "edit": "Captions burned in, meme overlays (a coin pile, a crying-emoji map), product cutouts flying in, a screen recording for a partner's catalog, ending on the logo or the brand colour bars." },
+    { "key": "B", "name": "Vibe reel", "what": "No voice. Good footage, one line of meme text, a trending sound added in the app.", "edit": "Quick to make from footage you and friends already have." },
+    { "key": "C", "name": "Editorial poster", "what": "A still: a duotone or moody photo with text in the brand serif.", "edit": "Good for filler weeks." }
+  ],
+  "bit": {
+    "script": "What if every time you recommended your favorite gear, you got paid? I'm Luke, and this is GearBook.",
+    "joke": "A straight-faced corporate presenter in places no suit belongs. The outdoor setting is real, and the gear and the information are real too."
+  },
+  "voice": ["Dry humour, meme overlays, emojis (🤙), \"get stoked\", \"make some cash\"", "Short captions: one or two lines, then \"Click the link in our bio\"", "Captions credit people: \"Featuring:\", \"Captured by:\", \"Edited by:\"", "Hashtags: #gearbook #outdoorindustry"],
+  "rules": ["Never promise an amount or quote a rate. Talking about getting paid is fine; numbers live on /commission-rates.", "No em or en dashes, in any copy.", "No urgency theatre or fake deals.", "Safety topics (avalanche, diving depth) are played straight: no jokes, no instruction."],
+  "taste": ["Ideas he can post, built around one person's real kit tied to a job, a season or a moment.", "Keep it positive: what people carry and love, not what they dropped or dislike.", "Skip pro-deal and discount angles (Outdoor Prolink, ExpertVoice). They're where pros buy, not where they earn.", "Content is made in the week of posting. Ideas keep loose windows, not dates."],
+  "worst": "The generic shopper pitch and the generic seasonal tip did worst (24 and 27 likes). Lead with the bit or the footage, and put the pitch last.",
+  "maybeLater": [
+    { "name": "Black Friday no-sale report", "when": "Thanksgiving week", "what": "The presenter bit with \"Today's top deal: going outside.\" No real deals. Don't use REI's #OptOutside tag." },
+    { "name": "Giving Tuesday", "when": "Dec 1 in 2026", "what": "Groups that keep trails, forecasts and access running. Don't imply GearBook donates unless that's decided." },
+    { "name": "Home-shopping-channel gift list", "when": "Early Dec", "what": "A shopping-host parody, but with real picks and why, and no fake urgency." },
+    { "name": "Avalanche season", "when": "Nov, when forecasts start", "what": "Played straight, no jokes. \"Take a course, read your local forecast.\" No kit claims without avalanche training." },
+    { "name": "Course notes", "when": "When someone finishes a course", "what": "The kit that held up. No technique or rescue advice." },
+    { "name": "Get to know a pro", "when": "Needs members", "what": "A short profile with 3 to 5 picks." }
+  ],
+  "toFill": [
+    "Who's on the team (Matt's role in content, the photographer, the editor), and which friends or members are happy to be on camera.",
+    "Where the presenter bit came from, what it should never become, and whether it stays Luke-only.",
+    "Instagram Insights per post (reach, saves, shares, non-follower reach, average watch time). Likes alone may mislead.",
+    "Where raw footage lives, and roughly what's there by sport and person.",
+    "A swipe file: about 5 posts from any account you'd love to have made, and 3 you'd never post, each with a few words on why."
+  ]
+}

@@ -8,7 +8,7 @@ description: Mod 04. Use when Luke pastes Pulse decisions, says "apply these Pul
 Pulse is the first human gate. Every pitch waits there until Luke approves or passes it.
 
 ## Applying decisions
-The hub is a static site, so Approve, Pass and notes are saved in Luke's browser. He copies them from `/pulse` ("Copy decisions") as JSON:
+The hub is a static site, so Approve, Pass and notes are saved in Luke's browser. He copies them from "Approve or pass" on `/library` ("Copy decisions") as JSON:
 ```json
 { "I09": { "decision": "approved", "note": "keep it under 3 seconds" } }
 ```

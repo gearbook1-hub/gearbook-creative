@@ -12,7 +12,7 @@ const fallbackSerif = Newsreader({ subsets: ["latin"], variable: "--font-fallbac
 
 export const metadata: Metadata = {
   title: "GearBook Creative",
-  description: "GearBook's creative mods: the motion library, the scout that reads every reel, and Pulse.",
+  description: "GearBook's creative hub: social identity, the content idea bank, the feed and the motion library.",
   robots: { index: false, follow: false },
 };
 

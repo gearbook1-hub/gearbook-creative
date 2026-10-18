@@ -1,0 +1,232 @@
+[
+  {
+    "id": "C01",
+    "format": "A",
+    "name": "Partner showcase",
+    "series": true,
+    "window": "Anytime, roughly one a month",
+    "hook": "So you can link products like these.",
+    "beats": [
+      "The hook in the setting",
+      "What the partner carries (cutouts fly in)",
+      "\"So you can link products like these\"",
+      "The partner-logo wall",
+      "\"Click the link in our bio.\""
+    ],
+    "notes": [
+      "Done: Backcountry, Scuba.com and West Marine.",
+      "Next: Osprey, Gregory, Kailas, Suunto, Adorama, SunnySports."
+    ],
+    "settings": [
+      "Osprey or Gregory: a fully loaded pack with a desk lamp clipped to it.",
+      "Suunto: timing something absurdly unimportant.",
+      "Adorama: Luke as his own news crew, filming himself filming.",
+      "SunnySports: a beach umbrella at the crag.",
+      "Kailas: a big wall, or a hangboard in the office."
+    ]
+  },
+  {
+    "id": "C02",
+    "format": "A",
+    "name": "Kit check, newsroom edition",
+    "series": true,
+    "window": "Anytime, works as a recurring segment",
+    "hook": "Breaking news: here's what's in my pack.",
+    "beats": [
+      "Luke unpacks on a desk outdoors",
+      "Each item as a cutout plus one line on why",
+      "\"Every pick is on my GearBook page.\""
+    ],
+    "notes": [
+      "Rotate: a crag day, a ski tour, a dive day, a sailing day.",
+      "Member upgrade: \"We sent our correspondent to [member]'s pack.\""
+    ]
+  },
+  {
+    "id": "C03",
+    "format": "A",
+    "name": "Reporting live from the job",
+    "series": true,
+    "window": "Anytime, pick the trip you're on that week",
+    "hook": "Reporting live from [single-pitch / ski tour / dive boat]. Here's what goes in the bag.",
+    "beats": [
+      "On location in the suit",
+      "3 to 4 items with why",
+      "\"Full list on my page.\""
+    ],
+    "notes": [
+      "This is where the water sports go: a dive boat, a dock, a creek."
+    ]
+  },
+  {
+    "id": "C04",
+    "format": "A",
+    "name": "A moment of silence for gear that outlived the season",
+    "window": "End of a season",
+    "hook": "Today we say goodbye to [item]. [Real number] days. Never quit.",
+    "beats": [
+      "An anchor-desk tribute to a worn item",
+      "What it went through",
+      "What you'd buy again",
+      "\"Its replacement is on my page.\""
+    ],
+    "notes": [
+      "Deadpan eulogy, your own gear only, so it doesn't read as a review."
+    ]
+  },
+  {
+    "id": "C05",
+    "format": "A",
+    "name": "Man on the street: \"What never leaves your pack?\"",
+    "window": "Anytime you're at a crag, trailhead, marina or dive shop",
+    "hook": "One question. What never leaves your pack?",
+    "beats": [
+      "Mic in hand, quick answers from people there",
+      "One answer per cut",
+      "End with yours"
+    ],
+    "notes": [
+      "Get each person's OK on camera and tag them if they want. It turns people into talent without needing members."
+    ]
+  },
+  {
+    "id": "C06",
+    "format": "A",
+    "name": "Skit: \"Your clients ask what you use\"",
+    "window": "Anytime, for pros who teach or lead trips",
+    "hook": "Hey, what harness is that?",
+    "beats": [
+      "A friend plays the client: \"Hey, what harness is that?\"",
+      "Luke hands over a QR code with a straight face",
+      "\"Your clients already ask. Give them one link.\""
+    ]
+  },
+  {
+    "id": "C07",
+    "format": "A",
+    "name": "Skit: the overpacked first-timer",
+    "window": "Before a peak season (spring climbing, winter ski, summer dive)",
+    "hook": "First guided day? Let's check your bag.",
+    "beats": [
+      "Luke as the client pulls out absurd items (desk lamp, stapler, the mic)",
+      "A pro's real short list",
+      "\"Ask your pro what they use. Their picks can live on one page.\""
+    ],
+    "notes": [
+      "Aimed at clients, GearBook's second audience."
+    ]
+  },
+  {
+    "id": "C08",
+    "format": "A",
+    "name": "GearBook in 20 seconds",
+    "window": "Anytime, again every few months in a new setting",
+    "hook": "GearBook, explained by a man in a suit in a [river / snowbank / dive boat].",
+    "beats": [
+      "Pick gear you use",
+      "We make the links",
+      "Share one page",
+      "Get paid when it sells",
+      "\"Free. Link in bio.\""
+    ],
+    "notes": [
+      "The launch reel's script works as the base. New setting each time."
+    ],
+    "motion": [
+      "M25"
+    ]
+  },
+  {
+    "id": "C09",
+    "format": "A",
+    "name": "Live from the lift line (first chair)",
+    "window": "Early Nov, around the first lift openings (check that week)",
+    "hook": "We're live from opening day.",
+    "beats": [
+      "In the suit and ski boots in the lift line",
+      "What's in the pocket for day one",
+      "What changed this year",
+      "\"Kit on my page.\""
+    ]
+  },
+  {
+    "id": "C10",
+    "format": "A",
+    "name": "Shortest day, evening news by headlamp",
+    "window": "Around the winter solstice (Dec 21 in 2026)",
+    "hook": "Good evening. It's 4:30 and it's dark.",
+    "beats": [
+      "Presenter by headlamp",
+      "Headlamp, spare light, warm layer",
+      "\"Start earlier. Turn around earlier.\""
+    ]
+  },
+  {
+    "id": "C11",
+    "format": "B",
+    "name": "\"[Season] loading\" series",
+    "series": true,
+    "window": "The run-up to each season: ice and ski (fall), climbing (spring), dive and sail (summer)",
+    "hook": "[Season] [loading bar]",
+    "beats": [
+      "The loading-bar overlay from \"Winter\", with the word swapped",
+      "Footage from the last season"
+    ]
+  },
+  {
+    "id": "C12",
+    "format": "B",
+    "name": "\"This and...\" meme",
+    "window": "Anytime",
+    "hook": "This and knowing the person who recommended your gear got paid for it",
+    "beats": [
+      "Run it over the best footage you have, in any sport"
+    ],
+    "notes": [
+      "Another line: \"This and a catalog that took five minutes\"."
+    ]
+  },
+  {
+    "id": "C13",
+    "format": "B",
+    "name": "Split-screen sequels",
+    "window": "Anytime",
+    "hook": "Rock / Snow / Water",
+    "beats": [
+      "\"Rock / Snow / Water\": one clip each, stacked",
+      "\"6am / noon / 6pm\" on one trip",
+      "Reverse the altitude one: -40 m to 4000 m"
+    ],
+    "notes": [
+      "Credit whoever's footage it is."
+    ]
+  },
+  {
+    "id": "C14",
+    "format": "B",
+    "name": "Trip recap: one word",
+    "window": "After any trip",
+    "hook": "[Place].",
+    "beats": [
+      "A montage like \"Squamish.\"",
+      "The place name only",
+      "The crew tagged in the caption"
+    ]
+  },
+  {
+    "id": "C15",
+    "format": "C",
+    "name": "Poster series",
+    "series": true,
+    "window": "Anytime, good filler weeks",
+    "hook": "Sign up on GearBook today",
+    "beats": [
+      "A photo",
+      "An arched serif line in the same dry voice",
+      "\"Sign up on GearBook today\""
+    ],
+    "notes": [
+      "Use friends' or members' photos with their OK and credit the photographer."
+    ]
+  }
+]

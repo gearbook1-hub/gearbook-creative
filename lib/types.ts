@@ -98,3 +98,33 @@ export interface Idea {
   builtAs?: string;
   renderCheck?: { t: string; pass: boolean; note: string }[];
 }
+
+// Social: what GearBook posts. From the gearbook repo's docs/marketing/social-identity.md and
+// content-idea-bank.md, copied into data/ (posts.json, content-ideas.json, social.json).
+
+export type FormatKey = "A" | "B" | "C";
+
+export interface Post {
+  date: string;
+  title: string;
+  line: string;
+  format: FormatKey;
+  likes: number;
+  comments: number;
+  note?: string;
+}
+
+export interface ContentIdea {
+  id: string;
+  format: FormatKey;
+  name: string;
+  series?: boolean;
+  /** A loose window, never a date: content is made in the week of posting. */
+  window: string;
+  hook: string;
+  beats: string[];
+  notes?: string[];
+  settings?: string[];
+  /** Library pieces the edit can reuse. */
+  motion?: string[];
+}

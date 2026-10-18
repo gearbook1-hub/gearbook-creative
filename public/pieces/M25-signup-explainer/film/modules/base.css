@@ -1,0 +1,56 @@
+#stage { --ground:#F0F7EE; --main:#6A8D73; --second:#3D3522; --accent:#F6AE2D; color:var(--second); font-family:var(--sans, system-ui, sans-serif) }
+.ground { position:absolute; inset:0; background:var(--ground) }
+.words { position:absolute; margin:0; display:flex; flex-direction:column; gap:24px } .words > * { margin:0 }
+.line { font-family:var(--display, var(--sans, system-ui, sans-serif)); font-size:96px; line-height:1.02; font-weight:800; letter-spacing:-.01em; text-wrap:balance } .sub { font-size:42px; line-height:1.25; color:color-mix(in srgb, var(--second) 78%, var(--ground)) }
+.box { position:absolute; margin:0; border:2px solid var(--second); box-sizing:border-box; font-size:30px; letter-spacing:.12em } .box::after { content:attr(data-label); position:absolute; left:14px; bottom:10px }
+.cap { left:96px; right:96px; top:262px; align-items:center; text-align:center; gap:18px } .cap .line { font-size:62px; white-space:nowrap }
+.hero .line { font-size:92px; white-space:normal }
+.eyebrow { font-family:var(--mono, ui-monospace, monospace); font-size:28px; font-weight:600; letter-spacing:.24em; text-transform:uppercase; color:color-mix(in srgb, var(--main) 78%, var(--second)) }
+.topo { position:absolute; inset:0; width:100%; height:100%; overflow:visible }
+.topo-line { fill:none; stroke:color-mix(in srgb, var(--second) 17%, transparent); stroke-width:2.2; stroke-linejoin:round; stroke-linecap:round }
+.topo-idx { stroke:color-mix(in srgb, color-mix(in srgb, var(--main) 80%, var(--second)) 55%, transparent); stroke-width:4.2 }
+.topo-hot { stroke:var(--accent); stroke-width:3.4 } .topo-hot.topo-idx { stroke-width:4.6 }
+.logo-img { display:block; width:100%; height:auto }
+.phone { position:absolute; left:358px; top:623px; width:364px; height:704px; padding:12px; box-sizing:border-box; border-radius:58px; background:var(--second); box-shadow:0 34px 70px rgba(0,0,0,.18); transform-origin:50% 50% }
+.screen { position:relative; width:340px; height:680px; border-radius:46px; overflow:hidden; background:var(--ground) }
+.notch { position:absolute; left:120px; top:10px; width:100px; height:28px; border-radius:14px; background:var(--second); z-index:5 }
+.appbar { position:absolute; left:0; right:0; top:0; height:88px; padding:44px 20px 0; box-sizing:border-box; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid color-mix(in srgb, var(--second) 12%, transparent); z-index:4; background:var(--ground) }
+.appbar-time { position:absolute; left:30px; top:13px; font-size:14px; font-weight:600 }
+.appbar-logo { height:24px; width:auto; display:block }
+.appbar-menu { display:block; width:22px; height:2px; border-radius:1px; background:var(--second); box-shadow:0 7px 0 var(--second), 0 -7px 0 var(--second) }
+.view { position:absolute; left:0; top:88px; width:340px; height:592px; box-sizing:border-box; padding:22px 20px 20px }
+.view > * { position:absolute; left:20px; right:20px; margin:0 }
+.gb-label { font-family:var(--mono, ui-monospace, monospace); font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:#6B6450 }
+.gb-h { font-family:var(--display, var(--sans, system-ui, sans-serif)); font-size:30px; line-height:1.05; font-weight:800 }
+.gb-p { font-size:15px; line-height:1.4; color:#6B6450 }
+.gb-input { background:#fff; border:1px solid color-mix(in srgb, var(--second) 60%, #fff); height:48px; padding:0 14px; box-sizing:border-box; display:flex; align-items:center; font-size:16px; white-space:nowrap; overflow:hidden }
+.gb-input.on { border-color:var(--second); box-shadow:0 0 0 1px var(--second) }
+.gb-btn { display:flex; justify-content:center; align-items:center; height:50px; box-sizing:border-box; border:2px solid var(--second); border-radius:25px; background:var(--second); color:var(--ground); font-size:14px; font-weight:600; letter-spacing:.07em; text-transform:uppercase; white-space:nowrap }
+.gb-btn.amber { background:var(--accent); border-color:var(--accent); color:var(--second) }
+.gb-card { background:#fff; border:2px solid color-mix(in srgb, var(--second) 15%, #fff); border-radius:20px; box-sizing:border-box }
+.gb-row { display:flex; align-items:center; gap:12px; height:66px; padding:0 12px }
+.gb-thumb { width:56px; height:48px; flex:none; display:flex; align-items:center; justify-content:center }
+.gb-name { font-size:15px; font-weight:600; line-height:1.15 }
+.gear-img { display:block; max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain }
+.ring { position:absolute; width:88px; height:88px; margin:-44px 0 0 -44px; border-radius:50%; border:5px solid var(--accent); box-sizing:border-box; opacity:0; z-index:8 }
+.finger { position:absolute; width:56px; height:56px; margin:-28px 0 0 -28px; border-radius:50%; box-sizing:border-box; background:color-mix(in srgb, var(--ground) 55%, transparent); border:3px solid var(--second); box-shadow:0 6px 14px rgba(0,0,0,.2); opacity:0; z-index:9 }
+.caret { display:inline-block; width:2px; height:20px; margin-left:1px; background:var(--second) }
+.clearing { position:absolute; border-radius:50%; background:radial-gradient(closest-side, var(--ground) 62%, color-mix(in srgb, var(--ground) 0%, transparent)) }
+.gb-chat-head { top:4px; height:50px; display:flex; align-items:center; gap:12px } .gb-chat-head p { margin:0 }
+.gb-ava { width:38px; height:38px; flex:none; border-radius:50%; display:flex; align-items:center; justify-content:center; font-style:normal; font-size:16px; font-weight:600; background:color-mix(in srgb, var(--main) 30%, var(--ground)) }
+.gb-chat-name { font-size:17px; font-weight:600; line-height:1.1 }
+.gb-chat-rule { top:64px; height:1px; background:color-mix(in srgb, var(--second) 12%, transparent) }
+.gb-msg { max-width:220px; padding:10px 14px; box-sizing:border-box; border-radius:20px; font-size:15px; line-height:1.35 }
+.gb-msg.me, .gb-link.me { left:auto; right:20px; transform-origin:100% 100% }
+.gb-msg.me { background:var(--second); color:var(--ground); border-bottom-right-radius:6px }
+.gb-msg.them { right:auto; transform-origin:0 100%; background:#fff; border:1px solid color-mix(in srgb, var(--second) 14%, #fff); border-bottom-left-radius:6px }
+.gb-link { width:236px; border-radius:18px; overflow:hidden; background:#fff; border:1px solid color-mix(in srgb, var(--second) 14%, #fff) }
+.gb-link-img { position:relative; height:124px; overflow:hidden; background:var(--second) }
+.gb-link-shade { position:absolute; inset:0; background:linear-gradient(to bottom, transparent 30%, color-mix(in srgb, var(--second) 40%, transparent) 44%, color-mix(in srgb, var(--second) 94%, transparent) 70%) }
+.gb-link-bar { position:absolute; left:0; right:0; top:0; height:3px; display:flex }
+.gb-link-who { position:absolute; left:0; right:0; bottom:8px; display:flex; flex-direction:column; align-items:center; text-align:center; color:var(--ground) }
+.gb-link-who b { font-size:15px; font-weight:600; line-height:1.1; color:#fff } .gb-link-who span { margin-top:3px; font-size:8px; letter-spacing:.2em; text-transform:uppercase; color:var(--accent) } .gb-link-who em { font-style:normal; font-size:10px; line-height:1.2 }
+.gb-link-meta { padding:8px 12px 10px } .gb-link-meta p { margin:0; font-size:12px; font-weight:600; line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis } .gb-link-meta span { font-size:11px; color:#6B6450 }
+.gb-compose { top:526px; height:44px; display:flex; align-items:center; gap:8px }
+.gb-compose-in { flex:1; height:40px; box-sizing:border-box; padding:0 16px; display:flex; align-items:center; border-radius:20px; border:1px solid color-mix(in srgb, var(--second) 30%, #fff); background:#fff; font-size:15px; color:#6B6450 }
+.gb-send { width:40px; height:40px; flex:none; border-radius:50%; display:flex; align-items:center; justify-content:center; background:var(--second) }

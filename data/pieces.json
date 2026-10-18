@@ -751,17 +751,13 @@
     "name": "Signup Explainer",
     "version": 1,
     "status": "live",
-    "description": "The 28 second signup reel Matt had Claude build as a fully animated page, recorded at 60 fps: client questions pop up, a phone applies in about five minutes, adds gear with one search, shares the catalog after a trip and with a friend, gear drops into a pack and the pack becomes the logo. Its cream and topo ground, Roca titles that arrive word by word and small tracked labels are the house style every new piece follows.",
+    "description": "The 28 second signup reel Matt had Claude build as a Motion artifact (\"GearBook Signup Reel\" on his Claude account). It plays here live from the artifact's own scene code: client questions pop up, a phone applies, adds gear with one search, shares the catalog after a trip and with a friend, then gear drops into a pack and the pack becomes the logo. Its cream and topo ground, serif titles that arrive word by word and small tracked labels are the house style every new piece follows.",
     "covers": "The whole member journey, apply to share to earn, as one 28 s reel. Not a single stat or step on its own.",
     "preview": "video",
     "ground": "cream",
     "variants": [
       {
-        "label": "WITH CAPTIONS",
-        "ground": "cream"
-      },
-      {
-        "label": "NO CAPTIONS",
+        "label": "LIVE",
         "ground": "cream"
       }
     ],
@@ -772,6 +768,7 @@
     "video": "pieces/M25-signup-explainer/preview.mp4",
     "master": "Google Drive: GearBook/Marketing/Reels/Signup Reel/GearBook-Signup-Reel.mp4",
     "builtOn": "2026-10-13",
-    "sample": false
+    "sample": false,
+    "html": "M25-signup-explainer"
   }
 ]

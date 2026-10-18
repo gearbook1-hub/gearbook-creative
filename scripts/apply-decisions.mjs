@@ -1,5 +1,5 @@
 // Pulse runs as a static page, so approve / pass / notes live in the browser until applied.
-// "Copy decisions" on /pulse puts JSON on the clipboard; save it to a file and run:
+// "Copy decisions" under "Approve or pass" on /library puts JSON on the clipboard; save it to a file and run:
 //   node scripts/apply-decisions.mjs decisions.json
 // Approved ideas move to "approved" (next: 3 stills), passed ideas to "passed", notes are kept.
 import fs from "node:fs";

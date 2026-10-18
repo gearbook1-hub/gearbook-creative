@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>M25 Signup Explainer</title>
+<!-- The reel's own faces, as its scenes.json names them: Fraunces titles, Outfit text, Afacad Flux labels. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Outfit:wght@400;600&family=Afacad+Flux:wght@400;600&display=block" />
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: transparent; }
+  #stage {
+    position: absolute; top: 0; left: 0; width: 1080px; height: 1920px; transform-origin: 0 0; overflow: hidden;
+    --display: Fraunces, Georgia, serif; --sans: Outfit, system-ui, sans-serif; --mono: "Afacad Flux", system-ui, sans-serif;
+  }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<script>
+  // Load every face before the scenes measure anything.
+  ["600 40px Fraunces", "800 40px Fraunces", "400 20px Outfit", "600 20px Outfit", "400 20px 'Afacad Flux'", "600 20px 'Afacad Flux'"]
+    .forEach((f) => document.fonts.load(f));
+</script>
+<script src="film-kit.js"></script>
+</body>
+</html>

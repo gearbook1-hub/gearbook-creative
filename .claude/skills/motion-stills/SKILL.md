@@ -12,4 +12,4 @@ Nothing gets animated until Luke has picked a look. Stills are cheap; animation 
 3. Set `status: "stills"` and tell Luke they're ready to pick on the dashboard.
 4. When he picks, record `pickedLetters` (all three is allowed: "one engine, three looks"), store any note, set `status: "picked"`, and hand off to `motion-build`.
 
-Every look follows the rules in `/tokens`: GearBook colours, Roca, the safe area.
+Every look follows the brand rules (`/identity`, `public/pieces/pieces.css`): GearBook colours, Roca, the safe area (y 230 to 1520, x under 900).

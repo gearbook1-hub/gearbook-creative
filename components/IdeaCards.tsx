@@ -19,7 +19,7 @@ export function IdeaCards({ cards }: { cards: IdeaCardData[] }) {
   const [noteOpen, setNoteOpen] = useState<string | null>(null);
 
   if (cards.length === 0) {
-    return <p className="caption">No new pitches. The scout logs them here as it reads new videos.</p>;
+    return <p className="muted">No new pitches. The scout logs them here as it reads new reels.</p>;
   }
 
   return (

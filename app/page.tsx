@@ -1,229 +1,98 @@
 import Link from "next/link";
-import { CountUp } from "@/components/CountUp";
-import { IdeaCards, type IdeaCardData } from "@/components/IdeaCards";
-import { Footer, ModsNav } from "@/components/ModsNav";
-import { PieceTile } from "@/components/PieceTile";
-import { Section } from "@/components/Section";
-import { StillCard } from "@/components/StillCard";
-import { PieceFrame, PieceVideo } from "@/components/PieceFrame";
-import { SOURCE_KINDS, ideas, ideasFrom, livePieces, piece, plural, source, sourceLabel, stats } from "@/lib/data";
-import type { Idea } from "@/lib/types";
+import { PieceFrame } from "@/components/PieceFrame";
+import { FormatChip, Footer, Section, TopBar } from "@/components/Site";
+import { byFormat, contentIdeas, fmtDate, posts, social } from "@/lib/social";
 
-// 11 Motion Breakdown: "How the motion mod thinks". One scrolling page that walks the loop
-// top to bottom, section for section as in the reel (docs/VIDEO_SPEC.md §4).
+// Overview: what GearBook posts, who it's for, what's next in the bank and what's working,
+// with the signup reel (M25) playing live from its Motion artifact code.
 
+const NEXT_UP = ["C01", "C02", "C03", "C11"];
 
-function statusLine(i: Idea) {
-  switch (i.status) {
-    case "built": return { text: `built (${i.builtAs})`, built: true };
-    case "waiting": return { text: `waiting on ${i.waitingOn}`, built: false };
-    case "pitched": return { text: "pitched, on Pulse", built: false };
-    case "passed": return { text: "passed", built: false };
-    default: return { text: i.status, built: false };
-  }
-}
-
-export default function MotionBreakdown() {
-  const s = stats();
-  // The walkthrough idea: the reel follows one idea from transcript to library. Ours is the
-  // first built idea that went through stills and has a render check.
-  const hero = ideas.find((i) => i.status === "built" && i.renderCheck && i.stills)!;
-  const heroSource = source(hero.sourceId)!;
-  const heroPiece = piece(hero.builtAs!)!;
-  const lookOf = (letter: string) => heroPiece.variants["ABC".indexOf(letter)]?.look;
-  const withStills = ideas.filter((i) => i.stills?.length);
-  const pitched: IdeaCardData[] = ideas
-    .filter((i) => i.status === "pitched")
-    .map((i) => ({
-      id: i.id,
-      name: i.name,
-      date: i.pitchedOn,
-      pitch: i.pitch,
-      evidence: `${source(i.sourceId)?.title}${i.at ? ` ${i.at}` : ""} · "${i.quote}"`,
-      why: [...i.catalogCheck.map((c) => `${c.piece} ${piece(c.piece)?.name}: ${c.verdict}`), `So: ${i.whyNew}`],
-    }));
+export default function Overview() {
+  const formats = byFormat();
+  const top = [...posts].sort((a, b) => b.likes - a.likes).slice(0, 3);
+  const next = NEXT_UP.map((id) => contentIdeas.find((i) => i.id === id)!);
 
   return (
     <>
-      <header className="band">
-        <div className="wrap">
-          <ModsNav current="/" />
-          <h1 className="title">How the motion mod <em>thinks</em></h1>
-          <div className="stats">
-            <div><CountUp className="stat-value signal" value={s.pieces} /><div className="stat-label">Pieces in the library</div></div>
-            <div><CountUp className="stat-value" value={s.finishedFiles} /><div className="stat-label">Finished files, every format</div></div>
-            <div><CountUp className="stat-value" value={s.ideasPitched} /><div className="stat-label">Ideas pitched</div></div>
-            <div><CountUp className="stat-value" value={s.builtWithoutPick} /><div className="stat-label">Built without my pick</div></div>
+      <TopBar current="/" />
+      <section className="hero">
+        <div className="wrap hero-in">
+          <div>
+            <p className="label">GearBook on social · {social.channels.join(" + ")}</p>
+            <h1 className="title" style={{ marginTop: 16 }}>Real gear, real pros, <em>a man in a suit.</em></h1>
+            <p className="lede" style={{ marginTop: 20 }}>
+              The creative hub for Luke and Matt: who the posts are for, the three formats, the idea bank, how the feed is doing,
+              and the motion pieces every edit can reuse.
+            </p>
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 28 }}>
+              <Link className="btn" href="/ideas">Open the idea bank</Link>
+              <Link className="btn ghost" href="/library">Motion library</Link>
+            </div>
+          </div>
+          <div className="hero-film">
+            <div className="frame"><PieceFrame piece="M25-signup-explainer" title="M25 Signup Explainer, playing live" /></div>
+            <p className="frame-cap" style={{ color: "var(--on-dark-2)" }}>M25 · the signup reel, playing live from its Motion artifact</p>
           </div>
         </div>
-      </header>
+      </section>
 
       <main className="wrap">
-        <Section num="01" title="Where ideas come from">
-          <div className="cards2">
-            {SOURCE_KINDS.map(({ kind, title }) => (
-              <Link key={kind} href={`/video-inbox#${kind}`} className="card glow">
-                <div className="card-title">{title}</div>
-                <div className="card-meta">{plural(ideasFrom(kind).length, "idea")}</div>
-              </Link>
+        <Section label="Who it's for" title="Pros first, their clients second">
+          <div className="grid g2">
+            {social.audiences.map((a) => (
+              <div className="card" key={a.name}>
+                <span className={`chip ${a.weight === "main" ? "fA" : ""}`}>{a.weight === "main" ? "Main audience" : "Second audience"}</span>
+                <h3 className="h3">{a.name}</h3>
+                <p className="muted">{a.who}</p>
+              </div>
             ))}
           </div>
+          <p className="muted" style={{ marginTop: 16 }}>Every sport, rotated: {social.sports.join(" · ")}.</p>
         </Section>
 
-        <Section num="02" title="What it already has">
-          <div className="tiles">
-            {livePieces.map((p) => (
-              <Link key={p.id} href={`/library#${p.id}`} className="tile">
-                <div className="tile-frame">
-                  {p.video ? <PieceVideo src={p.video} title={`${p.id} ${p.name}`} /> : <PieceTile kind={p.preview} ground={p.ground} label={`${p.id} ${p.name}`} />}
-                </div>
-                <div className="tile-label">{p.id} {p.name}</div>
-              </Link>
-            ))}
-          </div>
-        </Section>
-
-        <Section num="03" title="It reads every transcript">
-          <div className="split">
-            <div>
-              <div className="tile-frame" style={{ background: "linear-gradient(160deg,#4c5a3f,#2c3324 55%,#5d6b52)", position: "relative" }}>
-                <div style={{ position: "absolute", inset: "auto 0 0 0", padding: "14px", background: "linear-gradient(transparent, rgba(14,12,8,.85))" }}>
-                  <div style={{ fontFamily: "var(--font-display)", fontSize: 18 }}>{heroSource.title}</div>
-                  <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--ink-muted)", marginTop: 4 }}>▶ {hero.at} · {heroSource.date}</div>
-                </div>
-              </div>
-              <p className="caption">The {heroSource.shortName}</p>
-            </div>
-            <div>
-              <div className="panel">
-                <p><span className="k">transcript</span><br />&quot;{hero.quote}&quot;</p>
-                <p>
-                  <span className="k">checked against the catalog</span><br />
-                  {hero.catalogCheck.map((c) => (
-                    <span key={c.piece}><span className="k">{c.piece} {piece(c.piece)?.name}</span>&nbsp;&nbsp;{c.verdict}<br /></span>
-                  ))}
-                  <mark>{hero.whyNew}</mark>
-                </p>
-              </div>
-              <span className="flag">FLAGGED</span>
-            </div>
-          </div>
-        </Section>
-
-        <Section num="04" title="The idea log">
-          <div className="log">
-            {ideas.map((i) => {
-              const st = statusLine(i);
+        <Section label="Three house formats" title="Lead with the bit or the footage" intro="Put the pitch last. The generic shopper pitch and the seasonal tip did worst so far.">
+          <div className="grid g3">
+            {social.formats.map((f) => {
+              const s = formats.find((x) => x.key === f.key)!;
               return (
-                <div className="log-row" key={i.id}>
-                  <span className="name">{i.name}</span>
-                  <span className="src">{sourceLabel(i)}</span>
-                  <span className={`status${st.built ? " built" : ""}`}>{st.text}</span>
+                <div className="card" key={f.key}>
+                  <FormatChip k={f.key as "A" | "B" | "C"} />
+                  <h3 className="h3">{f.name}</h3>
+                  <p className="muted small">{f.what}</p>
+                  <div className="card-foot small muted">{s.count} posted · {s.avg} likes on average</div>
                 </div>
               );
             })}
           </div>
         </Section>
 
-        <Section num="05" title="Approve or pass">
-          <IdeaCards cards={pitched} />
-          <p className="caption">New ideas on my <Link href="/pulse">Pulse</Link></p>
-        </Section>
-
-        <Section num="06" title="Stills before motion">
-          <div className="stack">
-            {withStills.map((i) => (
-              <div key={i.id}>
-                <div className="paper-frame">
-                  <div className="triptych">
-                    {i.stills!.map((st) => (
-                      <div key={st.letter}>
-                        {i.id === hero.id ? (
-                          <div className="still"><PieceFrame piece={heroPiece.html!} look={lookOf(st.letter)} t={5} title={`${i.name} still ${st.letter}`} /></div>
-                        ) : (
-                          <StillCard still={st} idea={i.name} />
-                        )}
-                        <div className="still-label"><b>{st.letter}</b>{st.name}{i.pickedLetters?.includes(st.letter) ? " · picked" : ""}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <p className="caption">{i.name}</p>
-              </div>
-            ))}
-          </div>
-        </Section>
-
-        <Section num="07" title="Built in code">
-          <div className="panel">
-            <p><span className="k">the build</span><br />{heroPiece.id} {heroPiece.name}. One member&apos;s number across N months.<br /><span className="k">public/pieces/{heroPiece.html}/index.html · an animated HTML page, like the signup explainer</span></p>
-            <p className="hl">
-              Luke picked {hero.pickedLetters!.length === 3 ? "A" : hero.pickedLetters![0]} ({hero.stills![0].name}) and asked for all three,<br />
-              so one engine renders three looks.
-            </p>
-            <p><span className="k">Luke&apos;s note:</span> <mark>{hero.note}</mark></p>
-            <p><span className="k">variables</span>&nbsp;&nbsp;{heroPiece.variables.join(" · ")}</p>
-          </div>
-        </Section>
-
-        <Section num="08" title="It checks its own render">
-          <div className="triptych" style={{ background: "var(--panel)", border: "1px solid var(--panel-line)", gap: 0 }}>
-            {hero.renderCheck!.map((check, n) => {
-              return (
-                <div key={check.t} className="still" style={{ borderRight: n < 2 ? "1px solid var(--panel-line)" : 0 }}>
-                  <PieceFrame piece={heroPiece.html!} look={lookOf("A")} t={parseFloat(check.t)} title={`Render frame at ${check.t}`} />
-                  <span className="ts">{check.t}</span>
-                  <span className={`check-badge${check.pass ? "" : " fail"}`} style={{ animationDelay: `${0.4 + n * 0.5}s` }} title={check.note}>
-                    {check.pass ? "✓" : "!"}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-          <p className="caption">Frames pulled from the render before it&apos;s delivered (npm run render:check)</p>
-        </Section>
-
-        <Section num="09" title="Three looks, one engine">
-          <div className="triptych">
-            {heroPiece.variants.map((v) => (
-              <div key={v.label}>
-                <div className="still"><PieceFrame piece={heroPiece.html!} look={v.look} title={`${heroPiece.name}, ${v.look}`} /></div>
-                <div className="dark-label">{v.look![0].toUpperCase() + v.look!.slice(1)}</div>
-              </div>
-            ))}
-          </div>
-        </Section>
-
-        <Section num="10" title="Into the library">
-          <Link href="/library" className="gallery-btn">Open the gallery</Link>
-        </Section>
-
-        <Section num="11" title="The loop">
-          <div className="loop">
-            {["Video, inspo or a request", "Check the catalog", "Log the idea", "Approve or pass", "3 stills", "Pick one", "Build in code", "Check the render", "Into the library"].map((step, n, all) => (
-              <span key={step} style={{ display: "contents" }}>
-                <span className={`step${step === "Approve or pass" || step === "Pick one" ? " gate" : ""}`}>{step}</span>
-                {n < all.length - 1 && <span className="arrow" aria-hidden>→</span>}
-              </span>
-            ))}
-          </div>
-        </Section>
-
-        <Section num="12" title="Any library">
-          <div className="cards2">
-            {[
-              { t: "Motion graphics", m: "Mine" },
-              { t: "Sales decks", m: "" },
-              { t: "Email templates", m: "" },
-              { t: "Ad creative", m: "" },
-              { t: "Proposals", m: "" },
-            ].map((c) => (
-              <Link key={c.t} href="/find-your-mods" className="card glow" style={{ padding: "22px 26px" }}>
-                <div className="card-title">{c.t}</div>
-                {c.m && <div className="card-meta" style={{ fontSize: 11 }}>{c.m}</div>}
+        <Section label="Next up" title="From the idea bank" intro="Ideas keep loose windows, not dates. Pick one, make it that week.">
+          <div className="grid g4">
+            {next.map((i) => (
+              <Link className="card" href={`/ideas#${i.id}`} key={i.id}>
+                <FormatChip k={i.format} />
+                <h3 className="h3" style={{ fontSize: 21 }}>{i.name}</h3>
+                <p className="small muted">{i.window}</p>
               </Link>
             ))}
           </div>
+          <p style={{ marginTop: 18 }}><Link href="/ideas">All {contentIdeas.length} ideas →</Link></p>
+        </Section>
+
+        <Section label="What works so far" title="The presenter bit leads" intro={`Likes only, ${posts.length} posts from ${fmtDate(posts[0].date)} to ${fmtDate(posts[posts.length - 1].date)}. A hint, not a finding.`}>
+          <div className="grid g3">
+            {top.map((p, n) => (
+              <div className="card" key={p.date}>
+                <p className="label" style={{ color: "var(--ink-2)" }}>#{n + 1} · {fmtDate(p.date)}</p>
+                <div className="stat" style={{ marginTop: 10 }}>{p.likes}</div>
+                <p className="stat-label">likes · {p.comments} comments</p>
+                <h3 className="h3" style={{ fontSize: 20, marginTop: 14 }}>{p.title}</h3>
+                <div className="card-foot"><FormatChip k={p.format} /></div>
+              </div>
+            ))}
+          </div>
+          <p style={{ marginTop: 18 }}><Link href="/feed">The whole feed →</Link></p>
         </Section>
       </main>
       <Footer />

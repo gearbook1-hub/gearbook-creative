@@ -6,30 +6,23 @@ Built for Luke and Matt. Everything marked `sample` is example data until real r
 
 **Live:** https://gearbook1-hub.github.io/gearbook-creative/
 
-## How it maps to the video
+## What's on the hub
 
-It's rebuilt from Josh Blatchford's reel "How the motion mod thinks" (Instagram, 2026-10-12). The full panel-by-panel spec is in [docs/VIDEO_SPEC.md](docs/VIDEO_SPEC.md). His wellness brand (Attuned) and its motion graphics are swapped for GearBook's content and brand.
+| Page | What it shows | From |
+|---|---|---|
+| `/` Overview | Who the posts are for, the three formats, what's next in the idea bank, the top posts, and M25 playing live | `data/social.json`, `data/content-ideas.json`, `data/posts.json` |
+| `/ideas` Idea bank | The 15 post ideas by format (presenter bit, vibe reel, poster), with beats and notes, a "this week" shortlist kept in the browser, the "maybe later" list and the copy rules | `data/content-ideas.json`, `data/social.json` |
+| `/feed` Feed | Everything posted on @gear.book with likes and comments, and the average per format | `data/posts.json` |
+| `/library` Motion library | M25 live, M18 (demo, sample data) in its three looks, the build loop, and motion pitches to approve or pass | `data/pieces.json`, `data/ideas.json` |
+| `/identity` Identity | The presenter bit, formats, who's on camera, voice, brand colour and type, and the gaps Luke still has to fill in | `data/social.json`, `lib/brand.ts` |
 
-| In the video | Here |
-|---|---|
-| "Claude Code Mods · Full Breakdown" tabs 01, 04, 07, 10, 11, 12, 13 | The same seven tabs, one page each: `/tokens`, `/pulse`, `/library`, `/video-breakdown`, `/` (11 Motion Breakdown), `/video-inbox`, `/find-your-mods` |
-| "How the motion mod *thinks*" plus 4 stats | `/`, with stats computed from `data/` |
-| 01 Where ideas come from (videos, inspo, asks) | `data/sources.json` (`kind`: video, inspo, request) |
-| 02 What it already has (M01 to M24 tiles) | `data/pieces.json`, the catalog every pitch is checked against |
-| 03 It reads every transcript, then FLAGGED | Whisper transcript, then the catalog check (`catalogCheck`, `whyNew`) |
-| 04 The idea log | `data/ideas.json` |
-| 05 Approve or pass | Pitch cards with Approve, Pass and Add a note (also on `/pulse`) |
-| 06 Stills before motion | 3 looks per idea. For M18 they're real frames of the piece, frozen with `?t=` |
-| 07 Built in code | `public/pieces/M18-click-trail/index.html`: one animated HTML page, three looks, variables in the URL |
-| 08 It checks its own render | `npm run render:check` (blank frame, safe area, button rail) |
-| 09 Three looks, one engine | The three looks looping live in the browser |
-| 10 Open the gallery | `/library`: the reel (M25, the real signup explainer), palette, motion voice and every piece |
-| 11 The loop | Same nine steps, with the same two human gates |
-| 12 Any library | `/find-your-mods`: decks, emails, ads, proposals |
+The social data comes from the main repo's `docs/marketing/social-identity.md` and `content-idea-bank.md` (gearbook1-hub/gearbook, drafts of 2026-10-16). Those docs are the source of truth: when they change, update the JSON here to match. The hub was first rebuilt from the reel "How the motion mod thinks" (spec in [docs/VIDEO_SPEC.md](docs/VIDEO_SPEC.md)); the scout, Pulse and build loop come from there.
 
-**How pieces are made.** No video editor or animation framework. Each motion piece is a fully animated HTML page, the way Claude built GearBook's signup explainer (M25, in Drive at Marketing/Reels/Signup Reel). `public/pieces/runtime.js` gives every piece one clock, so the same page loops on the dashboard, freezes on any frame for stills (`?t=2.5`), takes new words and numbers from the URL (`?props=`), and is recorded frame by frame to a 60 fps MP4 by `npm run render` in headless Edge or Chrome. M25's cream and topo ground, Roca titles that arrive word by word and small tracked labels are the house style (`public/pieces/pieces.css`).
+**How pieces are made.** No video editor or animation framework. Each motion piece is a fully animated HTML page. `public/pieces/runtime.js` gives every piece one clock, so the same page loops on the hub, freezes on any frame for stills (`?t=2.5`), takes new words and numbers from the URL (`?props=`), and is recorded frame by frame to a 60 fps MP4 by `npm run render` in headless Edge or Chrome.
 
-Colours are GearBook's: the dark appearance from the iOS app (page `#17140D`, surface `#241F15`), with cream text and amber where the video uses lemon. Sage stands in for the video's green and slate for its blue. Headings are Roca from Matt's Adobe kit.
+**M25, the signup reel,** was made as a Motion artifact on Matt's Claude account ("GearBook Signup Reel"). Its scenes, styles and images are copied unchanged into `public/pieces/M25-signup-explainer/film/`, and `film-kit.js` there is a small stand-in for the artifact's player with the same clock contract as `runtime.js`. It plays silent on the hub; the MP4 master with sound is in Drive. To refresh it after the artifact changes, copy its `modules` and `assets` again from the artifact's store. Its cream and topo ground, serif titles that arrive word by word and small tracked labels are the house style (`public/pieces/pieces.css`).
+
+The hub wears the same house style: cream ground, bark ink, Roca headings from Matt's Adobe kit (Newsreader where the kit doesn't serve), Outfit text, Afacad Flux labels, amber for the one thing that matters and sage for done. Tokens are in `app/globals.css` and `lib/brand.ts`.
 
 ## The loop
 
@@ -42,14 +35,14 @@ Video, inspo or a request -> Check the catalog -> Log the idea -> [Approve or pa
 |---|---|---|
 | A reel comes in | `video-inbox` (12) | `npm run transcribe` |
 | Read it, check the catalog, log and pitch | `motion-scout` (11) | `npm run scout -- S01` |
-| Approve or pass | `pulse` (04) | `/pulse`, then `node scripts/apply-decisions.mjs decisions.json` |
+| Approve or pass | `pulse` (04) | "Approve or pass" on `/library`, then `node scripts/apply-decisions.mjs decisions.json` |
 | 3 stills, pick one | `motion-stills` | `npm run stills -- M18-click-trail` |
 | Build in code | `motion-build` | `public/pieces/<Mxx-name>/index.html` |
 | Check the render | `render-check` | `npm run render:check` |
 | Into the library | `motion-library` (07) | add to `data/pieces.json`, `npm run render` |
-| Per-video table | `video-breakdown` (10) | `/video-breakdown` |
+| Per-video table | `video-breakdown` (10) | in chat (from `data/`) |
 | Brand values | `tokens` (01) | `lib/brand.ts`, `app/globals.css` |
-| New libraries | `find-your-mods` (13) | `/find-your-mods` |
+| New libraries | `find-your-mods` (13) | a new skill plus a catalog in `data/` |
 
 In Claude Code, the skills load automatically in this folder. Say "scout S01", "apply these Pulse decisions" or "make stills for I09".
 
@@ -57,17 +50,20 @@ In Claude Code, the skills load automatically in this folder. Say "scout S01", "
 
 ```
 app/                     the hub (Next.js 16, static export)
-  page.tsx               11 Motion Breakdown, sections 01 to 12
-  library/  pulse/  video-inbox/  video-breakdown/  tokens/  find-your-mods/
-components/              PieceFrame (shows an HTML piece or video), PieceTile (placeholder tiles),
-                         IdeaCards (approve/pass), Section (scroll lighting), CountUp, ModsNav
+  page.tsx               Overview
+  ideas/  feed/  library/  identity/
+components/              Site (top bar, sections, chips), IdeaBank (filter + shortlist), PieceFrame,
+                         IdeaCards and PulseBoard (approve or pass motion pitches)
 data/
-  pieces.json            the library: every motion graphic GearBook has (M01 to M25)
+  social.json            the social identity: audiences, formats, voice, rules, gaps
+  content-ideas.json     the post idea bank
+  posts.json             what's been posted, with likes and comments
+  pieces.json            the motion library (M18 and M25 are real; the rest are sample catalog entries)
   sources.json           videos, inspo and requests, with transcripts
-  ideas.json             every flagged moment: quote, catalog check, pitch, stills, build, render check
-lib/                     types, data helpers, brand tokens, Pulse decisions (localStorage)
+  ideas.json             every flagged motion moment: quote, catalog check, pitch, stills, build, render check
+lib/                     types, data helpers (data.ts, social.ts), brand tokens, Pulse decisions (localStorage)
 public/pieces/           the motion pieces: runtime.js, pieces.css (house style), topo.svg,
-                         M18-click-trail/ (built here, three looks), M25-signup-explainer/ (preview of the real reel)
+                         M18-click-trail/ (built here, three looks), M25-signup-explainer/ (the real reel, live, plus its MP4 preview)
 scripts/                 setup-check, transcribe, scout, motion.mjs (recorder), render-stills / render-piece /
                          render-check, apply-decisions
 .claude/skills/          one skill per mod, with its full prompt
