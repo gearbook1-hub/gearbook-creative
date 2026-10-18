@@ -106,7 +106,10 @@ Nothing needs keys to run; the hub shows the sample data in `data/`. Copy `.env.
 
 ## Hosting
 
-`.github/workflows/pages.yml` builds the static site and deploys it to GitHub Pages on every push to `main`, at `https://gearbook1-hub.github.io/gearbook-creative/`. Pages on a private repo needs a paid GitHub plan, and a Pages site is public to anyone with the URL (only Enterprise can restrict it). If that's a problem, deploy `out/` to Vercel with Deployment Protection instead.
+Not hosted yet. `npm run build` writes a static site to `out/` that can go anywhere.
+
+- **GitHub Pages:** `.github/workflows/pages.yml` is ready (run it from the Actions tab), but GitHub refused to turn Pages on for this private repo on the current plan ("Your current plan does not support GitHub Pages for this repository"). It needs GitHub Pro or Team, and even then a Pages site is public to anyone with the URL. Only Enterprise can restrict it. When enabled, it serves at `https://gearbook1-hub.github.io/gearbook-creative/`.
+- **Vercel (recommended for "just Luke and Matt"):** import the repo in Vercel, or run `vercel login` then `vercel deploy`. It needs no settings, since Next.js builds the static export itself. Turn on Deployment Protection (Vercel Authentication) so only your Vercel team can open it.
 
 Roca only loads on domains listed in the Adobe kit's settings. Add `gearbook1-hub.github.io` (and `localhost`) to kit `aac5uoe`, or headings fall back to Newsreader.
 
