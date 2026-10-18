@@ -22,7 +22,9 @@ The social data comes from the main repo's `docs/marketing/social-identity.md` a
 
 **M25, the signup reel,** was made as a Motion artifact on Matt's Claude account ("GearBook Signup Reel"). Its scenes, styles and images are copied unchanged into `public/pieces/M25-signup-explainer/film/`, and `film-kit.js` there is a small stand-in for the artifact's player with the same clock contract as `runtime.js`. It plays silent on the hub; the MP4 master with sound is in Drive. To refresh it after the artifact changes, copy its `modules` and `assets` again from the artifact's store. Its cream and topo ground, serif titles that arrive word by word and small tracked labels are the house style (`public/pieces/pieces.css`).
 
-The hub wears the same house style: cream ground, bark ink, Roca headings from Matt's Adobe kit (Newsreader where the kit doesn't serve), Outfit text, Afacad Flux labels, amber for the one thing that matters and sage for done. Tokens are in `app/globals.css` and `lib/brand.ts`.
+The hub wears the same house style: cream ground, bark ink, Roca headings from Matt's Adobe kit (Newsreader where the kit doesn't serve), Outfit text, Afacad Flux labels, amber for the one thing that matters and sage for done. Tokens are in `app/globals.css` and `lib/brand.ts`. Logos are the official files from the GearBook Drive (`Branding/Adobe/Full Length.svg` as `public/brand/gearbook-logo.svg`; the favicon is `Branding/Logo Variations/Social Media Cropped.png`); never redraw them.
+
+**Making a new video:** see [docs/NEW_VIDEO.md](docs/NEW_VIDEO.md).
 
 ## The loop
 

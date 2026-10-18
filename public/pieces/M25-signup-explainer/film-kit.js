@@ -103,7 +103,7 @@
 
     const spec = JSON.parse(await fetchText("modules/scenes.json"));
     assetNames = new Set(["gear-belay.webp", "gear-binos.webp", "gear-camera.webp", "gear-duffel.webp", "gear-goggles.webp",
-      "gear-jacket.webp", "gear-rope.webp", "gear-shoes.webp", "logo-full.png", "share-logo-cutout.png", "share-photo.webp",
+      "gear-jacket.webp", "gear-rope.webp", "gear-shoes.webp", "share-logo-cutout.png", "share-photo.webp",
       ...Array.from({ length: 10 }, (_, i) => "pro-" + String(i + 1).padStart(2, "0") + ".webp")]);
     stage.style.background = spec.background;
 

@@ -18,7 +18,7 @@ export function TopBar({ current }: { current: PageHref }) {
       <div className="wrap topbar-in">
         <Link className="brand" href="/">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={`${BASE}/logo-full.png`} alt="GearBook" />
+          <img src={`${BASE}/brand/gearbook-logo.svg`} alt="GearBook" />
           <span>Creative</span>
         </Link>
         <nav aria-label="Pages">

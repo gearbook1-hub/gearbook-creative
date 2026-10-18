@@ -28,6 +28,8 @@
   .row.last .fill { background: var(--sage); }
   .row.last .v { color: var(--sage-dark); }
   svg.chart { position: absolute; inset: 0; overflow: visible; }
+  /* The official logo is dark ink; on the bark look it sits on a cream plate so it reads. */
+  body[data-look="switchback"] .lockup img { background: var(--cream); padding: 10px 14px; border-radius: 10px; }
 </style>
 </head>
 <body>
@@ -119,9 +121,9 @@
         arrive(el("div", { class: "member", text: p.member, style: { top: "1380px" } }, stage), 0.6);
       }
 
-      // GearBook lockup, inside the safe area (Luke's note on I01).
+      // The official GearBook logo (Branding/Adobe/Full Length.svg), inside the safe area (Luke's note on I01).
       const lockup = el("div", { class: "lockup" }, stage);
-      lockup.innerHTML = '<svg width="50" height="34" viewBox="0 0 46 32" aria-hidden="true"><polygon points="0,32 23,2 23,32" fill="#6a8d73"/><polygon points="23,32 23,2 46,32" fill="#f6ae2d"/></svg><span>gearbook</span>';
+      lockup.innerHTML = '<img src="../../brand/gearbook-logo.svg" alt="GearBook" style="display:block;height:52px;width:auto">';
       arrive(lockup, 0.3);
     },
   });
