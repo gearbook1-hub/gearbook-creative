@@ -9,8 +9,8 @@ const nextConfig: NextConfig = {
   basePath,
   trailingSlash: true,
   images: { unoptimized: true },
-  // The Remotion compositions are shared between the dashboard (@remotion/player) and the CLI renders.
-  transpilePackages: ["remotion", "@remotion/player"],
+  // Motion pieces are plain HTML under public/pieces; the dashboard iframes them under the base path.
+  env: { NEXT_PUBLIC_BASE_PATH: basePath },
 };
 
 export default nextConfig;

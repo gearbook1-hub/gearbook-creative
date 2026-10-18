@@ -1,16 +1,21 @@
-// Step 7, "Build in code": renders the picked looks to MP4 (H.264, 1080x1920).
-//   npm run render                       all three looks
-//   npm run render -- ClickTrail-A-Switchback --props='{"values":[3,9,20,41,77]}'
+// Delivery: records a piece to MP4 (1080x1920, H.264, 60 fps by default).
+//   npm run render                                  M18, every look
+//   npm run render -- M18-click-trail --look=ledger --props={"values":[3,9,20,41,77]}
 // New words or numbers never need new code: pass props.
 import fs from "node:fs";
-import { remotion, ENTRY, LOOKS } from "./remotion-cli.mjs";
+import path from "node:path";
+import { args, ffmpeg, looksOf, openPiece } from "./motion.mjs";
 
-const args = process.argv.slice(2);
-const ids = args.filter((a) => !a.startsWith("--"));
-const extra = args.filter((a) => a.startsWith("--"));
+const { piece, look: only, props, fps } = args();
 fs.mkdirSync("renders", { recursive: true });
-for (const id of ids.length ? ids : LOOKS) {
-  const out = `renders/${id}.mp4`;
-  remotion(["render", ENTRY, id, out, "--codec=h264", ...extra]);
-  console.log(`render ${id} -> ${out}`);
+for (const look of only ? [only] : looksOf(piece)) {
+  const p = await openPiece(piece, { look, props });
+  const dir = fs.mkdtempSync(path.join("renders", ".frames-"));
+  const frames = Math.round(p.duration * fps);
+  for (let i = 0; i <= frames; i++) await p.frame(i / fps, path.join(dir, `${String(i).padStart(5, "0")}.png`));
+  await p.close();
+  const out = `renders/${piece}-${look ?? "main"}.mp4`;
+  ffmpeg(["-framerate", String(fps), "-i", path.join(dir, "%05d.png"), "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "18", out]);
+  fs.rmSync(dir, { recursive: true, force: true });
+  console.log(`render ${piece} ${look ?? ""} -> ${out} (${frames + 1} frames)`);
 }

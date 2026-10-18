@@ -1,14 +1,16 @@
-// Step 6 of the loop, "3 stills": renders one still per look so Luke can pick a direction
-// before anything is animated. Writes stills/out/<composition>.png.
-//   npm run stills                 (frame 140, the settled end state)
-//   npm run stills -- 90           (any frame)
+// Step "3 stills": one still per look so Luke can pick a direction before anything is
+// animated further. Writes stills/out/<piece>-<look>.png.
+//   npm run stills                                  M18, every look, at the settled end
+//   npm run stills -- M18-click-trail --t=2.5
 import fs from "node:fs";
-import { remotion, ENTRY, LOOKS } from "./remotion-cli.mjs";
+import { args, looksOf, openPiece } from "./motion.mjs";
 
-const frame = process.argv[2] ?? "140";
+const { piece, t, props } = args();
 fs.mkdirSync("stills/out", { recursive: true });
-for (const id of LOOKS) {
-  const out = `stills/out/${id}.png`;
-  remotion(["still", ENTRY, id, out, `--frame=${frame}`]);
-  console.log(`still ${id} @${frame} -> ${out}`);
+for (const look of looksOf(piece)) {
+  const p = await openPiece(piece, { look, props });
+  const out = `stills/out/${piece}-${look ?? "main"}.png`;
+  await p.frame(t ? Number(t) : p.duration, out);
+  await p.close();
+  console.log(`still ${piece} ${look ?? ""} -> ${out}`);
 }

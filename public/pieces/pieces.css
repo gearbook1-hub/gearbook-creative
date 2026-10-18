@@ -1,0 +1,22 @@
+/* Shared look for every GearBook motion piece. The house style comes from M25, the signup
+   explainer: cream ground with faint bark topo lines, Roca headings that arrive word by word,
+   small tracked labels above them, Outfit for everything else. 1080x1920 (9:16). */
+@import url("https://use.typekit.net/aac5uoe.css");
+@import url("https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@400;600&family=Outfit:wght@300;400;500;600&display=block");
+
+:root {
+  --bark: #3d3522; --sage: #6a8d73; --sage-dark: #527060; --cream: #eef5ed; --amber: #f6ae2d;
+  --slate: #33658a; --ink-muted: #6b6450; --white: #ffffff;
+  --display: roca, Roca, Georgia, serif; --body: Outfit, system-ui, sans-serif; --label: "Afacad Flux", system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: transparent; }
+#stage {
+  position: absolute; top: 0; left: 0; width: 1080px; height: 1920px; transform-origin: 0 0; overflow: hidden;
+  background: var(--ground, var(--cream)); color: var(--fg, var(--bark)); font-family: var(--body);
+}
+.topo { position: absolute; inset: 0; background: url("topo.svg") center / cover no-repeat; }
+body[data-look] .ground-bark { --ground: var(--bark); --fg: var(--cream); }
+.eyebrow { font-family: var(--label); font-weight: 600; font-size: 26px; letter-spacing: 0.32em; text-transform: uppercase; }
+.title { font-family: var(--display); font-weight: 700; font-size: 84px; line-height: 1.04; letter-spacing: -0.01em; }
+.lockup { position: absolute; left: 90px; top: 1440px; display: flex; align-items: center; gap: 16px; font-family: var(--display); font-weight: 700; font-size: 44px; }

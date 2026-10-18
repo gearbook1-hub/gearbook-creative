@@ -8,7 +8,6 @@
     "build": "next build",
     "start": "next start",
     "lint": "tsc --noEmit",
-    "studio": "remotion studio remotion/index.ts",
     "stills": "node scripts/render-stills.mjs",
     "render": "node scripts/render-piece.mjs",
     "render:check": "node scripts/render-check.mjs",
@@ -17,20 +16,17 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.135.0",
-    "@remotion/player": "4.0.536",
     "next": "^16.4.2",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
-    "remotion": "4.0.536",
-    "zod": "4.5.4"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@remotion/cli": "4.0.536",
-    "@remotion/renderer": "4.0.536",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "pngjs": "^7.0.0",
+    "puppeteer-core": "^25.14.0",
     "typescript": "^5.9.0"
   }
 }

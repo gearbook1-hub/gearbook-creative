@@ -2,8 +2,8 @@ import { brand, grounds } from "@/lib/brand";
 import type { Ground, PreviewKind } from "@/lib/types";
 
 // A live, looping preview for a library piece. These are lightweight SVG stand-ins so the grid
-// moves like the reel's does; the real piece is whatever is in the library (a Remotion
-// composition for M18, renders for the rest once they exist).
+// moves like the reel's does; the real piece is whatever is in the library (an HTML motion
+// piece in public/pieces for M18, the recorded video for M25, renders for the rest).
 
 const DUR = "4s";
 
@@ -197,6 +197,7 @@ export function PieceTile({ kind, ground, label }: { kind: PreviewKind; ground: 
             </circle>
           </g>
         );
+      case "video":
       case "retired":
         return <text x="45" y="84" textAnchor="middle" fontFamily="var(--font-mono)" fontSize="6" fill={fg} opacity=".7">RETIRED</text>;
     }

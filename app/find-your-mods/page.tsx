@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Find Your Mods - GearBook Creative" 
 // Each library needs the same four parts: sources to read, a catalog to check, two human
 // gates, and a way to build and check it.
 const LIBRARIES = [
-  { name: "Motion graphics", status: "Mine · running", sources: "Reels Luke records, saved inspo reels, requests", catalog: "data/pieces.json (this repo)", build: "Remotion, npm run render, npm run render:check" },
+  { name: "Motion graphics", status: "Mine · running", sources: "Reels Luke records, saved inspo reels, requests", catalog: "data/pieces.json (this repo)", build: "Animated HTML pieces, npm run render, npm run render:check" },
   { name: "Sales decks", status: "Next", sources: "Partner calls, Impact applications, partner emails", catalog: "Past partner decks", build: "One deck engine, a version per partner" },
   { name: "Email templates", status: "Idea", sources: "lib/resend.ts in the gearbook repo, replies to hello@gearbook.shop", catalog: "Existing emailDocument templates", build: "New template in lib/resend.ts, checked at /dev-preview/emails" },
   { name: "Ad creative", status: "Idea", sources: "Top posts in Metricool, content-idea-bank.md", catalog: "Posted creative and the three house formats", build: "Stills and cut-downs from the motion library" },

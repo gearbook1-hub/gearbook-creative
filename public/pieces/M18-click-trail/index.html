@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>M18 Click Trail</title>
+<link rel="stylesheet" href="../pieces.css" />
+<style>
+  /* Three looks, one engine. Switchback: dotted climb on bark. Ledger: bar rows on the
+     explainer's cream and topo. Summit: one big number on sage. */
+  body[data-look="switchback"] #stage { --ground: var(--bark); --fg: var(--cream); --muted: #b9b29c; --line: var(--cream); }
+  body[data-look="ledger"] #stage { --ground: var(--cream); --fg: var(--bark); --muted: var(--ink-muted); --line: var(--bark); }
+  body[data-look="summit"] #stage { --ground: var(--sage); --fg: var(--bark); --muted: #2f3b2c; --line: var(--bark); }
+  body[data-look="switchback"] .topo { filter: invert(1); opacity: 0.35; }
+  body[data-look="summit"] .topo { opacity: 0.5; }
+  .head { position: absolute; left: 90px; top: 230px; width: 780px; }
+  .head .eyebrow { color: var(--muted); }
+  .head .title { margin-top: 22px; }
+  .big { position: absolute; left: 80px; top: 330px; font-family: var(--display); font-weight: 700; font-size: 380px; line-height: 1; letter-spacing: -0.04em; }
+  .sub { position: absolute; left: 90px; top: 760px; width: 720px; font-size: 38px; }
+  .member { position: absolute; left: 90px; font-size: 30px; color: var(--muted); }
+  .rows { position: absolute; left: 90px; top: 640px; width: 780px; }
+  .row { display: flex; align-items: center; gap: 28px; height: 118px; border-top: 2px solid rgba(61, 53, 34, 0.14); }
+  .row .m { width: 120px; font-family: var(--label); font-weight: 600; font-size: 28px; letter-spacing: 0.14em; color: var(--muted); }
+  .row .bar { flex: 1; height: 16px; border-radius: 9px; background: rgba(61, 53, 34, 0.1); overflow: hidden; }
+  .row .fill { height: 100%; border-radius: 9px; background: var(--bark); transform-origin: left; }
+  .row .v { width: 130px; text-align: right; font-family: var(--display); font-weight: 700; font-size: 54px; }
+  .row.last .fill { background: var(--sage); }
+  .row.last .v { color: var(--sage-dark); }
+  svg.chart { position: absolute; inset: 0; overflow: visible; }
+</style>
+</head>
+<body>
+<div id="stage"><div class="topo"></div></div>
+<script src="../runtime.js"></script>
+<script>
+  const { el, arrive, words, tick, progress, outCubic } = Motion;
+  const KICKER = { switchback: "One member, five months", ledger: "One member, month by month", summit: "Clicks this month" };
+
+  Motion.init({
+    duration: 5,
+    hold: 1.2,
+    looks: ["switchback", "ledger", "summit"],
+    // The piece's variables. Override any of them with ?props={...}.
+    defaults: {
+      headline: "The clicks climbed first.",
+      values: [12, 40, 68, 95, 148],
+      months: ["May", "Jun", "Jul", "Aug", "Sep"],
+      member: "Sam, climbing guide (sample)",
+      flagged: "catalog shared",
+    },
+    build(stage, p, look) {
+      const n = p.values.length, last = n - 1, max = Math.max(...p.values);
+      // Each month lands on its own beat between 0.6 s and 3.9 s.
+      const beat = (i) => 0.6 + (3.3 * i) / Math.max(1, last);
+
+      const head = el("div", { class: "head" }, stage);
+      const eyebrow = el("div", { class: "eyebrow", text: KICKER[look] }, head);
+      arrive(eyebrow, 0);
+      if (look !== "summit") words(el("div", { class: "title" }, head), p.headline, 0.15);
+
+      if (look === "switchback") {
+        const svg = el("svg", { class: "chart", width: 1080, height: 1920 }, stage);
+        const x0 = 130, x1 = 830, y0 = 1240, y1 = 640;
+        const pts = p.values.map((v, i) => [x0 + ((x1 - x0) * i) / Math.max(1, last), y0 - ((y0 - y1) * v) / max]);
+        el("line", { x1: x0, x2: x1, y1: y0 + 60, y2: y0 + 60, stroke: "#b9b29c", "stroke-opacity": 0.45, "stroke-width": 2 }, svg);
+        const segs = pts.slice(1).map((pt, i) => el("line", { x1: pts[i][0], y1: pts[i][1], x2: pts[i][0], y2: pts[i][1], stroke: "#eef5ed", "stroke-width": 5, "stroke-dasharray": "2 16", "stroke-linecap": "round" }, svg));
+        pts.forEach(([x, y], i) => {
+          const g = el("g", {}, svg);
+          const isLast = i === last;
+          if (isLast) el("circle", { cx: x, cy: y, r: 34, fill: "#f6ae2d", opacity: 0.25 }, g);
+          el("circle", { cx: x, cy: y, r: isLast ? 16 : 11, fill: isLast ? "#f6ae2d" : "#3d3522", stroke: isLast ? "#f6ae2d" : "#eef5ed", "stroke-width": 4 }, g);
+          el("text", { x, y: y - 34, "text-anchor": "middle", "font-family": "roca, Georgia, serif", "font-weight": 700, "font-size": 44, fill: isLast ? "#f6ae2d" : "#eef5ed", text: p.values[i] }, g);
+          el("text", { x, y: y0 + 102, "text-anchor": "middle", "font-family": "Afacad Flux, sans-serif", "font-weight": 600, "font-size": 26, "letter-spacing": 4, fill: "#b9b29c", text: (p.months[i] || "").toUpperCase() }, g);
+          g.animate([{ opacity: 0, transform: "translateY(16px)" }, { opacity: 1, transform: "none" }], { duration: 450, delay: beat(i) * 1000, easing: Motion.ease.arrive, fill: "both" });
+        });
+        if (p.flagged) {
+          const [x, y] = pts[last];
+          const tag = el("text", { x: x - 30, y: y + 70, "text-anchor": "end", "font-family": "Afacad Flux, sans-serif", "font-weight": 600, "font-size": 30, "letter-spacing": 2, fill: "#f6ae2d", text: `[ ${p.flagged} ]` }, svg);
+          tag.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 400, delay: (beat(last) + 0.3) * 1000, fill: "both" });
+        }
+        // The trail draws between points: segment i grows while point i+1 lands.
+        tick((t) => segs.forEach((s, i) => {
+          const k = outCubic(progress(t, beat(i), beat(i + 1) - beat(i)));
+          s.setAttribute("x2", pts[i][0] + (pts[i + 1][0] - pts[i][0]) * k);
+          s.setAttribute("y2", pts[i][1] + (pts[i + 1][1] - pts[i][1]) * k);
+        }));
+        arrive(el("div", { class: "member", text: p.member, style: { top: "1392px" } }, stage), 0.6);
+      }
+
+      if (look === "ledger") {
+        const rows = el("div", { class: "rows" }, stage);
+        p.values.forEach((v, i) => {
+          const row = el("div", { class: "row" + (i === last ? " last" : "") }, rows);
+          el("div", { class: "m", text: (p.months[i] || "").toUpperCase() }, row);
+          const fill = el("div", { class: "fill", style: { width: `${(100 * v) / max}%` } }, el("div", { class: "bar" }, row));
+          const val = el("div", { class: "v", text: "0" }, row);
+          row.animate([{ opacity: 0.25 }, { opacity: 1 }], { duration: 300, delay: beat(i) * 1000, fill: "both" });
+          fill.animate([{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], { duration: 700, delay: beat(i) * 1000, easing: Motion.ease.arrive, fill: "both" });
+          tick((t) => { val.textContent = Math.round(v * outCubic(progress(t, beat(i), 0.7))); });
+        });
+        arrive(el("div", { class: "member", text: p.member, style: { top: "1290px" } }, stage), 0.6);
+      }
+
+      if (look === "summit") {
+        const big = el("div", { class: "big", text: String(p.values[0]) }, stage);
+        arrive(big, 0.1, { y: 40 });
+        tick((t) => { big.textContent = Math.round(p.values[0] + (p.values[last] - p.values[0]) * outCubic(progress(t, 0.4, 3.6))); });
+        arrive(el("div", { class: "sub", text: `${p.months[last]} clicks, up from ${p.values[0]} in ${p.months[0]}.` }, stage), 0.5);
+        const svg = el("svg", { class: "chart", width: 1080, height: 1920 }, stage);
+        const x0 = 110, x1 = 850, y0 = 1330, y1 = 1130;
+        const pts = p.values.map((v, i) => [x0 + ((x1 - x0) * i) / Math.max(1, last), y0 - ((y0 - y1) * v) / max]);
+        pts.forEach(([x, y], i) => {
+          const g = el("g", {}, svg);
+          if (i > 0) el("line", { x1: pts[i - 1][0], y1: pts[i - 1][1], x2: x, y2: y, stroke: "#3d3522", "stroke-width": 4, "stroke-dasharray": "2 14", "stroke-linecap": "round" }, g);
+          el("circle", { cx: x, cy: y, r: i === last ? 15 : 9, fill: i === last ? "#eef5ed" : "#3d3522" }, g);
+          g.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 400, delay: beat(i) * 1000, fill: "both" });
+        });
+        arrive(el("div", { class: "member", text: p.member, style: { top: "1380px" } }, stage), 0.6);
+      }
+
+      // GearBook lockup, inside the safe area (Luke's note on I01).
+      const lockup = el("div", { class: "lockup" }, stage);
+      lockup.innerHTML = '<svg width="50" height="34" viewBox="0 0 46 32" aria-hidden="true"><polygon points="0,32 23,2 23,32" fill="#6a8d73"/><polygon points="23,32 23,2 46,32" fill="#f6ae2d"/></svg><span>gearbook</span>';
+      arrive(lockup, 0.3);
+    },
+  });
+</script>
+</body>
+</html>

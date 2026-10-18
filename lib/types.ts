@@ -6,7 +6,7 @@
 export type PreviewKind =
   | "signal" | "transition" | "ring" | "dots" | "wave" | "statement" | "name" | "number"
   | "flow" | "compare" | "opener" | "pop" | "topo" | "bars" | "quiet" | "trail" | "map"
-  | "load" | "tally" | "relay" | "sweep" | "path" | "retired";
+  | "load" | "tally" | "relay" | "sweep" | "path" | "video" | "retired";
 
 export type Ground = "bark" | "cream" | "sage" | "amber" | "ink" | "slate";
 
@@ -14,6 +14,8 @@ export interface Variant {
   /** Tracked label shown under the variant in the gallery, e.g. "SWITCHBACK". */
   label: string;
   ground: Ground;
+  /** For HTML pieces: the ?look= value that renders this variant. */
+  look?: string;
 }
 
 export interface Piece {
@@ -33,8 +35,12 @@ export interface Piece {
   formats: string[];
   /** Props the piece takes, so it can be re-rendered with new words or numbers. */
   variables: string[];
-  /** Remotion composition id when the piece is built in this repo. */
-  composition?: string;
+  /** Folder under public/pieces/ when the piece is an HTML motion piece in this repo. */
+  html?: string;
+  /** Preview video under public/ for pieces made elsewhere (e.g. M25). */
+  video?: string;
+  /** Where the full-quality master lives. */
+  master?: string;
   builtFrom?: string;
   builtOn: string;
   sample: boolean;

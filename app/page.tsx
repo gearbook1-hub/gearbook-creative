@@ -5,16 +5,13 @@ import { Footer, ModsNav } from "@/components/ModsNav";
 import { PieceTile } from "@/components/PieceTile";
 import { Section } from "@/components/Section";
 import { StillCard } from "@/components/StillCard";
-import { TrailPlayer, TrailStill } from "@/components/Trail";
+import { PieceFrame, PieceVideo } from "@/components/PieceFrame";
 import { SOURCE_KINDS, ideas, ideasFrom, livePieces, piece, plural, source, sourceLabel, stats } from "@/lib/data";
 import type { Idea } from "@/lib/types";
-import type { TrailLook } from "@/remotion/ClickTrail";
 
 // 11 Motion Breakdown: "How the motion mod thinks". One scrolling page that walks the loop
 // top to bottom, section for section as in the reel (docs/VIDEO_SPEC.md §4).
 
-const LOOK_BY_LETTER: Record<string, TrailLook> = { A: "switchback", B: "ledger", C: "summit" };
-const RENDER_FRAMES = [30, 90, 140];
 
 function statusLine(i: Idea) {
   switch (i.status) {
@@ -33,6 +30,7 @@ export default function MotionBreakdown() {
   const hero = ideas.find((i) => i.status === "built" && i.renderCheck && i.stills)!;
   const heroSource = source(hero.sourceId)!;
   const heroPiece = piece(hero.builtAs!)!;
+  const lookOf = (letter: string) => heroPiece.variants["ABC".indexOf(letter)]?.look;
   const withStills = ideas.filter((i) => i.stills?.length);
   const pitched: IdeaCardData[] = ideas
     .filter((i) => i.status === "pitched")
@@ -76,7 +74,9 @@ export default function MotionBreakdown() {
           <div className="tiles">
             {livePieces.map((p) => (
               <Link key={p.id} href={`/library#${p.id}`} className="tile">
-                <div className="tile-frame"><PieceTile kind={p.preview} ground={p.ground} label={`${p.id} ${p.name}`} /></div>
+                <div className="tile-frame">
+                  {p.video ? <PieceVideo src={p.video} title={`${p.id} ${p.name}`} /> : <PieceTile kind={p.preview} ground={p.ground} label={`${p.id} ${p.name}`} />}
+                </div>
                 <div className="tile-label">{p.id} {p.name}</div>
               </Link>
             ))}
@@ -139,7 +139,7 @@ export default function MotionBreakdown() {
                     {i.stills!.map((st) => (
                       <div key={st.letter}>
                         {i.id === hero.id ? (
-                          <div className="still"><TrailStill look={LOOK_BY_LETTER[st.letter]} /></div>
+                          <div className="still"><PieceFrame piece={heroPiece.html!} look={lookOf(st.letter)} t={5} title={`${i.name} still ${st.letter}`} /></div>
                         ) : (
                           <StillCard still={st} idea={i.name} />
                         )}
@@ -156,7 +156,7 @@ export default function MotionBreakdown() {
 
         <Section num="07" title="Built in code">
           <div className="panel">
-            <p><span className="k">the build</span><br />{heroPiece.id} {heroPiece.name}. One member&apos;s number across N months.</p>
+            <p><span className="k">the build</span><br />{heroPiece.id} {heroPiece.name}. One member&apos;s number across N months.<br /><span className="k">public/pieces/{heroPiece.html}/index.html · an animated HTML page, like the signup explainer</span></p>
             <p className="hl">
               Luke picked {hero.pickedLetters!.length === 3 ? "A" : hero.pickedLetters![0]} ({hero.stills![0].name}) and asked for all three,<br />
               so one engine renders three looks.
@@ -168,11 +168,10 @@ export default function MotionBreakdown() {
 
         <Section num="08" title="It checks its own render">
           <div className="triptych" style={{ background: "var(--panel)", border: "1px solid var(--panel-line)", gap: 0 }}>
-            {RENDER_FRAMES.map((f, n) => {
-              const check = hero.renderCheck![n];
+            {hero.renderCheck!.map((check, n) => {
               return (
-                <div key={f} className="still" style={{ borderRight: n < 2 ? "1px solid var(--panel-line)" : 0 }}>
-                  <TrailStill look="switchback" frame={f} />
+                <div key={check.t} className="still" style={{ borderRight: n < 2 ? "1px solid var(--panel-line)" : 0 }}>
+                  <PieceFrame piece={heroPiece.html!} look={lookOf("A")} t={parseFloat(check.t)} title={`Render frame at ${check.t}`} />
                   <span className="ts">{check.t}</span>
                   <span className={`check-badge${check.pass ? "" : " fail"}`} style={{ animationDelay: `${0.4 + n * 0.5}s` }} title={check.note}>
                     {check.pass ? "✓" : "!"}
@@ -186,10 +185,10 @@ export default function MotionBreakdown() {
 
         <Section num="09" title="Three looks, one engine">
           <div className="triptych">
-            {(["switchback", "ledger", "summit"] as const).map((look) => (
-              <div key={look}>
-                <div className="still"><TrailPlayer look={look} /></div>
-                <div className="dark-label">{look[0].toUpperCase() + look.slice(1)}</div>
+            {heroPiece.variants.map((v) => (
+              <div key={v.label}>
+                <div className="still"><PieceFrame piece={heroPiece.html!} look={v.look} title={`${heroPiece.name}, ${v.look}`} /></div>
+                <div className="dark-label">{v.look![0].toUpperCase() + v.look!.slice(1)}</div>
               </div>
             ))}
           </div>

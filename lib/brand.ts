@@ -1,5 +1,5 @@
 // GearBook brand tokens, mirrored from the web app's app/globals.css :root and the iOS app's
-// dark variants (GearBook-IOS-App scripts/make_assets.py). Used by the Remotion pieces,
+// dark variants (GearBook-IOS-App scripts/make_assets.py). Used by the dashboard tiles,
 // which can't read CSS variables at render time. The dashboard reads the same values from
 // app/globals.css.
 

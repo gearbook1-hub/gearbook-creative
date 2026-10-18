@@ -33,7 +33,7 @@ export function Footer() {
   return (
     <footer className="footer">
       <div className="wrap">
-        GearBook Creative · internal, for Luke and Matt · sample data is marked as sample · rebuilt from the
+        GearBook Creative · built for Luke and Matt · sample data is marked as sample · rebuilt from the
         &quot;How the motion mod thinks&quot; reel, see docs/VIDEO_SPEC.md
       </div>
     </footer>
