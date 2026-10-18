@@ -1,0 +1,53 @@
+[
+  {
+    "id": "S01", "kind": "video", "title": "Member spotlight (sample member)", "shortName": "Member spotlight video",
+    "date": "2026-10-08", "sample": true,
+    "transcript": [
+      { "t": "0:04", "text": "This is Sam. Sam guides climbing in Squamish and has a GearBook catalog." },
+      { "t": "0:22", "text": "Since May, her catalog's had five months of clicks... twelve... forty... sixty-eight... ninety-five... a hundred and forty-eight." },
+      { "t": "1:36", "text": "She swapped her tent and her stove and her pack dropped almost two pounds." },
+      { "t": "1:59", "text": "People clicked from fourteen different states." },
+      { "t": "2:10", "text": "Click the link in our bio." }
+    ],
+    "usedPieces": ["M01", "M08", "M13", "M15"]
+  },
+  {
+    "id": "S02", "kind": "video", "title": "How we make our reels", "shortName": "my mods video",
+    "date": "2026-10-09", "sample": true,
+    "transcript": [
+      { "t": "0:19", "text": "I record it, Claude edits it, the motion mod looks for graphics, and I approve them." },
+      { "t": "1:12", "text": "An edit that used to take me two weeks, I now get back in one morning." }
+    ],
+    "usedPieces": ["M01", "M07", "M15"]
+  },
+  {
+    "id": "S03", "kind": "video", "title": "Launch: \"I'm Luke, and this is GearBook\"", "shortName": "Launch reel",
+    "date": "2026-09-14", "sample": false,
+    "transcript": [
+      { "t": "0:09", "text": "What if every time you recommended your favorite gear, you got paid? I'm Luke, and this is GearBook." }
+    ],
+    "usedPieces": ["M01", "M08", "M13", "M15"]
+  },
+  {
+    "id": "S04", "kind": "video", "title": "Partner showcase: Scuba.com and West Marine", "shortName": "Scuba.com and West Marine reel",
+    "date": "2026-10-05", "sample": true,
+    "transcript": [
+      { "t": "0:14", "text": "Same catalog, from four thousand metres up to forty metres down." }
+    ],
+    "usedPieces": ["M12", "M13", "M15"]
+  },
+  {
+    "id": "S05", "kind": "inspo", "title": "Saved reel: bouldering beta breakdown", "shortName": "a reel I saved",
+    "date": "2026-10-03", "sample": true, "transcript": [], "usedPieces": []
+  },
+  {
+    "id": "S06", "kind": "inspo", "title": "Saved reel: podcast clip with a highlighter caption", "shortName": "a reel I saved",
+    "date": "2026-10-04", "sample": true, "transcript": [], "usedPieces": []
+  },
+  {
+    "id": "S07", "kind": "request", "title": "Partner unboxing graphic", "shortName": "I asked for it",
+    "date": "2026-10-12", "sample": true,
+    "transcript": [{ "t": "", "text": "Can we get a box-opening graphic for the partner reels, using our own product photos?" }],
+    "usedPieces": []
+  }
+]

@@ -1,0 +1,746 @@
+[
+  {
+    "id": "M01",
+    "name": "Signal",
+    "version": 2,
+    "status": "live",
+    "description": "The GearBook mark builds itself: a sage peak and an amber peak rise out of a flat ridge line, the wordmark settles under them and the ridge carries one slow pulse out to the edge. Opens or closes any reel.",
+    "covers": "Brand sting only. Carries no data and no words beyond the wordmark.",
+    "preview": "signal",
+    "ground": "bark",
+    "variants": [
+      {
+        "label": "BARK",
+        "ground": "bark"
+      },
+      {
+        "label": "CREAM",
+        "ground": "cream"
+      },
+      {
+        "label": "SAGE",
+        "ground": "sage"
+      }
+    ],
+    "formats": [
+      "9:16",
+      "1:1",
+      "16:9",
+      "4:5"
+    ],
+    "variables": [
+      "tagline"
+    ],
+    "builtOn": "2026-09-12",
+    "sample": true
+  },
+  {
+    "id": "M02",
+    "name": "Transitions",
+    "version": 2,
+    "status": "live",
+    "description": "Three cuts that work on real trip footage. Ridge Cut wipes along a mountain profile, Clip In snaps the next clip through a carabiner gate, Whip runs the colour bars across while the footage itself whips.",
+    "covers": "Clip to clip transitions. No text, no data.",
+    "preview": "transition",
+    "ground": "sage",
+    "variants": [
+      {
+        "label": "RIDGE CUT",
+        "ground": "bark"
+      },
+      {
+        "label": "CLIP IN",
+        "ground": "cream"
+      },
+      {
+        "label": "WHIP",
+        "ground": "amber"
+      }
+    ],
+    "formats": [
+      "9:16",
+      "16:9"
+    ],
+    "variables": [
+      "direction"
+    ],
+    "builtOn": "2026-09-13",
+    "sample": true
+  },
+  {
+    "id": "M03",
+    "name": "Catalog Score",
+    "version": 2,
+    "status": "live",
+    "description": "A member's catalog completeness as a dial: rings fill for name, bio, photo, payout and each product, and the score rolls in at the centre. Board and Orbit looks for longer explainers.",
+    "covers": "One member, one score, one moment in time. Not a change over time.",
+    "preview": "ring",
+    "ground": "sage",
+    "variants": [
+      {
+        "label": "FOCUS",
+        "ground": "bark"
+      },
+      {
+        "label": "BOARD",
+        "ground": "cream"
+      },
+      {
+        "label": "ORBIT",
+        "ground": "sage"
+      }
+    ],
+    "formats": [
+      "9:16",
+      "1:1"
+    ],
+    "variables": [
+      "score",
+      "items"
+    ],
+    "builtOn": "2026-09-15",
+    "sample": true
+  },
+  {
+    "id": "M04",
+    "name": "Coin Pile",
+    "version": 1,
+    "status": "retired",
+    "description": "Coins stack up under a caption. Retired: it read as a money promise, which GearBook copy never makes.",
+    "covers": "Retired.",
+    "preview": "retired",
+    "ground": "amber",
+    "variants": [
+      {
+        "label": "AMBER",
+        "ground": "amber"
+      }
+    ],
+    "formats": [
+      "9:16"
+    ],
+    "variables": [
+      "caption"
+    ],
+    "builtOn": "2026-09-14",
+    "sample": true
+  },
+  {
+    "id": "M05",
+    "name": "Your Catalog",
+    "version": 1,
+    "status": "live",
+    "description": "Hundreds of drifting dots stream home into the shape of a member's catalog grid, one dot per product view, and the card sets: name, sport, \"Shop my gear\".",
+    "covers": "A member's catalog as a whole. Not a single product.",
+    "preview": "dots",
+    "ground": "bark",
+    "variants": [
+      {
+        "label": "BARK · CLIMB",
+        "ground": "bark"
+      },
+      {
+        "label": "CREAM · SNOW",
+        "ground": "cream"
+      },
+      {
+        "label": "SAGE · WATER",
+        "ground": "sage"
+      }
+    ],
+    "formats": [
+      "9:16",
+      "4:5"
+    ],
+    "variables": [
+      "member",
+      "sport",
+      "productCount"
+    ],
+    "builtOn": "2026-09-18",
+    "sample": true
+  },
+  {
+    "id": "M06",
+    "name": "Sports",
+    "version": 1,
+    "status": "live",
+    "description": "One opener per sport (climbing, ski and snow, mountain, water). Each sport owns a line shape generated from its name, so it's the same line every time it appears.",
+    "covers": "Section openers by sport. No numbers.",
+    "preview": "wave",
+    "ground": "bark",
+    "variants": [
+      {
+        "label": "CLIMB",
+        "ground": "bark"
+      },
+      {
+        "label": "SNOW",
+        "ground": "cream"
+      },
+      {
+        "label": "WATER",
+        "ground": "slate"
+      }
+    ],
+    "formats": [
+      "9:16",
+      "16:9"
+    ],
+    "variables": [
+      "sport",
+      "title"
+    ],
+    "builtOn": "2026-09-19",
+    "sample": true
+  },
+  {
+    "id": "M07",
+    "name": "Statement Cards",
+    "version": 2,
+    "status": "live",
+    "description": "One short line slams in, word by word, on a flat ground, with the key word in amber brackets. For the line the reel hangs on.",
+    "covers": "Words only. One statement per card.",
+    "preview": "statement",
+    "ground": "amber",
+    "variants": [
+      {
+        "label": "AMBER",
+        "ground": "amber"
+      },
+      {
+        "label": "BARK",
+        "ground": "bark"
+      },
+      {
+        "label": "CREAM",
+        "ground": "cream"
+      }
+    ],
+    "formats": [
+      "9:16",
+      "1:1"
+    ],
+    "variables": [
+      "line",
+      "bracketWord"
+    ],
+    "builtOn": "2026-09-20",
+    "sample": true
+  },
+  {
+    "id": "M08",
+    "name": "Name Cards",
+    "version": 1,
+    "status": "live",
+    "description": "Lower third for whoever is on camera: name, role, and a hairline that draws under them. Sits clear of Instagram's button rail.",
+    "covers": "Who is talking. Name and role only.",
+    "preview": "name",
+    "ground": "ink",
+    "variants": [
+      {
+        "label": "OVER FOOTAGE",
+        "ground": "ink"
+      },
+      {
+        "label": "CREAM",
+        "ground": "cream"
+      }
+    ],
+    "formats": [
+      "9:16",
+      "16:9"
+    ],
+    "variables": [
+      "name",
+      "role"
+    ],
+    "builtOn": "2026-09-21",
+    "sample": true
+  },
+  {
+    "id": "M09",
+    "name": "One Number",
+    "version": 1,
+    "status": "live",
+    "description": "A single big number rolls up like an odometer with one line of context under it. For a total or a count.",
+    "covers": "One aggregate number. Not a member's change over time, and not a comparison.",
+    "preview": "number",
+    "ground": "bark",
+    "variants": [
+      {
+        "label": "BARK",
+        "ground": "bark"
+      },
+      {
+        "label": "AMBER",
+        "ground": "amber"
+      }
+    ],
+    "formats": [
+      "9:16",
+      "1:1",
+      "16:9"
+    ],
+    "variables": [
+      "value",
+      "unit",
+      "context"
+    ],
+    "builtOn": "2026-09-22",
+    "sample": true
+  },
+  {
+    "id": "M10",
+    "name": "How it works",
+    "version": 1,
+    "status": "live",
+    "description": "Four steps on a trail line: pick your gear, we build the tracked link, share your catalog, get paid monthly. Each step lights as it's said.",
+    "covers": "GearBook's four-step explainer. Fixed steps.",
+    "preview": "flow",
+    "ground": "cream",
+    "variants": [
+      {
+        "label": "CREAM",
+        "ground": "cream"
+      },
+      {
+        "label": "BARK",
+        "ground": "bark"
+      }
+    ],
+    "formats": [
+      "9:16",
+      "16:9"
+    ],
+    "variables": [
+      "steps"
+    ],
+    "builtOn": "2026-09-23",
+    "sample": true
+  },
+  {
+    "id": "M11",
+    "name": "Then & Now",
+    "version": 1,
+    "status": "live",
+    "description": "Two values morph from one to the other with a then and now label. For any single before and after.",
+    "covers": "Exactly two values. Nothing in between.",
+    "preview": "compare",
+    "ground": "bark",
+    "variants": [
+      {
+        "label": "BARK",
+        "ground": "bark"
+      },
+      {
+        "label": "SAGE",
+        "ground": "sage"
+      }
+    ],
+    "formats": [
+      "9:16",
+      "1:1"
+    ],
+    "variables": [
+      "then",
+      "now",
+      "labels"
+    ],
+    "builtOn": "2026-09-24",
+    "sample": true
+  },
+  {
+    "id": "M12",
+    "name": "Series Openers",
+    "version": 1,
+    "status": "live",
+    "description": "The partner showcase opener: the partner's logo lands on the GearBook ridge and the episode title types in. Reused for every partner reel.",
+    "covers": "Opens a series episode. One partner per episode.",
+    "preview": "opener",
+    "ground": "bark",
+    "variants": [
+      {
+        "label": "PARTNER SHOWCASE",
+        "ground": "bark"
+      },
+      {
+        "label": "FIELD NOTES",
+        "ground": "cream"
+      }
+    ],
+    "formats": [
+      "9:16"
+    ],
+    "variables": [
+      "series",
+      "episode",
+      "partnerLogo"
+    ],
+    "builtOn": "2026-09-25",
+    "sample": true
+  },
+  {
+    "id": "M13",
+    "name": "Pop-outs",
+    "version": 1,
+    "status": "live",
+    "description": "Product cutouts fly in over footage with a label tag: the pack, the rope, the dive computer. From the presenter bit.",
+    "covers": "Showing products. Up to four at once.",
+    "preview": "pop",
+    "ground": "cream",
+    "variants": [
+      {
+        "label": "CREAM",
+        "ground": "cream"
+      },
+      {
+        "label": "OVER FOOTAGE",
+        "ground": "ink"
+      }
+    ],
+    "formats": [
+      "9:16"
+    ],
+    "variables": [
+      "products"
+    ],
+    "builtOn": "2026-09-26",
+    "sample": true
+  },
+  {
+    "id": "M14",
+    "name": "Loops",
+    "version": 1,
+    "status": "live",
+    "description": "Seamless topo-line loops for behind text or under a voiceover. Never draws attention.",
+    "covers": "Background texture only.",
+    "preview": "topo",
+    "ground": "bark",
+    "variants": [
+      {
+        "label": "BARK",
+        "ground": "bark"
+      },
+      {
+        "label": "SAGE",
+        "ground": "sage"
+      }
+    ],
+    "formats": [
+      "9:16",
+      "16:9"
+    ],
+    "variables": [],
+    "builtOn": "2026-09-27",
+    "sample": true
+  },
+  {
+    "id": "M15",
+    "name": "End Cards",
+    "version": 2,
+    "status": "live",
+    "description": "The brand colour bars run across, the wordmark lands, \"Click the link in our bio\". Every reel ends here.",
+    "covers": "Sign-off only.",
+    "preview": "bars",
+    "ground": "amber",
+    "variants": [
+      {
+        "label": "BARS",
+        "ground": "amber"
+      },
+      {
+        "label": "BARK",
+        "ground": "bark"
+      }
+    ],
+    "formats": [
+      "9:16",
+      "1:1",
+      "16:9",
+      "4:5"
+    ],
+    "variables": [
+      "cta"
+    ],
+    "builtOn": "2026-09-28",
+    "sample": true
+  },
+  {
+    "id": "M16",
+    "name": "Crying Map",
+    "version": 1,
+    "status": "retired",
+    "description": "A map with a crying emoji for \"landlocked in Colorado\". Retired: a one-off meme, now done in the edit with a sticker.",
+    "covers": "Retired.",
+    "preview": "retired",
+    "ground": "slate",
+    "variants": [
+      {
+        "label": "SLATE",
+        "ground": "slate"
+      }
+    ],
+    "formats": [
+      "9:16"
+    ],
+    "variables": [
+      "place"
+    ],
+    "builtOn": "2026-09-29",
+    "sample": true
+  },
+  {
+    "id": "M17",
+    "name": "Quiet",
+    "version": 1,
+    "status": "live",
+    "description": "Footage softens out of focus and one small line fades in. For the pause before the payoff.",
+    "covers": "A beat of silence with one line. No data.",
+    "preview": "quiet",
+    "ground": "ink",
+    "variants": [
+      {
+        "label": "OVER FOOTAGE",
+        "ground": "ink"
+      }
+    ],
+    "formats": [
+      "9:16"
+    ],
+    "variables": [
+      "line"
+    ],
+    "builtOn": "2026-10-01",
+    "sample": true
+  },
+  {
+    "id": "M18",
+    "name": "Click Trail",
+    "version": 1,
+    "status": "live",
+    "description": "One member's clicks across N months as a trail that climbs: each month lands as a point, the line draws between them and the last point lights amber. One engine, three looks: Switchback (dotted climb on bark), Ledger (bar rows on cream) and Summit (big number on sage).",
+    "covers": "One member's number changing over several months.",
+    "preview": "trail",
+    "ground": "bark",
+    "variants": [
+      {
+        "label": "A · SWITCHBACK",
+        "ground": "bark"
+      },
+      {
+        "label": "B · LEDGER",
+        "ground": "cream"
+      },
+      {
+        "label": "C · SUMMIT",
+        "ground": "sage"
+      }
+    ],
+    "formats": [
+      "9:16"
+    ],
+    "variables": [
+      "headline",
+      "values",
+      "months",
+      "member",
+      "flagged"
+    ],
+    "composition": "ClickTrail",
+    "builtFrom": "I01",
+    "builtOn": "2026-10-09",
+    "sample": true
+  },
+  {
+    "id": "M19",
+    "name": "Spread Map",
+    "version": 1,
+    "status": "live",
+    "description": "A US map where a member's clicks land as small sage pins state by state, then the count of states rolls in.",
+    "covers": "Where shoppers are, by state.",
+    "preview": "map",
+    "ground": "cream",
+    "variants": [
+      {
+        "label": "CREAM",
+        "ground": "cream"
+      },
+      {
+        "label": "BARK",
+        "ground": "bark"
+      }
+    ],
+    "formats": [
+      "9:16",
+      "1:1"
+    ],
+    "variables": [
+      "states",
+      "headline"
+    ],
+    "builtFrom": "I02",
+    "builtOn": "2026-10-10",
+    "sample": true
+  },
+  {
+    "id": "M20",
+    "name": "Load Shift",
+    "version": 1,
+    "status": "live",
+    "description": "A pack's weight split into bars (shelter, sleep, kitchen, water) that shift as gear is swapped, the total ticking down.",
+    "covers": "Parts of one whole changing. Gear weights, time split.",
+    "preview": "load",
+    "ground": "bark",
+    "variants": [
+      {
+        "label": "BARK",
+        "ground": "bark"
+      },
+      {
+        "label": "CREAM",
+        "ground": "cream"
+      }
+    ],
+    "formats": [
+      "9:16"
+    ],
+    "variables": [
+      "parts",
+      "unit"
+    ],
+    "builtFrom": "I03",
+    "builtOn": "2026-10-11",
+    "sample": true
+  },
+  {
+    "id": "M21",
+    "name": "Then vs Now Tally",
+    "version": 1,
+    "status": "live",
+    "description": "Two bars, old time and new time, fill on the words and the shorter one wins. For any before and after of time or effort.",
+    "covers": "Time or effort, before and after, as two bars.",
+    "preview": "tally",
+    "ground": "slate",
+    "variants": [
+      {
+        "label": "SLATE",
+        "ground": "slate"
+      },
+      {
+        "label": "BARK",
+        "ground": "bark"
+      }
+    ],
+    "formats": [
+      "9:16",
+      "16:9"
+    ],
+    "variables": [
+      "thenLabel",
+      "nowLabel",
+      "caption"
+    ],
+    "builtFrom": "I07",
+    "builtOn": "2026-10-13",
+    "sample": true
+  },
+  {
+    "id": "M22",
+    "name": "Relay Line",
+    "version": 1,
+    "status": "live",
+    "description": "Steps of a process sit on one trail line; an amber marker walks it and each stop lights when it's named. Labels change per video, for any how-we-work clip.",
+    "covers": "A process of 3 to 5 named steps, with custom labels.",
+    "preview": "relay",
+    "ground": "slate",
+    "variants": [
+      {
+        "label": "SLATE",
+        "ground": "slate"
+      },
+      {
+        "label": "BARK",
+        "ground": "bark"
+      }
+    ],
+    "formats": [
+      "9:16",
+      "16:9"
+    ],
+    "variables": [
+      "stations"
+    ],
+    "builtFrom": "I06",
+    "builtOn": "2026-10-14",
+    "sample": true
+  },
+  {
+    "id": "M23",
+    "name": "Highlight Sweep",
+    "version": 1,
+    "status": "live",
+    "description": "A sage block runs behind words as they're said, on a card over footage. Marker, Underline run and Lift out looks.",
+    "covers": "Emphasising a phrase on screen.",
+    "preview": "sweep",
+    "ground": "cream",
+    "variants": [
+      {
+        "label": "A · MARKER",
+        "ground": "cream"
+      },
+      {
+        "label": "B · UNDERLINE RUN",
+        "ground": "bark"
+      },
+      {
+        "label": "C · LIFT OUT",
+        "ground": "sage"
+      }
+    ],
+    "formats": [
+      "9:16"
+    ],
+    "variables": [
+      "phrase",
+      "card"
+    ],
+    "builtFrom": "I05",
+    "builtOn": "2026-10-15",
+    "sample": true
+  },
+  {
+    "id": "M24",
+    "name": "Path Trace",
+    "version": 1,
+    "status": "live",
+    "description": "Traces a climber's real move frame by frame: ghost frames, a dotted path, and a tick on the hold that lands it.",
+    "covers": "Showing a movement path over footage.",
+    "preview": "path",
+    "ground": "ink",
+    "variants": [
+      {
+        "label": "A · STROBE TRAIL",
+        "ground": "ink"
+      },
+      {
+        "label": "B · HAIRLINE ARC",
+        "ground": "cream"
+      },
+      {
+        "label": "C · COMET",
+        "ground": "sage"
+      }
+    ],
+    "formats": [
+      "9:16"
+    ],
+    "variables": [
+      "keyframes",
+      "label"
+    ],
+    "builtFrom": "I04",
+    "builtOn": "2026-10-16",
+    "sample": true
+  }
+]

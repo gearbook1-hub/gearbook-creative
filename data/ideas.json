@@ -1,0 +1,282 @@
+[
+  {
+    "id": "I01",
+    "name": "Click Trail",
+    "sourceId": "S01",
+    "at": "0:22",
+    "quote": "Since May, her catalog's had five months of clicks... twelve... forty... sixty-eight... ninety-five... a hundred and forty-eight.",
+    "pitch": "One member's clicks month by month as a trail that climbs: five points land in turn, a dotted line draws between them and the last point lights amber. Reusable for any one-member, many-months number.",
+    "catalogCheck": [
+      {
+        "piece": "M11",
+        "verdict": "only morphs two values"
+      },
+      {
+        "piece": "M09",
+        "verdict": "a single total, not one member's month by month"
+      }
+    ],
+    "whyNew": "nothing shows one member's number climbing over five months",
+    "status": "built",
+    "pitchedOn": "2026-10-08",
+    "stills": [
+      {
+        "letter": "A",
+        "name": "Switchback",
+        "line": "A dotted trail climbs; each month is a point.",
+        "ground": "bark"
+      },
+      {
+        "letter": "B",
+        "name": "Ledger",
+        "line": "One bar per month, the last bar in sage.",
+        "ground": "cream"
+      },
+      {
+        "letter": "C",
+        "name": "Summit",
+        "line": "The latest number, huge, with the trail below.",
+        "ground": "sage"
+      }
+    ],
+    "pickedLetters": [
+      "A",
+      "B",
+      "C"
+    ],
+    "note": "the lockup can't sit at the bottom (Instagram's caption and buttons cover it), so everything lives between y 230 and 1520, clear of the right-hand button rail.",
+    "builtAs": "M18",
+    "renderCheck": [
+      {
+        "t": "1.25s",
+        "pass": true,
+        "note": "first points inside the safe area"
+      },
+      {
+        "t": "3s",
+        "pass": true,
+        "note": "trail drawn, labels clear of the button rail"
+      },
+      {
+        "t": "5s",
+        "pass": true,
+        "note": "end point lit, nothing below y 1520, Roca loaded"
+      }
+    ]
+  },
+  {
+    "id": "I02",
+    "name": "Spread Map",
+    "sourceId": "S01",
+    "at": "1:59",
+    "quote": "People clicked from fourteen different states.",
+    "pitch": "A US map where clicks land as sage pins state by state, then the state count rolls in.",
+    "catalogCheck": [
+      {
+        "piece": "M09",
+        "verdict": "can say 14, can't show where"
+      }
+    ],
+    "whyNew": "nothing shows where shoppers are",
+    "status": "built",
+    "pitchedOn": "2026-10-08",
+    "builtAs": "M19"
+  },
+  {
+    "id": "I03",
+    "name": "Load Shift",
+    "sourceId": "S01",
+    "at": "1:36",
+    "quote": "She swapped her tent and her stove and her pack dropped almost two pounds.",
+    "pitch": "Pack weight split into bars by category that shift as gear is swapped, the total ticking down.",
+    "catalogCheck": [
+      {
+        "piece": "M11",
+        "verdict": "shows the total change, not which parts moved"
+      }
+    ],
+    "whyNew": "nothing shows parts of one whole shifting",
+    "status": "built",
+    "pitchedOn": "2026-10-08",
+    "builtAs": "M20"
+  },
+  {
+    "id": "I04",
+    "name": "Path Trace",
+    "sourceId": "S05",
+    "quote": "Saved reel: the climber's move traced frame by frame over the footage.",
+    "pitch": "Trace a real move over footage: ghost frames, a dotted path, and a tick where it lands. For beta breakdowns in climbing reels.",
+    "catalogCheck": [
+      {
+        "piece": "M13",
+        "verdict": "flies products in, can't follow a body"
+      }
+    ],
+    "whyNew": "nothing draws on top of moving footage",
+    "status": "built",
+    "pitchedOn": "2026-10-09",
+    "stills": [
+      {
+        "letter": "A",
+        "name": "Strobe trail",
+        "line": "Faded copies of the climber trail the move; dots mark the path to the hold.",
+        "ground": "ink"
+      },
+      {
+        "letter": "B",
+        "name": "Hairline arc",
+        "line": "A thin line follows the hand from start to hold, with a tick per frame.",
+        "ground": "cream"
+      },
+      {
+        "letter": "C",
+        "name": "Comet",
+        "line": "A bright head with a fading tail rides the move and pings on the hold.",
+        "ground": "sage"
+      }
+    ],
+    "pickedLetters": [
+      "A"
+    ],
+    "builtAs": "M24"
+  },
+  {
+    "id": "I05",
+    "name": "Highlight Sweep",
+    "sourceId": "S06",
+    "quote": "Saved reel: a highlighter runs behind the caption as he says it.",
+    "pitch": "A sage block runs behind words as they're said, on a card over footage.",
+    "catalogCheck": [
+      {
+        "piece": "M07",
+        "verdict": "slams a whole line, can't follow speech"
+      }
+    ],
+    "whyNew": "nothing marks words in time with the voice",
+    "status": "built",
+    "pitchedOn": "2026-10-09",
+    "stills": [
+      {
+        "letter": "A",
+        "name": "Marker",
+        "line": "A sage band slides in behind each word as Luke says it.",
+        "ground": "cream"
+      },
+      {
+        "letter": "B",
+        "name": "Underline run",
+        "line": "A line runs under the phrase and the words brighten in time.",
+        "ground": "bark"
+      },
+      {
+        "letter": "C",
+        "name": "Lift out",
+        "line": "The phrase rises off its card while the card softens behind it.",
+        "ground": "sage"
+      }
+    ],
+    "pickedLetters": [
+      "A"
+    ],
+    "builtAs": "M23"
+  },
+  {
+    "id": "I06",
+    "name": "Relay Line",
+    "sourceId": "S02",
+    "at": "0:19",
+    "quote": "I record it, Claude edits it, the motion mod looks for graphics, and I approve them.",
+    "pitch": "Steps of a process sit on one trail line (Record, Edit, Motion, Approve). A small amber marker walks the trail and each stop lights when Luke names it. Labels change per video, so it works for any how-we-work clip.",
+    "catalogCheck": [
+      {
+        "piece": "M10",
+        "verdict": "fixed to GearBook's four member steps"
+      }
+    ],
+    "whyNew": "nothing shows a process with custom steps",
+    "status": "built",
+    "pitchedOn": "2026-10-10",
+    "builtAs": "M22"
+  },
+  {
+    "id": "I07",
+    "name": "Then vs Now Tally",
+    "sourceId": "S02",
+    "at": "1:12",
+    "quote": "An edit that used to take me two weeks, I now get back in one morning.",
+    "pitch": "Two bars, one labelled with the old time (2 weeks) and one with the new (1 morning), fill as the words are said, and the short one wins. Works for any before and after of time or effort.",
+    "catalogCheck": [
+      {
+        "piece": "M11",
+        "verdict": "morphs numbers, can't show a duration"
+      }
+    ],
+    "whyNew": "nothing compares two lengths of time",
+    "status": "built",
+    "pitchedOn": "2026-10-10",
+    "builtAs": "M21"
+  },
+  {
+    "id": "I08",
+    "name": "Partner Unbox",
+    "sourceId": "S07",
+    "quote": "Can we get a box-opening graphic for the partner reels, using our own product photos?",
+    "pitch": "The partner's box flaps open on the ridge line and three product photos rise out, each with a label tag.",
+    "catalogCheck": [
+      {
+        "piece": "M13",
+        "verdict": "pops products in, no reveal"
+      },
+      {
+        "piece": "M12",
+        "verdict": "opens the episode, not the products"
+      }
+    ],
+    "whyNew": "nothing reveals products from a partner",
+    "status": "waiting",
+    "waitingOn": "my photos",
+    "pitchedOn": "2026-10-12"
+  },
+  {
+    "id": "I09",
+    "name": "Link Drop",
+    "sourceId": "S03",
+    "at": "0:09",
+    "quote": "What if every time you recommended your favorite gear, you got paid?",
+    "pitch": "A product card drops onto a phone screen, a tracked link draws from the card to a member's catalog and the catalog card gets a small sage tick. Reusable for any \"how a recommendation becomes a link\" moment.",
+    "catalogCheck": [
+      {
+        "piece": "M10",
+        "verdict": "names the steps, never shows the link itself"
+      },
+      {
+        "piece": "M13",
+        "verdict": "shows the product, not where it goes"
+      }
+    ],
+    "whyNew": "nothing shows a recommendation turning into a link",
+    "status": "pitched",
+    "pitchedOn": "2026-10-17"
+  },
+  {
+    "id": "I10",
+    "name": "Sport Switch",
+    "sourceId": "S04",
+    "at": "0:14",
+    "quote": "Same catalog, from four thousand metres up to forty metres down.",
+    "pitch": "A split gauge: an altimeter on top rolls up to 4,000 m while a depth gauge below rolls down to -40 m, both sitting on the same catalog card. For any reel that spans two sports.",
+    "catalogCheck": [
+      {
+        "piece": "M06",
+        "verdict": "opens one sport at a time"
+      },
+      {
+        "piece": "M11",
+        "verdict": "two values, but not two directions at once"
+      }
+    ],
+    "whyNew": "nothing shows two sports on one catalog",
+    "status": "pitched",
+    "pitchedOn": "2026-10-17"
+  }
+]
