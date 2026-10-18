@@ -1,0 +1,28 @@
+{
+  "source": "S08",
+  "slug": "huss-valley",
+  "title": "Huss valley: crag to desk",
+  "format": "B",
+  "drivePath": "Marketing/Reels/Huss valley",
+  "fps": 30,
+  "shots": [
+    { "clip": "IMG_9649", "in": 0.0, "out": 1.3, "beat": "Belaying, looks up at the climber", "why": "Opens on his face looking up the rope, so the first second says climbing and belaying." },
+    { "clip": "IMG_9649", "in": 9.9, "out": 14.7, "beat": "Phone, drops the rope, runs", "why": "Jump cut in the same frame skips 8 s of rope handling. Ends the frame he leaves." },
+    { "clip": "IMG_9652", "in": 3.25, "out": 3.85, "beat": "Forest", "why": "The bigger leap of the two forest takes." },
+    { "clip": "IMG_9654", "in": 5.05, "out": 6.6, "beat": "River rocks", "why": "Best of three river takes: widest framing and the arms-up hop." },
+    { "clip": "IMG_9656", "in": 5.15, "out": 5.85, "beat": "Canyon road", "why": "Full sprint in profile against the rock. Starts after the car has gone." },
+    { "clip": "IMG_9659", "in": 0.25, "out": 1.45, "beat": "Street", "why": "Only take. Runs at the camera, so it changes the rhythm." },
+    { "clip": "IMG_9660", "in": 0.25, "out": 1.3, "beat": "Park, hurdles the bench", "why": "Best of three park takes: closest, sun rays, clean hurdle." },
+    { "clip": "IMG_9665", "in": 3.7, "out": 5.4, "beat": "Through the front door", "why": "Enters from the right like every run, cut the moment he is through the door." },
+    { "clip": "IMG_9671", "in": 4.55, "out": 6.2, "beat": "Crashes into the chair", "why": "The landing: slides in and slaps the keyboard." },
+    { "clip": "IMG_9672", "in": 4.25, "out": 6.9, "beat": "GearBook on screen, leans back", "why": "Jump cut to the site loaded. Ends on the lean back, which is the payoff." }
+  ],
+  "dropped": [
+    { "clip": "IMG_9651", "why": "Same forest frame as 9652 with a smaller stride." },
+    { "clip": "IMG_9653", "why": "Same river crossing as 9654, tighter and less dynamic." },
+    { "clip": "IMG_9655", "why": "Same river frame as 9654, third repeat." },
+    { "clip": "IMG_9657", "why": "Pedestrian street, the runner isn't in it." },
+    { "clip": "IMG_9661", "why": "Same benches as 9660, runner tiny in a wide frame." },
+    { "clip": "IMG_9662", "why": "Same benches as 9660, third hurdle in a row." }
+  ]
+}

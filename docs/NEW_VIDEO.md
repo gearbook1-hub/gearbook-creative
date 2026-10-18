@@ -1,14 +1,15 @@
 # Making a new video
 
-From clips you've already filmed to a post on @gear.book. The hub doesn't cut footage: you still edit in CapCut or Premiere. What the hub does is tell you what to make, find the motion graphics the video needs, build and render them, and log the post.
+From clips you've already filmed to a post on @gear.book. Claude does the cutting: send the folder of clips and the story in a line ("belaying, look at my phone, run 1, run 2, through the door, land at the computer"), and Claude picks the takes, cuts the reel, finds the motion graphics it needs, builds and renders them, and logs the post. The editing rules it follows are in `.claude/skills/video-cut/SKILL.md`, and it adds to them after every cut.
 
 Steps 4, 5, 7, 8 and 12 happen in Claude Code in this folder: just say the line in quotes. No API key needed.
 
 ## 1. Pick what it is
 Open the [Idea bank](https://gearbook1-hub.github.io/gearbook-creative/ideas/) and tap **Make this week** on the idea your clips are for. Read the Identity page's voice and rules before writing the script or caption.
 
-## 2. Put the clips in the inbox
-Copy them into `inbox/videos/` (MP4, MOV or M4A). Git never uploads that folder.
+## 2. Send the clips
+Put them in a Drive folder under `Marketing/Reels/` and tell Claude where, with the story. Claude watches every clip, writes the edit list (`edits/<id>-<slug>.json`), renders `renders/<slug>/cut.mp4` and sends a small preview. Ask for changes in words ("longer on the river", "use the other park take").
+For a presenter bit, Claude also needs the take with Luke's voice in `inbox/videos/` (MP4, MOV or M4A; git never uploads that folder).
 - **Presenter bit (A):** put in the take with Luke's voice.
 - **Vibe reel (B) or poster (C):** nothing to transcribe, skip to step 4.
 
@@ -47,12 +48,12 @@ npm run render -- M18-click-trail --look=ledger
 
 New words or numbers go in with `--props={...}`, never new code.
 
-## 10. Edit
-In your editor, lay the rendered graphics over or between the clips:
+## 10. Finish the edit
+Claude lays the rendered graphics over or between the shots of the cut:
 - burn in the captions;
 - keep text clear of the top 230 px and the bottom 400 px (and the right 180 px);
 - end on the logo or the brand colour bars;
-- for a vibe reel, add the trending sound in the Instagram app.
+- for a vibe reel, you add the trending sound in the Instagram app.
 
 ## 11. Post
 One or two caption lines, then "Click the link in our bio". Credit people ("Featuring:", "Captured by:", "Edited by:"). `#gearbook #outdoorindustry`. No dashes, no amounts or rates, no fake deals.

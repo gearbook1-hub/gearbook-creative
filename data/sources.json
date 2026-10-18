@@ -49,5 +49,18 @@
     "date": "2026-10-12", "sample": true,
     "transcript": [{ "t": "", "text": "Can we get a box-opening graphic for the partner reels, using our own product photos?" }],
     "usedPieces": []
+  },
+  {
+    "id": "S08", "kind": "video", "title": "Huss valley: crag to desk", "shortName": "Huss valley vibe reel",
+    "date": "2026-10-18", "sample": false,
+    "transcript": [
+      { "t": "0:00", "text": "Belaying at the crag, filmed from above." },
+      { "t": "0:01", "text": "Looks down at his phone." },
+      { "t": "0:05", "text": "Drops the rope and runs off." },
+      { "t": "0:06", "text": "Runs through the forest, across the river rocks, along the canyon road, down a street and across a park." },
+      { "t": "0:11", "text": "Runs up the steps and through the front door." },
+      { "t": "0:12", "text": "Lands at the laptop and opens GearBook." }
+    ],
+    "usedPieces": []
   }
 ]

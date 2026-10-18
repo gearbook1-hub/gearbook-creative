@@ -35,6 +35,7 @@ Video, inspo or a request -> Check the catalog -> Log the idea -> [Approve or pa
 
 | Step | Mod (skill in `.claude/skills/`) | Command |
 |---|---|---|
+| Clips come in: pick takes, cut | `video-cut` | `npm run sheets -- <folder>`, `npm run cut -- edits/S08-huss-valley.json --clips=<folder>` |
 | A reel comes in | `video-inbox` (12) | `npm run transcribe` |
 | Read it, check the catalog, log and pitch | `motion-scout` (11) | `npm run scout -- S01` |
 | Approve or pass | `pulse` (04) | "Approve or pass" on `/library`, then `node scripts/apply-decisions.mjs decisions.json` |
@@ -67,9 +68,10 @@ lib/                     types, data helpers (data.ts, social.ts), brand tokens,
 public/pieces/           the motion pieces: runtime.js, pieces.css (house style), topo.svg,
                          M18-click-trail/ (built here, three looks), M25-signup-explainer/ (the real reel, live, plus its MP4 preview)
 scripts/                 setup-check, transcribe, scout, motion.mjs (recorder), render-stills / render-piece /
-                         render-check, apply-decisions
+                         render-check, apply-decisions, clip-sheets and cut (the reel edit)
+edits/                   one edit list per reel: every shot's clip, in, out and why, and what was dropped
 .claude/skills/          one skill per mod, with its full prompt
-inbox/                   videos/ and transcripts/ (git-ignored), inspo/
+inbox/                   videos/, transcripts/ and sheets/ (git-ignored), inspo/
 docs/VIDEO_SPEC.md       what the source video shows, panel by panel
 screenshots/             the hub, for reference
 ```

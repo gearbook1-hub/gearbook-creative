@@ -13,6 +13,7 @@ inbox/videos/*
 inbox/transcripts/*.json
 !inbox/transcripts/sample-*.json
 renders/
+inbox/sheets/
 stills/out/
 screenshots/raw/
 .DS_Store
