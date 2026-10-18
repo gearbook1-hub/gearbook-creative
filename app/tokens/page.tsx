@@ -51,7 +51,18 @@ export default function Tokens() {
             <p><span style={{ fontSize: 18 }}>IBM Plex Mono</span><br /><span className="k">hub panels only (transcripts, logs, builds)</span></p>
           </div>
         </Section>
-        <Section num="03" title="Rules every piece follows">
+        <Section num="03" title="Motion house style">
+          <div className="split">
+            <div className="tile-frame"><iframe src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/pieces/M18-click-trail/index.html?look=ledger&t=5`} title="House style example" style={{ width: "100%", height: "100%", border: 0, pointerEvents: "none" }} /></div>
+            <div className="panel">
+              <p><span className="k">from</span>&nbsp;&nbsp;M25, the signup explainer Matt had Claude build as one animated page</p>
+              <p><span className="k">ground</span>&nbsp;&nbsp;cream #EEF5ED with faint bark topo lines (public/pieces/topo.svg); bark and sage grounds for contrast looks</p>
+              <p><span className="k">type</span>&nbsp;&nbsp;Roca bold titles that arrive word by word · tracked Afacad Flux label above · Outfit for UI and captions</p>
+              <p><span className="k">built as</span>&nbsp;&nbsp;public/pieces/pieces.css + runtime.js, shared by every piece</p>
+            </div>
+          </div>
+        </Section>
+        <Section num="04" title="Rules every piece follows">
           <div className="panel">
             <p><span className="k">safe area</span>&nbsp;&nbsp;9:16 at 1080x1920: everything between y 230 and 1520, nothing right of x 900 (Instagram&apos;s caption and button rail). Checked by npm run render:check.</p>
             <p><span className="k">copy</span>&nbsp;&nbsp;no em or en dashes · never promise earnings or quote a rate · &quot;outdoor professional&quot; or &quot;pro&quot;, not &quot;guide&quot; · links use https://www.gearbook.shop</p>

@@ -2,17 +2,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Footer, ModsNav } from "@/components/ModsNav";
 import { PieceTile } from "@/components/PieceTile";
-import { ReelPlayer, TrailPlayer } from "@/components/Trail";
+import { PieceFrame, PieceVideo } from "@/components/PieceFrame";
 import { brand } from "@/lib/brand";
-import { ideas, livePieces, pieces } from "@/lib/data";
-import type { TrailLook } from "@/remotion/ClickTrail";
+import { ideas, livePieces, piece, pieces } from "@/lib/data";
 
 export const metadata: Metadata = { title: "Motion Library - GearBook Creative" };
 
 // 07 Motion Library: the gallery behind "Open the gallery". Every piece the scout checks
 // against, with its looks, formats and variables (docs/VIDEO_SPEC.md §5).
 
-const LOOKS: TrailLook[] = ["switchback", "ledger", "summit"];
 const SWATCHES = [
   { name: "BARK", hex: brand.bark, fg: brand.cream },
   { name: "AMBER", hex: brand.amber, fg: brand.bark },
@@ -25,6 +23,7 @@ const h2 = { fontFamily: "var(--font-display)", fontWeight: 400, fontSize: "clam
 const body = { fontSize: 17, lineHeight: 1.6, color: "var(--ink-muted)", maxWidth: 660, margin: 0 };
 
 export default function Library() {
+  const reel = piece("M25")!;
   const date = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }).toUpperCase();
   return (
     <>
@@ -43,10 +42,11 @@ export default function Library() {
 
       <main className="wrap">
         <section className="section">
-          <div style={label}>The reel · 15s · 9:16</div>
-          <h2 style={h2}>Trail to summit</h2>
-          <p style={body}>The library cut together: every piece built in code here, back to back. Today that&apos;s M18 Click Trail in all three looks. Each new build joins the cut.</p>
-          <div style={{ width: "min(320px, 70%)", aspectRatio: "9 / 16", marginTop: 24, border: "1px solid var(--card-line)" }}><ReelPlayer /></div>
+          <div style={label}>The reel · 28s · 9:16</div>
+          <h2 style={h2}>Get your free catalog</h2>
+          <p style={body}>The signup explainer Matt had Claude build as one animated page and record at 60 fps. No footage, no editing app. It set the house style the library follows: cream and topo ground, Roca titles that arrive word by word, small tracked labels.</p>
+          <div style={{ width: "min(320px, 70%)", aspectRatio: "9 / 16", marginTop: 24, border: "1px solid var(--card-line)" }}><PieceVideo src={reel.video!} title="Signup explainer" /></div>
+          <p className="caption">Master: {reel.master}</p>
         </section>
 
         <section className="section">
@@ -82,10 +82,12 @@ export default function Library() {
               <h2 style={h2}>{p.name}</h2>
               <p style={body}>{p.description}</p>
               <div className="triptych" style={{ marginTop: 22, gridTemplateColumns: `repeat(${Math.max(3, p.variants.length)}, 1fr)` }}>
-                {p.variants.map((v, n) => (
+                {p.variants.map((v) => (
                   <div key={v.label}>
                     <div className="tile-frame">
-                      {p.composition === "ClickTrail" ? <TrailPlayer look={LOOKS[n]} /> : <PieceTile kind={p.preview} ground={v.ground} label={`${p.name} ${v.label}`} />}
+                      {p.html ? <PieceFrame piece={p.html} look={v.look} title={`${p.name} ${v.label}`} />
+                        : p.video ? <PieceVideo src={p.video} title={`${p.name} ${v.label}`} />
+                        : <PieceTile kind={p.preview} ground={v.ground} label={`${p.name} ${v.label}`} />}
                     </div>
                     <div style={{ ...label, fontSize: 11, marginTop: 8 }}>{v.label}</div>
                   </div>
@@ -94,7 +96,8 @@ export default function Library() {
               <p className="caption">
                 {p.formats.join(" · ")} · variables: {p.variables.length ? p.variables.join(", ") : "none"}
                 {idea && <> · from <Link href="/">{idea.name}</Link> ({idea.id})</>}
-                {p.composition && <> · built in code: remotion/{p.composition}.tsx</>}
+                {p.html && <> · built in code: public/pieces/{p.html}/index.html</>}
+                {p.master && <> · master in {p.master}</>}
                 {p.sample && " · sample entry"}
               </p>
             </section>

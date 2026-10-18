@@ -519,22 +519,25 @@
     "name": "Click Trail",
     "version": 1,
     "status": "live",
-    "description": "One member's clicks across N months as a trail that climbs: each month lands as a point, the line draws between them and the last point lights amber. One engine, three looks: Switchback (dotted climb on bark), Ledger (bar rows on cream) and Summit (big number on sage).",
+    "description": "One member's clicks across N months as a trail that climbs: each month lands as a point, the line draws between them and the last point lights amber. One engine, three looks: Switchback (dotted climb on bark), Ledger (bar rows on the explainer's cream and topo) and Summit (big number on sage).",
     "covers": "One member's number changing over several months.",
     "preview": "trail",
     "ground": "bark",
     "variants": [
       {
         "label": "A · SWITCHBACK",
-        "ground": "bark"
+        "ground": "bark",
+        "look": "switchback"
       },
       {
         "label": "B · LEDGER",
-        "ground": "cream"
+        "ground": "cream",
+        "look": "ledger"
       },
       {
         "label": "C · SUMMIT",
-        "ground": "sage"
+        "ground": "sage",
+        "look": "summit"
       }
     ],
     "formats": [
@@ -547,10 +550,10 @@
       "member",
       "flagged"
     ],
-    "composition": "ClickTrail",
     "builtFrom": "I01",
     "builtOn": "2026-10-09",
-    "sample": true
+    "sample": true,
+    "html": "M18-click-trail"
   },
   {
     "id": "M19",
@@ -742,5 +745,33 @@
     "builtFrom": "I04",
     "builtOn": "2026-10-16",
     "sample": true
+  },
+  {
+    "id": "M25",
+    "name": "Signup Explainer",
+    "version": 1,
+    "status": "live",
+    "description": "The 28 second signup reel Matt had Claude build as a fully animated page, recorded at 60 fps: client questions pop up, a phone applies in about five minutes, adds gear with one search, shares the catalog after a trip and with a friend, gear drops into a pack and the pack becomes the logo. Its cream and topo ground, Roca titles that arrive word by word and small tracked labels are the house style every new piece follows.",
+    "covers": "The whole member journey, apply to share to earn, as one 28 s reel. Not a single stat or step on its own.",
+    "preview": "video",
+    "ground": "cream",
+    "variants": [
+      {
+        "label": "WITH CAPTIONS",
+        "ground": "cream"
+      },
+      {
+        "label": "NO CAPTIONS",
+        "ground": "cream"
+      }
+    ],
+    "formats": [
+      "9:16"
+    ],
+    "variables": [],
+    "video": "pieces/M25-signup-explainer/preview.mp4",
+    "master": "Google Drive: GearBook/Marketing/Reels/Signup Reel/GearBook-Signup-Reel.mp4",
+    "builtOn": "2026-10-13",
+    "sample": false
   }
 ]
