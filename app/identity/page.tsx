@@ -10,7 +10,7 @@ export const metadata: Metadata = { title: "Identity · GearBook Creative" };
 // The official logo pack (GearBook Drive: Branding/02 Logo Pack), and where each one is used.
 const LOGOS = [
   { file: "full-length", name: "Full length", use: "The payoff: the end card, the backpack patch in M25, anywhere the logo is the point.", bg: "var(--paper)" },
-  { file: "full-length-bw", name: "Full length BW", use: "One colour in bark or cream: the hub's top bar, M18's corner, the phone app bar and share card in M25.", bg: "var(--paper)" },
+  { file: "full-length-bw", name: "Full length BW", use: "Black or white only, never tinted: the hub's top bar, M18's corner, the phone app bar (black) and share card (white) in M25.", bg: "var(--paper)" },
   { file: "lockup", name: "Lockup", use: "Square spaces. Never smaller than 64 px.", bg: "var(--paper)" },
   { file: "bookmark", name: "Bookmark", use: "Icon sizes: the footer, the \"Make this week\" button. It's also the clear space: one bookmark on every side.", bg: "var(--paper)" },
   { file: "favicon-dark", name: "Favicon", use: "Browser tabs (dark version; a light one is in the pack).", bg: "var(--paper)" },
@@ -79,7 +79,7 @@ export default function Identity() {
           <p className="muted" style={{ marginTop: 16 }}>Sports: {social.sportsNote}</p>
         </Section>
 
-        <Section label="Logo" title="Use the official files" intro="From the GearBook logo pack. Never redraw, recolour (beyond BW in bark or cream) or stretch them.">
+        <Section label="Logo" title="Use the official files" intro="From the GearBook logo pack. Never redraw, recolour or stretch them. The BW versions are black or white only.">
           <div className="grid g3">
             {LOGOS.map((l) => (
               <div key={l.file}>

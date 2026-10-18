@@ -23,6 +23,11 @@
   ["600 40px Fraunces", "800 40px Fraunces", "400 20px Outfit", "600 20px Outfit", "400 20px 'Afacad Flux'", "600 20px 'Afacad Flux'"]
     .forEach((f) => document.fonts.load(f));
 </script>
+<script>
+  // The two masters in Drive (Marketing/Reels/Signup Reel): ?look=captions (default) and ?look=nocaptions.
+  // `npm run render -- M25-signup-explainer` records both; scripts/motion.mjs reads this list.
+  window.M25 = { looks: ["captions", "nocaptions"] };
+</script>
 <script src="film-kit.js"></script>
 </body>
 </html>

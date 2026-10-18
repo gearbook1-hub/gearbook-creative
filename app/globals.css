@@ -57,7 +57,7 @@ p { margin: 0; }
 .mark-full-length-bw { aspect-ratio: 512 / 129.364; }
 .mark-bookmark { width: 14px; aspect-ratio: 512 / 342.725; margin-top: -2px; }
 .mark-lockup-bw { aspect-ratio: 1; }
-.brand-mark { height: 26px; color: var(--bark); }
+.brand-mark { height: 26px; color: #000; }
 .brand span { font-family: var(--font-label); font-weight: 600; font-size: 13px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ink-2); }
 .nav { display: flex; gap: 4px; margin: 0; padding: 0; list-style: none; flex-wrap: wrap; }
 .nav a { display: block; padding: 8px 14px; border-radius: 999px; text-decoration: none; font-size: 15px; color: var(--ink-2); transition: background 0.2s, color 0.2s; }
@@ -147,6 +147,7 @@ a.card:hover { border-color: var(--line-strong); transform: translateY(-2px); }
 .filters button[aria-pressed="true"] { background: var(--bark); border-color: var(--bark); color: var(--paper); }
 .star { display: inline-flex; align-items: center; gap: 8px; border: 1.5px solid var(--line-strong); background: transparent; border-radius: 999px; padding: 6px 14px; font: 500 14px var(--font-body); color: var(--ink-2); cursor: pointer; }
 .star[aria-pressed="true"] { background: var(--amber); border-color: var(--amber); color: var(--bark); }
+.star .mark { color: #000; }
 
 /* Idea cards (content ideas) */
 .idea { display: flex; flex-direction: column; }
@@ -213,6 +214,6 @@ a.card:hover { border-color: var(--line-strong); transform: translateY(-2px); }
 
 .footer { padding: 36px 0 56px; border-top: 1px solid var(--line); font-size: 14px; color: var(--ink-2); }
 .footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-.footer-brand .mark { color: var(--amber); margin-right: 6px; }
+.footer-brand .mark { color: #000; margin-right: 6px; }
 .logo-tile { border-radius: var(--radius); border: 1px solid var(--line); padding: 22px; min-height: 150px; display: flex; align-items: center; justify-content: center; }
 .logo-tile img { display: block; max-width: 100%; max-height: 90px; }

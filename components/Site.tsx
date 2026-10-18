@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
-/** An official one-colour logo from public/brand (the GearBook logo pack), drawn in the text colour. */
+/** An official one-colour logo from public/brand (the GearBook logo pack). Black or white only: set `color` to #000 or #fff. */
 export function Mark({ kind, label, className }: { kind: "full-length-bw" | "bookmark" | "lockup-bw"; label?: string; className?: string }) {
   const url = `url("${BASE}/brand/gearbook-${kind}.svg")`;
   return (
