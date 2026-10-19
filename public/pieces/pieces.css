@@ -15,6 +15,9 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: transparent;
   position: absolute; top: 0; left: 0; width: 1080px; height: 1920px; transform-origin: 0 0; overflow: hidden;
   background: var(--ground, var(--cream)); color: var(--fg, var(--bark)); font-family: var(--body);
 }
+/* Overlay pieces (laid over footage) record on a transparent stage; in the browser they sit on bark. */
+body[data-overlay="render"] #stage { background: transparent; }
+body[data-overlay="preview"] #stage { background: var(--bark); }
 .topo { position: absolute; inset: 0; background: url("topo.svg") center / cover no-repeat; }
 body[data-look] .ground-bark { --ground: var(--bark); --fg: var(--cream); }
 .eyebrow { font-family: var(--label); font-weight: 600; font-size: 26px; letter-spacing: 0.32em; text-transform: uppercase; }

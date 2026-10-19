@@ -287,12 +287,39 @@
     "quote": "Looks down at his phone.",
     "pitch": "A GearBook push notification drops in over the footage with the bookmark icon, a soft buzz shake and one line of text, then holds just long enough to read. Text, app line and timing come from props. For any reel where a pro gets pinged mid-activity.",
     "catalogCheck": [
-      { "piece": "M23", "verdict": "sweeps a phrase already on screen, not a phone UI" },
-      { "piece": "M07", "verdict": "a full card that covers the footage" }
+      {
+        "piece": "M23",
+        "verdict": "sweeps a phrase already on screen, not a phone UI"
+      },
+      {
+        "piece": "M07",
+        "verdict": "a full card that covers the footage"
+      }
     ],
     "whyNew": "nothing shows a notification arriving over footage",
-    "status": "pitched",
-    "pitchedOn": "2026-10-18"
+    "status": "stills",
+    "pitchedOn": "2026-10-18",
+    "note": "Matt: it has to ding for my phone, then a pop-up comes down from the top of the screen about the new GearBook promo.",
+    "stills": [
+      {
+        "letter": "A",
+        "name": "Banner",
+        "line": "A phone notification: frosted white card with the GearBook icon drops from the top.",
+        "ground": "cream"
+      },
+      {
+        "letter": "B",
+        "name": "House",
+        "line": "The house card: cream and topo, amber edge, Roca title, swings in.",
+        "ground": "cream"
+      },
+      {
+        "letter": "C",
+        "name": "Island",
+        "line": "A black pill at the top opens out into the message, amber app name.",
+        "ground": "ink"
+      }
+    ]
   },
   {
     "id": "I12",
@@ -302,26 +329,60 @@
     "quote": "Runs through the forest, across the river rocks, along the canyon road, down a street and across a park.",
     "pitch": "A topo trail line in the corner that draws a little further with every cut, a dot running along it and a small label for each place (crag, river, road, town, home), ending on a pin at the desk. Places and count come from props. For any montage that travels from A to B.",
     "catalogCheck": [
-      { "piece": "M24", "verdict": "traces a path inside one shot, not across cuts (and is still a sample)" },
-      { "piece": "M22", "verdict": "named steps as a diagram, not a journey over footage" }
+      {
+        "piece": "M24",
+        "verdict": "traces a path inside one shot, not across cuts (and is still a sample)"
+      },
+      {
+        "piece": "M22",
+        "verdict": "named steps as a diagram, not a journey over footage"
+      }
     ],
     "whyNew": "nothing carries one journey across many clips",
-    "status": "pitched",
-    "pitchedOn": "2026-10-18"
+    "status": "passed",
+    "pitchedOn": "2026-10-18",
+    "note": "Matt: I do all the running, no graphic over the runs."
   },
   {
     "id": "I13",
-    "name": "Screen Dive",
+    "name": "Site Screen",
     "sourceId": "S08",
     "at": "0:14",
     "quote": "Lands at the laptop and opens GearBook.",
     "pitch": "A push into the laptop screen: the GearBook page fills the frame, settles on the cream and topo ground and resolves into the logo and the link. Screen image and end line come from props. For any reel that lands on a screen.",
     "catalogCheck": [
-      { "piece": "M15", "verdict": "sign-off only, doesn't come out of the footage" },
-      { "piece": "M25", "verdict": "its end card fits the sign-off, but not the move from footage to screen" }
+      {
+        "piece": "M15",
+        "verdict": "sign-off only, doesn't come out of the footage"
+      },
+      {
+        "piece": "M25",
+        "verdict": "its end card fits the sign-off, but not the move from footage to screen"
+      }
     ],
     "whyNew": "nothing takes the viewer from footage into the site",
-    "status": "pitched",
-    "pitchedOn": "2026-10-18"
+    "status": "stills",
+    "pitchedOn": "2026-10-18",
+    "note": "Matt: when I get to the table, a mockup screen (or mograph) of me using the site.",
+    "stills": [
+      {
+        "letter": "A",
+        "name": "Laptop",
+        "line": "A drawn laptop on cream and topo plays the site, \"Worth the run.\" lands above.",
+        "ground": "cream"
+      },
+      {
+        "letter": "B",
+        "name": "Full screen",
+        "line": "The browser fills the frame on bark, like a screen recording.",
+        "ground": "bark"
+      },
+      {
+        "letter": "C",
+        "name": "Pop-out",
+        "line": "Over the footage: the browser grows out of the real laptop screen.",
+        "ground": "ink"
+      }
+    ]
   }
 ]

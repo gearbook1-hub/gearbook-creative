@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>M27 Site Screen</title>
+<link rel="stylesheet" href="../pieces.css" />
+<style>
+  /* Someone using gearbook.shop: the cursor clicks Shop the gear on the home page, the climbing
+     page scrolls to a product, it gets an amber ring and a tag. The pages are real screenshots
+     of the live site (site/, made with scripts/capture-site.mjs). Three looks:
+       laptop     a drawn laptop on the cream and topo ground, Roca line above
+       fullscreen the browser fills the safe area on bark, like a screen recording
+       popout     over the footage: the window grows out of the real laptop's screen */
+  body[data-look="laptop"] #stage { --ground: var(--cream); }
+  body[data-look="fullscreen"] #stage { --ground: var(--bark); }
+  body[data-look="fullscreen"] .topo { filter: invert(1); opacity: 0.3; }
+  .win { position: absolute; overflow: hidden; background: #f4f7f2; }
+  .chrome { position: absolute; left: 0; right: 0; top: 0; display: flex; align-items: center; gap: 12px; padding: 0 22px; background: #e4e9e1; border-bottom: 1px solid rgba(61, 53, 34, 0.12); }
+  .chrome i { width: 15px; height: 15px; border-radius: 50%; background: #c9cfc5; }
+  .chrome .url { margin-left: 14px; flex: 1; height: 62%; border-radius: 999px; background: #fff; display: flex; align-items: center; padding: 0 22px; font-size: 22px; color: #5d5848; }
+  .vp { position: absolute; left: 0; right: 0; bottom: 0; overflow: hidden; }
+  .pagelayer { position: absolute; left: 0; top: 0; width: 1440px; transform-origin: 0 0; }
+  .pagelayer img { position: absolute; left: 0; top: 0; width: 1440px; }
+  .ring { position: absolute; border: 7px solid var(--amber); border-radius: 26px; box-shadow: 0 0 0 10px rgba(246, 174, 45, 0.22); }
+  .tag { position: absolute; white-space: nowrap; background: var(--amber); color: var(--bark); font-family: var(--label); font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; border-radius: 999px; }
+  .press { position: absolute; border-radius: 999px; border: 5px solid var(--amber); }
+  .cursor { position: absolute; left: 0; top: 0; width: 40px; height: 56px; transform-origin: 4px 4px; filter: drop-shadow(0 3px 4px rgba(0,0,0,.35)); }
+
+  .laptop .lid { position: absolute; background: #1b1a16; border-radius: 26px; }
+  .laptop .deck { position: absolute; background: linear-gradient(#3a382f, #22211c); clip-path: polygon(3% 0, 97% 0, 100% 100%, 0 100%); border-radius: 0 0 18px 18px; }
+  .laptop .notch { position: absolute; background: #14130f; border-radius: 0 0 12px 12px; }
+  .head { position: absolute; left: 90px; top: 250px; width: 780px; }
+  .head .eyebrow { color: var(--ink-muted); }
+  .head .title { margin-top: 20px; }
+  .lockup .mark { display: block; width: 210px; aspect-ratio: 512 / 129.364; background: #000;
+    -webkit-mask: url("../../brand/gearbook-full-length-bw.svg") center / contain no-repeat; mask: url("../../brand/gearbook-full-length-bw.svg") center / contain no-repeat; }
+  .popshadow { box-shadow: 0 40px 90px rgba(0, 0, 0, 0.45); border-radius: 22px; }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<script src="../runtime.js"></script>
+<script>
+  const { el, tick, progress, outCubic, arrive, words } = Motion;
+  const inOut = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+  const lerp = (a, b, k) => a + (b - a) * k;
+  // Page coordinates on the 1440-wide captures.
+  const SITE = {
+    home: { src: "site/home.jpg", h: 2100, button: [593, 594] },
+    climbing: { src: "site/climbing.jpg", h: 2700, card: [432, 1635, 705, 2087], cardClick: [600, 1990] },
+  };
+
+  Motion.init({
+    duration: 5,
+    hold: 1,
+    looks: ["laptop", "fullscreen", "popout"],
+    overlay: Motion.look === "popout",
+    // The piece's variables. Override any of them with ?props={...}.
+    defaults: {
+      eyebrow: "gearbook.shop",
+      headline: "Worth the run.",
+      tag: "The one I just dropped",
+      url1: "gearbook.shop",
+      url2: "gearbook.shop/shop/climbing",
+    },
+    build(stage, p, look) {
+      // Where the browser sits, per look: x, y, width, viewport height, chrome height.
+      const G = {
+        laptop: { x: 104, y: 640, w: 752, vh: 470, ch: 34 },
+        fullscreen: { x: 54, y: 250, w: 846, vh: 1196, ch: 64 },
+        popout: { x: 54, y: 620, w: 846, vh: 529, ch: 52 },
+      }[look];
+
+      if (look !== "popout") el("div", { class: "topo" }, stage);
+      if (look === "laptop") {
+        const head = el("div", { class: "head" }, stage);
+        const eb = el("div", { class: "eyebrow", text: p.eyebrow }, head);
+        arrive(eb, 0.1);
+        words(el("div", { class: "title" }, head), p.headline, 3.4, 0.14);
+        const lap = el("div", { class: "laptop" }, stage);
+        el("div", { class: "lid", style: { left: `${G.x - 26}px`, top: `${G.y - 26}px`, width: `${G.w + 52}px`, height: `${G.vh + G.ch + 52}px` } }, lap);
+        el("div", { class: "deck", style: { left: "60px", top: `${G.y + G.ch + G.vh + 26}px`, width: "840px", height: "34px" } }, lap);
+        el("div", { class: "notch", style: { left: "420px", top: `${G.y + G.ch + G.vh + 26}px`, width: "120px", height: "12px" } }, lap);
+        arrive(lap, 0, { y: 40, dur: 0.7 });
+        const lock = el("div", { class: "lockup", style: { top: "1400px" } }, stage);
+        el("span", { class: "mark" }, lock);
+        arrive(lock, 3.9);
+      }
+
+      const win = el("div", { class: "win" + (look === "popout" ? " popshadow" : ""), style: { left: `${G.x}px`, top: `${G.y}px`, width: `${G.w}px`, height: `${G.ch + G.vh}px`, borderRadius: look === "laptop" ? "4px" : "22px" } }, stage);
+      const chrome = el("div", { class: "chrome", style: { height: `${G.ch}px` } }, win);
+      for (let i = 0; i < 3; i++) el("i", { style: { width: `${G.ch * 0.26}px`, height: `${G.ch * 0.26}px` } }, chrome);
+      const url = el("div", { class: "url", text: p.url1, style: { fontSize: `${Math.round(G.ch * 0.36)}px` } }, chrome);
+      const vp = el("div", { class: "vp", style: { top: `${G.ch}px` } }, win);
+      const s = G.w / 1440, vhp = G.vh / s;
+
+      const home = el("div", { class: "pagelayer" }, vp);
+      el("img", { src: SITE.home.src }, home);
+      const shop = el("div", { class: "pagelayer" }, vp);
+      el("img", { src: SITE.climbing.src }, shop);
+      const [cx0, cy0, cx1, cy1] = SITE.climbing.card;
+      const ring = el("div", { class: "ring", style: { left: `${cx0 - 14}px`, top: `${cy0 - 14}px`, width: `${cx1 - cx0 + 28}px`, height: `${cy1 - cy0 + 28}px` } }, shop);
+      const tagSize = 30 / s;
+      const tag = el("div", { class: "tag", text: p.tag, style: { fontSize: `${tagSize}px`, padding: `${tagSize * 0.45}px ${tagSize * 0.9}px`, left: `${cx0 - 14}px`, top: `${cy0 - 14 - tagSize * 2.6}px` } }, shop);
+      const press = el("div", { class: "press" }, home);
+      const cursor = el("svg", { class: "cursor", viewBox: "0 0 40 56" }, vp);
+      el("path", { d: "M4 4 L4 46 L15 35 L23 53 L31 49 L23 32 L38 32 Z", fill: "#111", stroke: "#fff", "stroke-width": 3, "stroke-linejoin": "round" }, cursor);
+
+      const scrollTo = Math.max(0, Math.min(SITE.climbing.h - vhp, (cy0 + cy1) / 2 - vhp / 2 + 40));
+      const [bx, by] = SITE.home.button, [kx, ky] = SITE.climbing.cardClick;
+
+      if (look === "popout") {
+        // Grows out of the laptop screen in the footage (centre 546, 1003, 463 px wide) to the front.
+        tick((t) => {
+          const k = outCubic(progress(t, 0, 0.7));
+          const sc = lerp(463 / G.w, 1, k);
+          const dx = lerp(546 - (G.x + G.w / 2), 0, k), dy = lerp(1003 - (G.y + (G.ch + G.vh) / 2), 0, k);
+          win.style.transform = `translate(${dx}px, ${dy}px) perspective(1600px) rotateX(${lerp(14, 0, k)}deg) scale(${sc})`;
+          win.style.opacity = progress(t, 0, 0.12);
+        });
+      } else if (look === "fullscreen") {
+        win.animate([{ opacity: 0, transform: "scale(.96)" }, { opacity: 1, transform: "none" }], { duration: 450, easing: Motion.ease.arrive, fill: "both" });
+      }
+
+      tick((t) => {
+        // Pages: home until the click, then the climbing page scrolls to the product.
+        const onShop = t >= 1.3;
+        home.style.opacity = onShop ? 0 : 1;
+        shop.style.opacity = onShop ? outCubic(progress(t, 1.3, 0.15)) : 0;
+        url.textContent = onShop ? p.url2 : p.url1;
+        const sc = scrollTo * inOut(progress(t, 1.55, 1.1));
+        home.style.transform = `scale(${s})`;
+        shop.style.transform = `scale(${s}) translateY(${-sc}px)`;
+
+        // Cursor, in viewport coordinates on the 1440 grid.
+        let x, y;
+        if (t < 1.05) { const k = inOut(progress(t, 0.35, 0.7)); x = lerp(1180, bx, k); y = lerp(vhp * 0.82, by, k); }
+        else if (t < 2.75) { x = bx; y = by; }
+        else { const k = inOut(progress(t, 2.75, 0.7)); x = lerp(bx, kx, k); y = lerp(by, ky - scrollTo, k); }
+        const dip = 1 - 0.18 * (Math.max(0, 1 - Math.abs(t - 1.17) / 0.08) + Math.max(0, 1 - Math.abs(t - 3.95) / 0.08));
+        cursor.style.transform = `translate(${x * s - 4}px, ${y * s - 4}px) scale(${Math.max(0.85, s * 1.6) * dip})`;
+
+        // Click on Shop the gear: an amber ring opens from the button.
+        const pk = progress(t, 1.15, 0.3), r = lerp(40, 150, outCubic(pk));
+        Object.assign(press.style, { left: `${bx - r * 1.6}px`, top: `${by - r * 0.55}px`, width: `${r * 3.2}px`, height: `${r * 1.1}px`, opacity: pk > 0 && pk < 1 ? 1 - pk : 0 });
+
+        // The product: ring draws in, the tag drops on.
+        const rk = outCubic(progress(t, 3.3, 0.35));
+        ring.style.opacity = rk;
+        ring.style.transform = `scale(${lerp(1.06, 1, rk)})`;
+        const tk = outCubic(progress(t, 3.5, 0.4));
+        tag.style.opacity = tk;
+        tag.style.transform = `translateY(${lerp(30, 0, tk)}px)`;
+      });
+    },
+  });
+</script>
+</body>
+</html>

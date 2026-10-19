@@ -14,8 +14,10 @@ for (const look of only ? [only] : looksOf(piece)) {
   const frames = Math.round(p.duration * fps);
   for (let i = 0; i <= frames; i++) await p.frame(i / fps, path.join(dir, `${String(i).padStart(5, "0")}.png`));
   await p.close();
-  const out = `renders/${piece}-${look ?? "main"}.mp4`;
-  ffmpeg(["-framerate", String(fps), "-i", path.join(dir, "%05d.png"), "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "18", out]);
+  // Overlays keep their transparency (ProRes 4444) so they can be laid over footage.
+  const out = `renders/${piece}-${look ?? "main"}.${p.overlay ? "mov" : "mp4"}`;
+  const codec = p.overlay ? ["-c:v", "prores_ks", "-profile:v", "4444", "-pix_fmt", "yuva444p10le"] : ["-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "18"];
+  ffmpeg(["-framerate", String(fps), "-i", path.join(dir, "%05d.png"), ...codec, out]);
   fs.rmSync(dir, { recursive: true, force: true });
   console.log(`render ${piece} ${look ?? ""} -> ${out} (${frames + 1} frames)`);
 }

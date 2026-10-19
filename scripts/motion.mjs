@@ -49,12 +49,15 @@ export async function openPiece(piece, { look, props } = {}) {
   await page.waitForFunction(() => document.body.dataset.ready === "true");
   const duration = await page.evaluate(() => window.Motion.duration);
   const roca = await page.evaluate(() => document.fonts.check("700 40px roca"));
+  const { overlay, checkAt } = await page.evaluate(() => ({ overlay: window.Motion.overlay, checkAt: window.Motion.checkAt }));
   return {
     duration,
     roca,
+    overlay,
+    checkAt,
     async frame(t, out) {
       await page.evaluate((s) => window.Motion.seek(s), t);
-      await page.screenshot({ path: out, type: "png" });
+      await page.screenshot({ path: out, type: "png", omitBackground: overlay });
     },
     async close() {
       await browser.close();
@@ -86,5 +89,6 @@ export function args() {
     props: flag("props"),
     fps: Number(flag("fps") || 60),
     t: flag("t"),
+    over: flag("over"),
   };
 }

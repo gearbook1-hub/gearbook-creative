@@ -7,6 +7,8 @@
 // and take its words and numbers from the URL:  ?look=ledger&props={"values":[3,9,20]}
 //
 // A piece calls Motion.init({ duration, hold, looks, defaults, build(stage, props, look) }).
+// Pieces laid over footage add overlay: true: they record with a transparent background, and
+// checkAt: [seconds] when the render check shouldn't sample 25/60/100% (a banner that has left).
 // build() creates the DOM and returns nothing; animations made with el.animate() or CSS are
 // all driven by the clock, and Motion.tick(fn) runs fn(t) every frame for things CSS can't
 // animate (counting numbers).
@@ -30,6 +32,8 @@
   const Motion = {
     look: q.get("look"),
     rendering: q.get("render") === "1",
+    overlay: false,
+    checkAt: null,
     ready: null,
     get duration() { return duration; },
     tick(fn) { ticks.push(fn); },
@@ -77,6 +81,9 @@
       const look = spec.looks.includes(Motion.look) ? Motion.look : spec.looks[0];
       Motion.look = look;
       document.body.dataset.look = look;
+      Motion.overlay = !!spec.overlay;
+      Motion.checkAt = spec.checkAt ?? null;
+      if (Motion.overlay) document.body.dataset.overlay = Motion.rendering ? "render" : "preview";
       const stage = document.getElementById("stage");
       fit(stage);
       window.addEventListener("resize", () => fit(stage));

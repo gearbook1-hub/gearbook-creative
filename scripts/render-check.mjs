@@ -36,7 +36,7 @@ for (const look of looksOf(piece)) {
   const name = `${piece}-${look ?? "main"}`;
   const bg = `stills/out/check/${name}-bg.png`;
   await p.frame(0, bg);
-  for (const t of [0.25, 0.6, 1].map((k) => +(p.duration * k).toFixed(2))) {
+  for (const t of p.checkAt ?? [0.25, 0.6, 1].map((k) => +(p.duration * k).toFixed(2))) {
     const file = `stills/out/check/${name}-${t}s.png`;
     await p.frame(t, file);
     const r = compare(bg, file);
