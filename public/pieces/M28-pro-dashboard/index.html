@@ -49,6 +49,10 @@
   .cat .img { height: 96px; border-radius: 12px; background: #dce7da; position: relative; overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; gap: 3px; padding: 5px; }
   .cat .img i { border-radius: 7px; background: #c8d8c6; display: grid; place-items: center; }
   .cat .img i svg { width: 18px; height: 18px; }
+  .cat .img i { background: #fff; overflow: hidden; position: relative; }
+  .cat .img i img { position: absolute; inset: 3px; width: calc(100% - 6px); height: calc(100% - 6px); }
+  .cat .pill { z-index: 2; }
+  .cat .img i img, .prod .th img, .list .r i img { width: 100%; height: 100%; object-fit: contain; }
   .cat .pill { position: absolute; left: 6px; top: 6px; background: #fff; border-radius: 9px; padding: 1px 5px; font-family: var(--label); font-size: 5.5px; }
   .cat b { display: block; font-family: var(--display); font-size: 10px; margin-top: 5px; }
   .cat small { display: block; font-size: 6.5px; color: #6b6450; }
@@ -81,12 +85,13 @@
   .list .k { font-family: var(--label); font-size: 6.5px; letter-spacing: 0.04em; color: #6b6450; }
   .list .r { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-top: 1px solid rgba(61, 53, 34, 0.08); font-size: 8px; }
   .list .r:first-of-type { border-top: 0; }
-  .list .r i { width: 22px; height: 22px; border-radius: 6px; background: #dce7da; display: grid; place-items: center; }
+  .list .r i { width: 22px; height: 22px; border-radius: 6px; background: #fff; border: 1px solid rgba(61, 53, 34, 0.08); display: grid; place-items: center; overflow: hidden; }
   .list .r i svg { width: 13px; height: 13px; }
   .list .r span { flex: 1; }
   .list .r b { font-family: var(--display); font-size: 9px; }
-  .tap { position: absolute; left: 0; top: 0; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%;
-    background: rgba(255, 255, 255, 0.55); border: 2px solid rgba(61, 53, 34, 0.55); box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25); z-index: 9; opacity: 0; }
+  /* The pointer, the same arrow as M27: tip at its top-left corner. */
+  .cursor { position: absolute; left: 0; top: 0; width: 15px; height: 21px; transform-origin: 1.5px 1.5px; z-index: 10; opacity: 0;
+    filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.35)); }
   .ripple { position: absolute; left: 0; top: 0; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%; border: 2px solid #f6ae2d; z-index: 9; opacity: 0; }
   .detail { overflow: hidden; }
   .dhead { background: #3d3522; color: #f0f7ee; border-radius: 14px; padding: 9px 11px; display: flex; align-items: center; gap: 7px; }
@@ -98,7 +103,7 @@
   .btn-add { background: #f6ae2d; color: #3d3522; border-radius: 12px; padding: 5px 10px; font-family: var(--label); font-weight: 600; font-size: 7px; letter-spacing: 0.04em; }
   .plist { display: flex; flex-direction: column; gap: 5px; }
   .prod { display: flex; gap: 8px; align-items: center; background: #fff; border: 2px solid rgba(61, 53, 34, 0.1); border-radius: 12px; padding: 5px 7px 5px 5px; }
-  .prod .th { width: 34px; height: 34px; flex: none; background: #dce7da; border-radius: 8px; display: grid; place-items: center; }
+  .prod .th { width: 34px; height: 34px; flex: none; background: #fff; border: 1px solid rgba(61, 53, 34, 0.08); border-radius: 8px; display: grid; place-items: center; overflow: hidden; padding: 2px; }
   .prod .th svg { width: 18px; height: 18px; }
   .prod .tx { flex: 1; min-width: 0; }
   .prod b { display: block; font-family: var(--display); font-size: 8.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -143,6 +148,7 @@
   const icon = (name, color = "currentColor") =>
     `<svg viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICON[name]}</svg>`;
   const ITEMS = ["pack", "helmet", "rope", "boot"];
+  const photo = (name) => `<img src="products/${name}.jpg" alt="">`;
 
   const fmt = (n, d = 0) => n.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
 
@@ -162,7 +168,7 @@
       size: 1,
       name: "Sam Rivera",
       role: "Pro",
-      specialty: "Rock climbing instructor (sample)",
+      specialty: "AMGA Rock and Ski Guide (sample)",
       completion: 80,
       nextStep: "Add a catalog cover photo",
       stats: [
@@ -171,28 +177,27 @@
         { label: "Conversion", value: 2.2, decimals: 1, suffix: "%" },
       ],
       catalogs: [
-        { name: "Crag Kit", products: 7, main: true },
-        { name: "Alpine Rack", products: 6 },
-        { name: "Gym Bag", products: 4 },
+        { name: "Trad Climbing", products: 4, main: true },
+        { name: "Skiing", products: 4 },
+        { name: "Layers", products: 4 },
       ],
       months: ["May", "Jun", "Jul"],
       clicks: [220, 305, 412],
-      topProducts: [["Petzl GRIGRI", 96], ["La Sportiva TC Pro", 71], ["Sterling Velocity 9.8 mm", 54]],
-      // Build look: the catalog the pro taps into. Real climbing gear from partner retailers
-      // (sample picks, not anyone's actual catalog). Up to 8 per catalog, as on the site.
+      topProducts: [["Petzl GRIGRI+", 96, "grigri"], ["Atomic Bent Chetler 100", 71, "bent-chetler"], ["Osprey Soelden 32", 54, "soelden"]],
+      // Luke's three catalogs (2026-10-18), real products from partner retailers with their
+      // photos in products/ (retailer images, shrunk). Sample member, not a real catalog.
+      // Build taps into the main one: three products list in, the fourth is added from search.
       products: [
-        { name: "Petzl GRIGRI", retailer: "Backcountry", icon: "belay", blurb: "On every client rope I set up." },
-        { name: "Black Diamond Momentum Harness", retailer: "Backcountry", icon: "harness" },
-        { name: "La Sportiva TC Pro", retailer: "Backcountry", icon: "boot", blurb: "Still my crack shoe." },
-        { name: "Petzl Boreo Helmet", retailer: "Backcountry", icon: "helmet" },
-        { name: "Sterling Velocity 9.8 mm Rope", retailer: "Backcountry", icon: "rope" },
-        { name: "Osprey Mutant 38", retailer: "Osprey", icon: "pack" },
-        { name: "Black Diamond ATC Guide", retailer: "Backcountry", icon: "belay" },
+        { name: "Petzl GRIGRI+ Belay Device", retailer: "Backcountry", img: "grigri", blurb: "On every client rope I set up." },
+        { name: "Black Diamond Solution Harness", retailer: "Backcountry", img: "solution" },
+        { name: "Black Diamond Camalot Z4", retailer: "Backcountry", img: "z4", blurb: "For the thin stuff." },
       ],
-      topPick: 2,
-      search: "camalot",
-      added: { name: "Black Diamond Camalot C4", retailer: "Backcountry", icon: "cam" },
-      results: ["Black Diamond Camalot C4", "Black Diamond Camalot Z4"],
+      topPick: 0,
+      search: "camalot c4",
+      added: { name: "Black Diamond Camalot C4", retailer: "Backcountry", img: "c4" },
+      results: [{ name: "Black Diamond Camalot C4", img: "c4" }, { name: "Black Diamond Camalot Z4", img: "z4" }],
+      // Photos on each catalog's cover grid: Trad Climbing, Skiing, Layers.
+      covers: [["grigri", "solution", "z4", "c4"], ["bent-chetler", "ledge", "soelden", "lightyear"], ["base-top", "base-bottom", "r1", "socks"]],
       slug: "sam-rivera",
     },
     build(stage, p, look) {
@@ -244,7 +249,8 @@
         const img = el("div", { class: "img" }, card);
         const thumbs = ITEMS.map((n, k) => {
           const th = el("i", {}, img);
-          th.innerHTML = icon(ITEMS[(k + ci) % 4], "#527060");
+          const cover = (p.covers[ci] || p.covers[0])[k];
+          th.innerHTML = cover ? photo(cover) : icon(ITEMS[(k + ci) % 4], "#527060");
           return th;
         });
         if (c.main) el("div", { class: "pill", text: "Main" }, img);
@@ -277,9 +283,9 @@
       });
       const list = el("div", { class: "list" }, earn);
       el("div", { class: "k", text: "TOP PRODUCTS BY CLICKS" }, list);
-      const rows = p.topProducts.map(([name, n], i) => {
+      const rows = p.topProducts.map(([name, n, img], i) => {
         const r = el("div", { class: "r" }, list);
-        r.innerHTML = `<i>${icon(ITEMS[i % 4], "#527060")}</i><span>${name}</span><b>${n}</b>`;
+        r.innerHTML = `<i>${img ? photo(img) : icon(ITEMS[i % 4], "#527060")}</i><span>${name}</span><b>${n}</b>`;
         return r;
       });
 
@@ -302,7 +308,7 @@
       const detail = el("div", { class: "tabpage detail" }, ui);
       const prodRow = (pr, parent) => {
         const r = el("div", { class: "prod" }, parent);
-        r.innerHTML = `<div class="th">${icon(pr.icon, "#527060")}</div><div class="tx"><b>${pr.name}</b><small>Retailer: ${pr.retailer}</small>${pr.blurb ? `<em>&ldquo;${pr.blurb}&rdquo;</em>` : ""}</div>${icon("star", "#b9b29c").replace("<svg", '<svg class="st"')}`;
+        r.innerHTML = `<div class="th">${pr.img ? photo(pr.img) : icon(pr.icon || "pack", "#527060")}</div><div class="tx"><b>${pr.name}</b><small>Retailer: ${pr.retailer}</small>${pr.blurb ? `<em>&ldquo;${pr.blurb}&rdquo;</em>` : ""}</div>${icon("star", "#b9b29c").replace("<svg", '<svg class="st"')}`;
         return r;
       };
       const mainCat = p.catalogs.find((c) => c.main) || p.catalogs[0];
@@ -321,8 +327,9 @@
       const field = el("div", { class: "field" }, sheet);
       field.innerHTML = `${icon("search", "#6b6450")}<span class="q"></span><span class="caret"></span>`;
       const res = el("div", { class: "res" }, sheet);
-      const resEls = p.results.map((name) => prodRow({ name, retailer: p.added.retailer, icon: p.added.icon }, res));
-      const tapDot = el("div", { class: "tap" }, ui);
+      const resEls = p.results.map((r) => prodRow({ ...p.added, ...r }, res));
+      const cursor = el("svg", { class: "cursor", viewBox: "0 0 40 56" }, ui);
+      el("path", { d: "M4 4 L4 46 L15 35 L23 53 L31 49 L23 32 L38 32 Z", fill: "#111", stroke: "#fff", "stroke-width": 3, "stroke-linejoin": "round" }, cursor);
       const ripple = el("div", { class: "ripple" }, ui);
 
       // A deterministic QR-looking pattern (decorative, not scannable).
@@ -371,23 +378,31 @@
         const centre = (node, fx = 0.5, fy = 0.5) => { const [x, y, w, h] = pos(node); return [x + w * fx, y + h * fy]; };
         const TAPS = [
           { at: 3.0, on: () => centre(cards[0].card, 0.5, 0.35) },               // open the main catalog
-          { at: 4.75, on: () => centre(prodEls[p.topPick].querySelector(".st")) }, // star a top pick
+          { at: 4.75, on: () => { const [x, y, w, h] = pos(prodEls[p.topPick]); return [x + w - 15, y + h / 2]; } }, // star a top pick (an SVG has no offsets)
           { at: 5.6, on: () => centre(addBtn) },                                 // + Add Product
           { at: 7.25, on: () => centre(resEls[0]) },                             // pick the search result
         ];
+        // The pointer glides in, reaches each target just before its click, dips on the click.
+        const START = [300, 560];
+        const inOut = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
         tick((t) => {
-          let shown = 0, press = 1, rk = -1, xy = [0, 0];
+          let xy = START, rk = -1, press = 1;
+          let from = START, fromAt = 2.2;
           for (const tp of TAPS) {
-            const d = t - tp.at;
-            if (d > -0.35 && d < 0.3) {
-              xy = tp.on();
-              shown = d < 0 ? Motion.clamp((d + 0.35) / 0.15) : Motion.clamp(1 - (d - 0.15) / 0.15);
-              press = 1 - 0.22 * Math.max(0, 1 - Math.abs(d) / 0.08);
+            const to = tp.on(), leave = Math.max(fromAt, tp.at - 0.75);
+            if (t < tp.at - 0.05) {
+              const k = inOut(progress(t, leave, tp.at - 0.05 - leave));
+              xy = [from[0] + (to[0] - from[0]) * k, from[1] + (to[1] - from[1]) * k];
+              break;
             }
-            if (d >= 0 && d < 0.45) { xy = tp.on(); rk = d / 0.45; }
+            xy = to;
+            const d = t - tp.at;
+            press = Math.min(press, 1 - 0.18 * Math.max(0, 1 - Math.abs(d) / 0.08));
+            if (d >= 0 && d < 0.45) rk = d / 0.45;
+            from = to; fromAt = tp.at + 0.15;
           }
-          tapDot.style.opacity = shown;
-          tapDot.style.transform = `translate(${xy[0]}px, ${xy[1]}px) scale(${press})`;
+          cursor.style.opacity = progress(t, 2.2, 0.25);
+          cursor.style.transform = `translate(${xy[0] - 1.5}px, ${xy[1] - 1.5}px) scale(${press})`;
           ripple.style.opacity = rk < 0 ? 0 : 1 - rk;
           ripple.style.transform = `translate(${xy[0]}px, ${xy[1]}px) scale(${1 + 1.6 * Math.max(0, rk)})`;
 
@@ -429,7 +444,7 @@
         });
       }
 
-      if (look !== "build") [detail, shade, sheet, tapDot, ripple].forEach((n) => { n.style.display = "none"; });
+      if (look !== "build") [detail, shade, sheet, cursor, ripple].forEach((n) => { n.style.display = "none"; });
       if (look === "tour") {
         countUp(0.6, 1.2);
         fillCatalogs(0.6);
