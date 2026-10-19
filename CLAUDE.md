@@ -16,4 +16,20 @@ The creative hub for GearBook. Read README.md first; the loop and which skill ru
 - Run `npm run render:check` before delivering any render, and `npm run build` before pushing. Every push to `main` deploys https://gearbook1-hub.github.io/gearbook-creative/.
 - Brand values come from `public/pieces/pieces.css` (pieces), `lib/brand.ts` and `app/globals.css` (hub). Don't hard-code new colours.
 - GearBook copy rules: no em or en dashes, never promise earnings or quote a commission rate, "outdoor professional" or "pro" rather than "guide" (unless a mountain guide), links use https://www.gearbook.shop.
+- Before taking a new `M` id, `git pull`: Matt and his cloud sessions add pieces too. M28 was first numbered M26 and collided with Matt's Ping, pushed the same day (2026-10-18).
+- Screen mockups of GearBook show what GearBook really is: the real dashboard layout, real products that belong in their catalog, each with its photo, a normal arrow cursor. Detail in `docs/context/motion-pieces.md`.
+- Luke sends changes while a piece is being built ("catalog 2: …", "use a normal cursor"). Fold each into the work in progress, stop any render that would bake in the old version, and re-render once at the end.
 - The repo is public. Keep sample data marked `sample: true`. Never commit videos (other than small previews of GearBook's own published work), frames, full transcripts of other people's videos, or secrets.
+
+## Context (read the one you need)
+Feature knowledge, one file per area, with dated facts and the reason for each rule. The code wins over these files: fix the file in the same commit when it drifts.
+
+| File | Covers |
+|---|---|
+| `docs/context/motion-pieces.md` | Grounded pieces vs overlays (transparent `.mov`), accurate screen mockups, example catalogs, the cursor, technical traps |
+| `docs/context/product-photos.md` | Where product pictures come from (gearbook.shop, Backcountry via the browser), preparing them, names, the open rights question |
+| `docs/context/hosting-and-access.md` | Who can see the public hub, the downloads question, confirming a Pages deploy, stale `.next` |
+| `docs/VIDEO_SPEC.md` | The source reel, panel by panel |
+| `docs/NEW_VIDEO.md`, `docs/ADOBE_FONTS.md` | Adding a reel; Roca on a new domain |
+
+Skills in `.claude/skills/` hold each step of the loop; the editing rules for cuts live in `video-cut`.

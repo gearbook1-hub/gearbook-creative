@@ -62,18 +62,20 @@ data/
   social.json            the social identity: audiences, formats, voice, rules, gaps
   content-ideas.json     the post idea bank
   posts.json             what's been posted, with likes and comments
-  pieces.json            the motion library (M18 and M25 are real; the rest are sample catalog entries)
+  pieces.json            the motion library (M18 demo; M25 to M28 real; M01 to M24 are sample catalog entries)
   sources.json           videos, inspo and requests, with transcripts
   ideas.json             every flagged motion moment: quote, catalog check, pitch, stills, build, render check
 lib/                     types, data helpers (data.ts, social.ts), brand tokens, Pulse decisions (localStorage)
 public/pieces/           the motion pieces: runtime.js, pieces.css (house style), topo.svg,
-                         M18-click-trail/ (built here, three looks), M25-signup-explainer/ (the real reel, live, plus its MP4 preview)
+                         M18-click-trail/ (demo, three looks), M25-signup-explainer/ (the real reel, plus its MP4 preview),
+                         M26-ping/, M27-site-screen/, M28-pro-dashboard/ (overlays laid over footage)
 scripts/                 setup-check, transcribe, scout, motion.mjs (recorder), render-stills / render-piece /
                          render-check, apply-decisions, clip-sheets and cut (the reel edit)
 edits/                   one edit list per reel: every shot's clip, in, out and why, and what was dropped
 .claude/skills/          one skill per mod, with its full prompt
 inbox/                   videos/, transcripts/ and sheets/ (git-ignored), inspo/
 docs/VIDEO_SPEC.md       what the source video shows, panel by panel
+docs/context/            what we've learned, one file per area (index in CLAUDE.md)
 screenshots/             the hub, for reference
 ```
 

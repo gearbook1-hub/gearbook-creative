@@ -17,4 +17,10 @@ Pieces are plain HTML pages, the same kind of fully animated page Claude built f
 5. Open the page in a browser to watch it loop, `?look=ledger` to switch looks, `?t=2.5` to freeze a frame.
 6. Hand off to `render-check`, then `motion-library`. `npm run render -- <piece>` records the MP4 at 60 fps.
 
+Before building, read `docs/context/motion-pieces.md`. In short:
+- **Over footage?** Make it an overlay (`overlay: true`): no ground, headline or caption, the object pops forward like M27's look C, with `x`, `y`, `size` props. It renders to a transparent ProRes `.mov`.
+- **A mockup of GearBook?** Draw it from the real screen (`/dev-preview/dashboard` on staging for the dashboard), with real products that belong in each catalog and their photos (`docs/context/product-photos.md`).
+- **Clicking through?** Use M27's arrow cursor, never a dot.
+- Put `easing` on each keyframe, not in the options; measure positions through `offsetParent`, and never from an SVG element.
+
 Colours come from `pieces.css` variables (GearBook's bark, sage, cream, amber, slate), never new hex values.
