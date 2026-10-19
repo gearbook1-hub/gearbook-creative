@@ -10,7 +10,7 @@ Who can see the hub, where finished files live, and how to confirm a deploy. Fac
 ## Downloads from the library (asked 2026-10-19, set aside)
 Luke asked for download buttons on the library, then said "nevermind". What was found, for next time:
 - Renders can't go in the repo: overlays are 190 to 310 MB each, GitHub refuses files over 100 MB, and the repo rule is no videos.
-- **Google Drive** (GearBook Drive, Marketing/Reels, where M25's master is) keeps downloads to the people the folder is shared with, even though the library page is public. Recommended.
+- **Google Drive** (GearBook Drive, Marketing/Reels, where the signup reel's master is) keeps downloads to the people the folder is shared with, even though the library page is public. Recommended.
 - **GitHub Releases** takes files up to 2 GB, but on a public repo anyone with the link can download them.
 - Risks of a public download: anyone could reuse finished GearBook videos, and they contain retailers' product photos (`product-photos.md`). There is no member data or secret in them.
 

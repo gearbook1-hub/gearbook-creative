@@ -1,0 +1,29 @@
+[
+  {
+    "id": "R01",
+    "name": "Signup Reel",
+    "kind": "animated",
+    "format": "A",
+    "description": "How joining works, start to finish: client questions pop up, a phone applies, adds gear with one search, shares the catalog after a trip and with a friend, then gear drops into a pack and the pack becomes the logo. Its cream and topo ground, serif titles that arrive word by word and small tracked labels are the house style.",
+    "made": "Matt had Claude build it as a Motion artifact (\"GearBook Signup Reel\" on his Claude account). Its scenes, styles and images are copied unchanged into public/pieces/M25-signup-explainer/film/ and play live here.",
+    "madeOn": "2026-10-13",
+    "seconds": 28,
+    "html": "M25-signup-explainer",
+    "pieces": [],
+    "master": "Google Drive: GearBook/Marketing/Reels/Signup Reel/GearBook-Signup-Reel.mp4 (with captions and without)",
+    "was": "M25"
+  },
+  {
+    "id": "R02",
+    "name": "Huss valley: crag to desk",
+    "kind": "cut",
+    "format": "B",
+    "description": "Belaying at the crag, a GearBook notification dings, he drops the rope and runs through the forest, river, canyon, town and park, through the front door and lands at the laptop as gearbook.shop pops out of the screen.",
+    "made": "Claude watched every clip, picked the takes and timings from the story, cut it, then laid M26 Ping and M27 Site Screen over it with the ding. Matt's cut notes are folded in.",
+    "madeOn": "2026-10-18",
+    "edit": "S08-huss-valley",
+    "source": "S08",
+    "pieces": ["M26", "M27"],
+    "master": "Google Drive: GearBook/Marketing/Reels/Huss valley (the clips; the final goes next to them when Matt or Luke says so)"
+  }
+]

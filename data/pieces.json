@@ -750,14 +750,14 @@
     "id": "M25",
     "name": "Signup Explainer",
     "version": 1,
-    "status": "live",
-    "description": "The 28 second signup reel Matt had Claude build as a Motion artifact (\"GearBook Signup Reel\" on his Claude account). It plays here live from the artifact's own scene code: client questions pop up, a phone applies, adds gear with one search, shares the catalog after a trip and with a friend, then gear drops into a pack and the pack becomes the logo. Its cream and topo ground, serif titles that arrive word by word and small tracked labels are the house style every new piece follows.",
-    "covers": "The whole member journey, apply to share to earn, as one 28 s reel. Not a single stat or step on its own.",
-    "preview": "video",
+    "status": "retired",
+    "description": "Moved to the Reels tab as R01 (data/reels.json) on 2026-10-19: it's a whole reel, not a pack piece. The id stays here so it's never reused.",
+    "covers": "Moved to R01.",
+    "preview": "retired",
     "ground": "cream",
     "variants": [
       {
-        "label": "LIVE",
+        "label": "MOVED",
         "ground": "cream"
       }
     ],
@@ -765,11 +765,8 @@
       "9:16"
     ],
     "variables": [],
-    "video": "pieces/M25-signup-explainer/preview.mp4",
-    "master": "Google Drive: GearBook/Marketing/Reels/Signup Reel/GearBook-Signup-Reel.mp4",
     "builtOn": "2026-10-13",
-    "sample": false,
-    "html": "M25-signup-explainer"
+    "sample": false
   },
   {
     "id": "M26",

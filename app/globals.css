@@ -217,3 +217,12 @@ a.card:hover { border-color: var(--line-strong); transform: translateY(-2px); }
 .footer-brand .mark { color: #000; margin-right: 6px; }
 .logo-tile { border-radius: var(--radius); border: 1px solid var(--line); padding: 22px; min-height: 150px; display: flex; align-items: center; justify-content: center; }
 .logo-tile img { display: block; max-width: 100%; max-height: 90px; }
+.avatar-row { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: clamp(20px, 4vw, 40px); align-items: center; }
+.avatar { display: block; width: 160px; height: 160px; border-radius: 50%; box-shadow: 0 0 0 1px var(--line-strong), 0 10px 24px rgba(0, 0, 0, 0.08); }
+@media (max-width: 520px) { .avatar-row { grid-template-columns: 1fr; } }
+
+/* Reels: a cut's shot list */
+.shots { width: 100%; border-collapse: collapse; font-size: 15px; }
+.shots th { text-align: left; font-family: var(--font-label); font-weight: 600; font-size: 12px; letter-spacing: 0.18em; color: var(--ink-2); padding: 0 12px 8px 0; }
+.shots td { padding: 9px 12px 9px 0; border-top: 1px solid var(--line); vertical-align: top; }
+.shots td:first-child { font-variant-numeric: tabular-nums; color: var(--ink-2); white-space: nowrap; }

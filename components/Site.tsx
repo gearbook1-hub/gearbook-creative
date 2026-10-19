@@ -20,6 +20,7 @@ export const PAGES = [
   { name: "Overview", href: "/" },
   { name: "Idea bank", href: "/ideas" },
   { name: "Feed", href: "/feed" },
+  { name: "Reels", href: "/reels" },
   { name: "Motion library", href: "/library" },
   { name: "Identity", href: "/identity" },
 ] as const;

@@ -3,7 +3,7 @@
 How a piece in `public/pieces/<Mxx-name>/` is built, beyond the steps in `.claude/skills/motion-build`. Facts are dated; the code wins over this file, so fix it in the same commit when it drifts.
 
 ## Two kinds of piece
-- **Grounded pieces** (M18, M25) fill the 9:16 frame: cream and topo, bark or sage ground, a Roca headline, the lockup. They stand alone in a reel.
+- **Grounded pieces** (M18) fill the 9:16 frame: cream and topo, bark or sage ground, a Roca headline, the lockup, in the house style of the signup reel (R01). They stand alone as a beat inside a reel. A whole reel built in code is not a piece: it goes on the Reels tab (`data/reels.json`), like R01.
 - **Overlays** (M26 Ping, M27 Site Screen look C, M28 Pro Dashboard) are laid over footage. Since 2026-10-18 `Motion.init({ overlay: true })` makes the stage transparent when recording (`body[data-overlay="render"]`) and bark in the browser (`"preview"`). `npm run render` then writes a ProRes 4444 `.mov` with alpha (`yuva444p12le`, about 190 to 310 MB for 6 to 10 s at 60 fps) instead of an MP4, and `npm run composite` lays it over a cut.
 - An overlay has **no ground, no topo, no headline and no caption label**: the footage and the person in it carry the words. Luke asked for M28 to "look like M27 option C" for exactly this, so it could go over a video of him doing the presenter bit in the suit (2026-10-18).
 - An overlay's object **pops forward** the way M27's browser grows out of the laptop: from about 35% scale, lower down, tilted back about 14° (`perspective(1600px) rotateX`), easing up into place over 0.7 s, with a soft dark shadow (`0 40px 90px rgba(0,0,0,.45)`). Give it `x`, `y` and `size` props so it can sit beside the person in the shot without new code.

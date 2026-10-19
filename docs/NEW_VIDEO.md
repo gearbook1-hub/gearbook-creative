@@ -27,7 +27,7 @@ Say **"add `<clip>` as a new video source"**. Claude adds it to `data/sources.js
 
 ## 5. Scout it
 Say **"scout S08"** (the new id). Claude reads every line and checks each moment against the motion library:
-- a piece that already fits (like the M25 end card) is noted for the edit;
+- a piece from the pack that already fits (like M26 Ping) is noted for the edit;
 - where nothing fits, it pitches at most 3 new pieces.
 
 ## 6. Approve or pass (your first yes)

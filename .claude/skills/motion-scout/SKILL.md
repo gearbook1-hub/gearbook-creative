@@ -11,6 +11,7 @@ You find moments in GearBook's reels where a motion graphic would explain someth
 - `data/sources.json`: the source (video, inspo reel or request) with its timestamped transcript. New videos are transcribed by the `video-inbox` skill first.
 - `data/pieces.json`: the library. Read `description` and `covers` for every live piece. `covers` is the honest limit of what a piece can show.
 - `data/ideas.json`: everything already logged. Never pitch something already there.
+- `data/social.json`: the identity (formats, voice, rules, Luke's taste). A pitch has to fit the format the reel is in: an overlay over the presenter bit carries no headline of its own, and a vibe reel gets one line of text at most.
 
 ## Steps
 1. Read the whole transcript. List the moments that carry a number, a change over time, a comparison, a process, a place, or a product.
@@ -24,5 +25,6 @@ You find moments in GearBook's reels where a motion graphic would explain someth
 
 ## Rules
 - GearBook copy: no em or en dashes; never promise earnings or quote a commission rate; "outdoor professional" or "pro", not "guide" (unless a mountain guide).
+- Safety moments (climbing, avalanche, diving depth) are played straight: no jokey graphic on them.
 - Sample data stays marked `sample: true`. Don't invent real members' numbers.
-- Nothing gets built here. Building starts only after Luke approves on Pulse and picks a still.
+- Nothing gets built here. Building starts only after Luke or Matt approves on Pulse and picks a still.

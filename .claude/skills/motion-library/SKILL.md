@@ -7,6 +7,8 @@ description: Mod 07. Use when a piece passes its render check, when Luke retires
 
 `data/pieces.json` is the source of truth for what GearBook already has. The scout trusts it, so keep it honest.
 
+The library is a pack: graphics any GearBook reel can use. A whole finished reel is not a piece; it goes in `data/reels.json` (next `R` id) and shows on `/reels`. If part of a reel is worth reusing (an end card, a sting), build that part as its own piece.
+
 ## Adding a built piece
 Add an entry: next `M` id (never reuse one), name, `version: 1`, `status: "live"`, a description of what it does and when to use it, `covers` (what it can and can't show, in one line), a `preview` kind for the dashboard tile, its `variants` (one per look), the `formats` actually rendered, `variables`, `html` (its folder under `public/pieces/`) or `video` and `master` for pieces made elsewhere, `builtFrom` (idea id) and `builtOn`. Then set the idea's `status: "built"` and `builtAs`.
 - `git pull` before choosing the id; Matt adds pieces too.

@@ -1,6 +1,6 @@
 # GearBook Creative
 
-GearBook's creative hub: a dashboard plus a set of Claude Code mods. Claude reads every reel Luke records, compares each moment against the library of motion graphics GearBook already has, pitches only what's missing, and builds nothing until Luke has approved it and picked a look.
+GearBook's creative hub: a dashboard plus a set of Claude Code mods. Claude reads every reel Luke records, compares each moment against the library of motion graphics GearBook already has, pitches only what's missing, and builds nothing until Luke or Matt has approved it and picked a look.
 
 Built for Luke and Matt. Everything marked `sample` is example data until real reels go through it.
 
@@ -10,19 +10,22 @@ Built for Luke and Matt. Everything marked `sample` is example data until real r
 
 | Page | What it shows | From |
 |---|---|---|
-| `/` Overview | Who the posts are for, the three formats, what's next in the idea bank, the top posts, and M25 playing live | `data/social.json`, `data/content-ideas.json`, `data/posts.json` |
+| `/` Overview | Who the posts are for, the three formats, what's next in the idea bank, the top posts, and the signup reel (R01) playing live | `data/social.json`, `data/content-ideas.json`, `data/posts.json` |
 | `/ideas` Idea bank | The 15 post ideas by format (presenter bit, vibe reel, poster), with beats and notes, a "this week" shortlist kept in the browser, the "maybe later" list and the copy rules | `data/content-ideas.json`, `data/social.json` |
 | `/feed` Feed | Everything posted on @gear.book with likes and comments, and the average per format | `data/posts.json` |
-| `/library` Motion library | M25 live, M18 (demo, sample data) in its three looks, the build loop, and motion pitches to approve or pass | `data/pieces.json`, `data/ideas.json` |
-| `/identity` Identity | The presenter bit, formats, who's on camera, voice, brand colour and type, and the gaps Luke still has to fill in | `data/social.json`, `lib/brand.ts` |
+| `/reels` Reels | Whole reels Claude made, ready to post: R01 the signup reel (built in code, playing live) and R02 Huss valley (cut from clips, with its shot list) | `data/reels.json`, `edits/` |
+| `/library` Motion library | The pack any reel can use: M26 Ping, M27 Site Screen and M28 Pro Dashboard in their looks, M18 (demo, sample data), the build loop, and motion pitches to approve or pass | `data/pieces.json`, `data/ideas.json` |
+| `/identity` Identity | The presenter bit, formats, who's on camera, voice, the profile picture, logos, brand colour and type, and the gaps Luke still has to fill in | `data/social.json`, `lib/brand.ts` |
 
 The social data comes from the main repo's `docs/marketing/social-identity.md` and `content-idea-bank.md` (gearbook1-hub/gearbook, drafts of 2026-10-16). Those docs are the source of truth: when they change, update the JSON here to match. The hub was first rebuilt from the reel "How the motion mod thinks" (spec in [docs/VIDEO_SPEC.md](docs/VIDEO_SPEC.md)); the scout, Pulse and build loop come from there.
 
 **How pieces are made.** No video editor or animation framework. Each motion piece is a fully animated HTML page. `public/pieces/runtime.js` gives every piece one clock, so the same page loops on the hub, freezes on any frame for stills (`?t=2.5`), takes new words and numbers from the URL (`?props=`), and is recorded frame by frame to a 60 fps MP4 by `npm run render` in headless Edge or Chrome.
 
-**M25, the signup reel,** was made as a Motion artifact on Matt's Claude account ("GearBook Signup Reel"). Its scenes, styles and images are copied unchanged into `public/pieces/M25-signup-explainer/film/`, and `film-kit.js` there is a small stand-in for the artifact's player with the same clock contract as `runtime.js`. It plays silent on the hub; the MP4 master with sound is in Drive. To refresh it after the artifact changes, copy its `modules` and `assets` again from the artifact's store. Its cream and topo ground, serif titles that arrive word by word and small tracked labels are the house style (`public/pieces/pieces.css`).
+**Pieces and reels are separate.** The motion library (`data/pieces.json`, `M` ids) is a pack of graphics any reel can use. Whole reels Claude made (`data/reels.json`, `R` ids) are on the Reels tab: built in code like the signup reel, or cut from clips with pack pieces over them.
 
-The hub wears the same house style: cream ground, bark ink, Roca headings from Matt's Adobe kit (Newsreader where the kit doesn't serve), Outfit text, Afacad Flux labels, amber for the one thing that matters and sage for done. Tokens are in `app/globals.css` and `lib/brand.ts`. Logos are the official logo pack from the GearBook Drive (`Branding/02 Logo Pack/SVG`), copied into `public/brand/`; never redraw them. Full colour where the logo is the payoff (M25's patch and end card), the one-colour BW version, black or white only (never tinted), for small signatures and dark or photo grounds (hub top bar, M18, M25's app bar and share card), the bookmark at icon sizes, and the dark favicon (`app/icon.svg`). The Identity page shows each one and where it's used.
+**R01, the signup reel** (logged as M25 until 2026-10-19; its folder keeps that name), was made as a Motion artifact on Matt's Claude account ("GearBook Signup Reel"). Its scenes, styles and images are copied unchanged into `public/pieces/M25-signup-explainer/film/`, and `film-kit.js` there is a small stand-in for the artifact's player with the same clock contract as `runtime.js`. It plays silent on the hub; the MP4 master with sound is in Drive. To refresh it after the artifact changes, copy its `modules` and `assets` again from the artifact's store. Its cream and topo ground, serif titles that arrive word by word and small tracked labels are the house style (`public/pieces/pieces.css`).
+
+The hub wears the same house style: cream ground, bark ink, Roca headings from Matt's Adobe kit (Newsreader where the kit doesn't serve), Outfit text, Afacad Flux labels, amber for the one thing that matters and sage for done. Tokens are in `app/globals.css` and `lib/brand.ts`. Logos are the official logo pack from the GearBook Drive (`Branding/02 Logo Pack/SVG`), copied into `public/brand/`; never redraw them. Full colour where the logo is the payoff (the signup reel's patch and end card), the one-colour BW version, black or white only (never tinted), for small signatures and dark or photo grounds (hub top bar, M18, the signup reel's app bar and share card), the bookmark at icon sizes, and the dark favicon (`app/icon.svg`). The accounts' profile picture is `public/brand/gearbook-social-avatar.png`, used as is; the pack's `profile-picture` SVG is a monogram, not the avatar in use. The Identity page shows each one and where it's used.
 
 **Making a new video:** see [docs/NEW_VIDEO.md](docs/NEW_VIDEO.md).
 
@@ -55,19 +58,20 @@ In Claude Code, the skills load automatically in this folder. Say "scout S01", "
 ```
 app/                     the hub (Next.js 16, static export)
   page.tsx               Overview
-  ideas/  feed/  library/  identity/
+  ideas/  feed/  reels/  library/  identity/
 components/              Site (top bar, sections, chips), IdeaBank (filter + shortlist), PieceFrame,
                          IdeaCards and PulseBoard (approve or pass motion pitches)
 data/
   social.json            the social identity: audiences, formats, voice, rules, gaps
   content-ideas.json     the post idea bank
   posts.json             what's been posted, with likes and comments
-  pieces.json            the motion library (M18 demo; M25 to M28 real; M01 to M24 are sample catalog entries)
+  pieces.json            the motion pack (M18 demo; M26 to M28 real; M01 to M24 are sample catalog entries; M25 moved to reels)
+  reels.json             whole reels Claude made: R01 signup reel (in code), R02 Huss valley (cut)
   sources.json           videos, inspo and requests, with transcripts
   ideas.json             every flagged motion moment: quote, catalog check, pitch, stills, build, render check
 lib/                     types, data helpers (data.ts, social.ts), brand tokens, Pulse decisions (localStorage)
 public/pieces/           the motion pieces: runtime.js, pieces.css (house style), topo.svg,
-                         M18-click-trail/ (demo, three looks), M25-signup-explainer/ (the real reel, plus its MP4 preview),
+                         M18-click-trail/ (demo, three looks), M25-signup-explainer/ (reel R01, plus its MP4 preview),
                          M26-ping/, M27-site-screen/, M28-pro-dashboard/ (overlays laid over footage)
 scripts/                 setup-check, transcribe, scout, motion.mjs (recorder), render-stills / render-piece /
                          render-check, apply-decisions, clip-sheets and cut (the reel edit)
@@ -111,7 +115,7 @@ Optional: copy `.env.example` to `.env.local` and add `ANTHROPIC_API_KEY` so `np
 
 What isn't in the repo, on purpose:
 - **The source reel's research** (video, frames, full transcript). It stays private. To redo it: `yt-dlp --write-info-json --write-description https://www.instagram.com/reel/DeaJeKGKBHi/`, then Whisper and ffmpeg as in docs/VIDEO_SPEC.md. The spec itself is in the repo.
-- **M25's full-quality master** is in the GearBook Google Drive (Marketing/Reels/Signup Reel). The repo has a small preview.
+- **The signup reel's full-quality master** is in the GearBook Google Drive (Marketing/Reels/Signup Reel). The repo has a small preview.
 - **Raw reels and renders** (`inbox/videos/`, `renders/`) are git-ignored. Keep masters in Drive.
 
 ## Run it

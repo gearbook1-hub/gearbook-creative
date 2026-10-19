@@ -4,7 +4,7 @@ import { FormatChip, Footer, Section, TopBar } from "@/components/Site";
 import { byFormat, contentIdeas, fmtDate, posts, social } from "@/lib/social";
 
 // Overview: what GearBook posts, who it's for, what's next in the bank and what's working,
-// with the signup reel (M25) playing live from its Motion artifact code.
+// with the signup reel (R01) playing live from its Motion artifact code.
 
 const NEXT_UP = ["C01", "C02", "C03", "C11"];
 
@@ -23,16 +23,17 @@ export default function Overview() {
             <h1 className="title" style={{ marginTop: 16 }}>Real gear, real pros, <em>a man in a suit.</em></h1>
             <p className="lede" style={{ marginTop: 20 }}>
               The creative hub for Luke and Matt: who the posts are for, the three formats, the idea bank, how the feed is doing,
-              and the motion pieces every edit can reuse.
+              the reels Claude made and the motion pack any reel can use.
             </p>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 28 }}>
               <Link className="btn" href="/ideas">Open the idea bank</Link>
+              <Link className="btn ghost" href="/reels">Reels</Link>
               <Link className="btn ghost" href="/library">Motion library</Link>
             </div>
           </div>
           <div className="hero-film">
-            <div className="frame"><PieceFrame piece="M25-signup-explainer" title="M25 Signup Explainer, playing live" /></div>
-            <p className="frame-cap" style={{ color: "var(--on-dark-2)" }}>M25 · the signup reel, playing live from its Motion artifact</p>
+            <div className="frame"><PieceFrame piece="M25-signup-explainer" title="Signup Reel, playing live" /></div>
+            <p className="frame-cap" style={{ color: "var(--on-dark-2)" }}>R01 · the signup reel, playing live from its Motion artifact</p>
           </div>
         </div>
       </section>

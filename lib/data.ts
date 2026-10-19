@@ -1,11 +1,26 @@
 import piecesJson from "@/data/pieces.json";
 import sourcesJson from "@/data/sources.json";
 import ideasJson from "@/data/ideas.json";
-import type { Idea, Piece, Source, SourceKind } from "./types";
+import reelsJson from "@/data/reels.json";
+import s08 from "@/edits/S08-huss-valley.json";
+import type { EditList, Idea, Piece, Reel, Source, SourceKind } from "./types";
 
 export const pieces = piecesJson as Piece[];
 export const sources = sourcesJson as Source[];
 export const ideas = ideasJson as Idea[];
+export const reels = reelsJson as Reel[];
+
+// Edit lists the Reels tab reads. A new cut reel adds its edit list here too.
+const EDITS: Record<string, EditList> = { "S08-huss-valley": s08 as EditList };
+
+export function editList(name?: string) {
+  return name ? EDITS[name] : undefined;
+}
+
+/** A cut's length in seconds, from its shot list. */
+export function cutSeconds(e: EditList) {
+  return e.shots.reduce((n, s) => n + (s.out - s.in), 0);
+}
 
 export const livePieces = pieces.filter((p) => p.status === "live");
 

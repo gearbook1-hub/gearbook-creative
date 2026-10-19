@@ -7,14 +7,17 @@ import { social } from "@/lib/social";
 
 export const metadata: Metadata = { title: "Identity · GearBook Creative" };
 
-// The official logo pack (GearBook Drive: Branding/02 Logo Pack), and where each one is used.
+// The social avatar the accounts actually use, then the official logo pack (GearBook Drive:
+// Branding/02 Logo Pack), and where each one is used.
+const AVATAR = { src: "gearbook-social-avatar.png", use: "GearBook's profile picture on Instagram, Facebook and the other accounts (Luke, 2026-10-19). The wordmark over the four colour bars, with the bookmark on amber. Use this file as is, round crop included; never rebuild it from the pack." };
+
 const LOGOS = [
   { file: "full-length", name: "Full length", use: "The payoff: the end card, the backpack patch in M25, anywhere the logo is the point.", bg: "var(--paper)" },
   { file: "full-length-bw", name: "Full length BW", use: "Black or white only, never tinted: the hub's top bar, M18's corner, the phone app bar (black) and share card (white) in M25.", bg: "var(--paper)" },
   { file: "lockup", name: "Lockup", use: "Square spaces. Never smaller than 64 px.", bg: "var(--paper)" },
   { file: "bookmark", name: "Bookmark", use: "Icon sizes: the footer, the \"Make this week\" button. It's also the clear space: one bookmark on every side.", bg: "var(--paper)" },
   { file: "favicon-dark", name: "Favicon", use: "Browser tabs (dark version; a light one is in the pack).", bg: "var(--paper)" },
-  { file: "profile-picture", name: "Profile picture", use: "Instagram and Facebook avatars.", bg: "var(--bark)" },
+  { file: "profile-picture", name: "Monogram", use: "The pack's gb monogram (its file is named profile-picture). Not the avatar the accounts use: that's the social avatar above.", bg: "var(--bark)" },
 ];
 
 const SWATCHES = [
@@ -77,6 +80,17 @@ export default function Identity() {
             <div className="card"><h3 className="h3" style={{ marginTop: 0 }}>Still applies</h3><ul className="bullets">{social.rules.map((v) => <li key={v}>{v}</li>)}</ul></div>
           </div>
           <p className="muted" style={{ marginTop: 16 }}>Sports: {social.sportsNote}</p>
+        </Section>
+
+        <Section label="Profile picture" title="The face of every account">
+          <div className="avatar-row">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className="avatar" src={`${BASE}/brand/${AVATAR.src}`} alt="GearBook social avatar: the gearbook wordmark over black, blue, sage and amber bars with a bookmark" />
+            <div>
+              <p className="muted">{AVATAR.use}</p>
+              <p className="small muted" style={{ marginTop: 10 }}>File: <span className="mono">public/brand/{AVATAR.src}</span> (960 x 960 PNG).</p>
+            </div>
+          </div>
         </Section>
 
         <Section label="Logo" title="Use the official files" intro="From the GearBook logo pack. Never redraw, recolour or stretch them. The BW versions are black or white only.">

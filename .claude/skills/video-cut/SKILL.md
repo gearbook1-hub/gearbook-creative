@@ -16,7 +16,7 @@ Matt and Luke film; Claude cuts. They give the clips and the story in a line ("I
 6. **Render.** `npm run cut -- edits/<file>.json --clips="<folder>"` writes `renders/<slug>/cut.mp4` (full quality, for Drive) and `cut-preview.mp4` (720p, under 30 MB so it can be sent to the phone).
 7. **Check the cut.** A 5 fps contact sheet of `cut.mp4`. Look at every cut point: the subject is in each shot, no dead frames at the head or tail, no flicker on a screen. Fix the list and re-render until it's clean.
 8. **Graphics.** Once the pieces are approved and a look picked, add them to the edit list's `graphics` (`piece`, `look`, `shot`, `offset`, `glass`, `sound`) and run `npm run composite -- edits/<file>.json`. It records each piece at the cut's frame rate, lays it over `cut.mp4`, adds the sounds and writes `final.mp4` and `final-preview.mp4`. Check frames of the final the same way as the cut.
-9. **Send and explain.** Send the preview, then a short table: time, shot, why. List what was dropped and why. Log the source and scout it for motion graphics (`video-inbox`, `motion-scout`); graphics still need Luke's two approvals.
+9. **Send and explain.** Send the preview, then a short table: time, shot, why. List what was dropped and why. Log the source and scout it for motion graphics (`video-inbox`, `motion-scout`); graphics still need two approvals, from Luke or Matt.
 
 ## Editing rules (learned, keep adding)
 - **One best take per place.** Several takes of the same spot read as a repeat, not as more distance. Keep the one with the biggest action, the closest framing and the best light. (Huss valley: 3 river takes and 3 park takes became 1 each.)
@@ -38,4 +38,5 @@ Matt and Luke film; Claude cuts. They give the clips and the story in a line ("I
 ## Rules
 - Raw clips, sheets and renders never go in git (`inbox/videos/`, `inbox/sheets/`, `renders/` are ignored). Edit lists in `edits/` are committed.
 - Full-quality cuts go to Drive next to the clips, only when Matt or Luke says to.
+- A finished cut is a reel: add it to `data/reels.json` (next `R` id, `kind: "cut"`, `edit`, `source`, the `pieces` it uses, where the master lives) so it shows on `/reels`, and add its edit list to `EDITS` in `lib/data.ts`.
 - GearBook copy rules apply to any on-screen text.

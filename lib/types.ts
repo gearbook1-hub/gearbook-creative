@@ -37,13 +37,58 @@ export interface Piece {
   variables: string[];
   /** Folder under public/pieces/ when the piece is an HTML motion piece in this repo. */
   html?: string;
-  /** Preview video under public/ for pieces made elsewhere (e.g. M25). */
+  /** Preview video under public/ for pieces made elsewhere. */
   video?: string;
   /** Where the full-quality master lives. */
   master?: string;
   builtFrom?: string;
   builtOn: string;
   sample: boolean;
+}
+
+/**
+ * A whole reel Claude made, ready to post (data/reels.json, the Reels tab). Not a pack piece:
+ * reels use pieces, pieces don't hold reels. "animated" reels are built entirely in code;
+ * "cut" reels are Claude's edit of filmed clips, with pack pieces laid over them.
+ */
+export interface Reel {
+  /** "R01" to "R99". Never reused. */
+  id: string;
+  name: string;
+  kind: "animated" | "cut";
+  format: "A" | "B" | "C";
+  /** What it shows, in a sentence or two. */
+  description: string;
+  /** Who asked for it and how it was made. */
+  made: string;
+  madeOn: string;
+  /** Animated reels: length in seconds. A cut's length comes from its edit list. */
+  seconds?: number;
+  /** Animated reels: folder under public/pieces/ that plays it live on the hub. */
+  html?: string;
+  /** Cut reels: the edit list in edits/ (without .json), which holds the shot list and the pieces used. */
+  edit?: string;
+  /** The source in data/sources.json, when the reel was cut from filmed clips. */
+  source?: string;
+  /** Pack pieces the reel uses, by id. */
+  pieces: string[];
+  /** Where the full-quality master (or the clips) live. Never in the repo. */
+  master: string;
+  /** An older id, e.g. the signup reel was logged as M25 before reels had their own tab. */
+  was?: string;
+}
+
+/** An edit list in edits/: how Claude cut a reel from filmed clips (the video-cut skill). */
+export interface EditList {
+  source: string;
+  slug: string;
+  title: string;
+  format: "A" | "B" | "C";
+  drivePath: string;
+  fps: number;
+  shots: { clip: string; in: number; out: number; beat: string; why: string }[];
+  graphics: { piece: string; look: string; shot: number; offset: number; why: string; glass?: boolean; sound?: string }[];
+  dropped: { clip: string; why: string }[];
 }
 
 export type SourceKind = "video" | "inspo" | "request";
