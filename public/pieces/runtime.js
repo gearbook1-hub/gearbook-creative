@@ -8,7 +8,8 @@
 //
 // A piece calls Motion.init({ duration, hold, looks, defaults, build(stage, props, look) }).
 // Pieces laid over footage add overlay: true: they record with a transparent background, and
-// checkAt: [seconds] when the render check shouldn't sample 25/60/100% (a banner that has left).
+// checkAt: [seconds] when the render check shouldn't sample 25/60/100% (a banner that has left),
+// and checkRail: false only for something pinned to the top, clear of Instagram's button rail.
 // build() creates the DOM and returns nothing; animations made with el.animate() or CSS are
 // all driven by the clock, and Motion.tick(fn) runs fn(t) every frame for things CSS can't
 // animate (counting numbers).
@@ -34,6 +35,7 @@
     rendering: q.get("render") === "1",
     overlay: false,
     checkAt: null,
+    checkRail: true,
     ready: null,
     get duration() { return duration; },
     tick(fn) { ticks.push(fn); },
@@ -83,6 +85,7 @@
       document.body.dataset.look = look;
       Motion.overlay = !!spec.overlay;
       Motion.checkAt = spec.checkAt ?? null;
+      Motion.checkRail = spec.checkRail ?? true;
       if (Motion.overlay) document.body.dataset.overlay = Motion.rendering ? "render" : "preview";
       const stage = document.getElementById("stage");
       fit(stage);

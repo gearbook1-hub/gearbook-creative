@@ -770,5 +770,86 @@
     "builtOn": "2026-10-13",
     "sample": false,
     "html": "M25-signup-explainer"
+  },
+  {
+    "id": "M26",
+    "name": "Ping",
+    "version": 1,
+    "status": "live",
+    "description": "A GearBook notification drops in over footage on a ding, holds long enough to read and slides away. Banner is a realistic phone notification with glass over a blur of the footage; House and Island are on-brand alternatives.",
+    "covers": "One notification over footage: an app line, a title and up to two lines of body.",
+    "preview": "pop",
+    "ground": "ink",
+    "variants": [
+      {
+        "label": "A · BANNER",
+        "ground": "cream",
+        "look": "banner"
+      },
+      {
+        "label": "B · HOUSE",
+        "ground": "cream",
+        "look": "house"
+      },
+      {
+        "label": "C · ISLAND",
+        "ground": "ink",
+        "look": "island"
+      }
+    ],
+    "formats": [
+      "9:16"
+    ],
+    "variables": [
+      "app",
+      "when",
+      "title",
+      "body"
+    ],
+    "builtFrom": "I11",
+    "builtOn": "2026-10-18",
+    "sample": false,
+    "html": "M26-ping"
+  },
+  {
+    "id": "M27",
+    "name": "Site Screen",
+    "version": 1,
+    "status": "live",
+    "description": "Someone using gearbook.shop, from real screenshots: the cursor clicks Shop the gear, the climbing page scrolls to a product, it gets an amber ring and a tag. Pop-out grows the browser out of a laptop in the footage; Laptop and Full screen stand alone.",
+    "covers": "One short browse on the site ending on one product. New pages need new screenshots (scripts/capture-site.mjs).",
+    "preview": "flow",
+    "ground": "cream",
+    "variants": [
+      {
+        "label": "A · LAPTOP",
+        "ground": "cream",
+        "look": "laptop"
+      },
+      {
+        "label": "B · FULL SCREEN",
+        "ground": "bark",
+        "look": "fullscreen"
+      },
+      {
+        "label": "C · POP-OUT",
+        "ground": "ink",
+        "look": "popout"
+      }
+    ],
+    "formats": [
+      "9:16"
+    ],
+    "variables": [
+      "eyebrow",
+      "headline",
+      "tag",
+      "url1",
+      "url2"
+    ],
+    "builtFrom": "I13",
+    "builtOn": "2026-10-18",
+    "sample": false,
+    "html": "M27-site-screen"
   }
 ]

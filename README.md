@@ -36,6 +36,7 @@ Video, inspo or a request -> Check the catalog -> Log the idea -> [Approve or pa
 | Step | Mod (skill in `.claude/skills/`) | Command |
 |---|---|---|
 | Clips come in: pick takes, cut | `video-cut` | `npm run sheets -- <folder>`, `npm run cut -- edits/S08-huss-valley.json --clips=<folder>` |
+| Graphics over the cut, with sound | `video-cut` | `npm run composite -- edits/S08-huss-valley.json` |
 | A reel comes in | `video-inbox` (12) | `npm run transcribe` |
 | Read it, check the catalog, log and pitch | `motion-scout` (11) | `npm run scout -- S01` |
 | Approve or pass | `pulse` (04) | "Approve or pass" on `/library`, then `node scripts/apply-decisions.mjs decisions.json` |

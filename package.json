@@ -15,7 +15,8 @@
     "transcribe": "node scripts/transcribe.mjs",
     "setup:check": "node scripts/setup-check.mjs",
     "sheets": "node scripts/clip-sheets.mjs",
-    "cut": "node scripts/cut.mjs"
+    "cut": "node scripts/cut.mjs",
+    "composite": "node scripts/composite.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.135.0",

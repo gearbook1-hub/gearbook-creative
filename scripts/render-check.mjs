@@ -44,7 +44,7 @@ for (const look of looksOf(piece)) {
       r.blank && "blank frame",
       !p.roca && "Roca did not load",
       r.outsideBand > 0 && `${r.outsideBand} px outside y ${SAFE_TOP}-${SAFE_BOTTOM}`,
-      r.inRail > 0 && `${r.inRail} px in the button rail`,
+      p.checkRail && r.inRail > 0 && `${r.inRail} px in the button rail`,
     ].filter(Boolean);
     console.log(`${problems.length ? "FAIL" : "pass"}  ${name} @ ${t}s${problems.length ? ": " + problems.join(", ") : ""}`);
     if (problems.length) failed++;

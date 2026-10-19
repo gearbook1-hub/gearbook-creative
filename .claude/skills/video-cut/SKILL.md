@@ -15,7 +15,8 @@ Matt and Luke film; Claude cuts. They give the clips and the story in a line ("I
 5. **Choose.** Apply the rules below. Write `edits/<source id>-<slug>.json`: every shot with `clip`, `in`, `out`, `beat` and `why`, and every unused clip in `dropped` with `why`.
 6. **Render.** `npm run cut -- edits/<file>.json --clips="<folder>"` writes `renders/<slug>/cut.mp4` (full quality, for Drive) and `cut-preview.mp4` (720p, under 30 MB so it can be sent to the phone).
 7. **Check the cut.** A 5 fps contact sheet of `cut.mp4`. Look at every cut point: the subject is in each shot, no dead frames at the head or tail, no flicker on a screen. Fix the list and re-render until it's clean.
-8. **Send and explain.** Send the preview, then a short table: time, shot, why. List what was dropped and why. Log the source and scout it for motion graphics (`video-inbox`, `motion-scout`); graphics still need Luke's two approvals.
+8. **Graphics.** Once the pieces are approved and a look picked, add them to the edit list's `graphics` (`piece`, `look`, `shot`, `offset`, `glass`, `sound`) and run `npm run composite -- edits/<file>.json`. It records each piece at the cut's frame rate, lays it over `cut.mp4`, adds the sounds and writes `final.mp4` and `final-preview.mp4`. Check frames of the final the same way as the cut.
+9. **Send and explain.** Send the preview, then a short table: time, shot, why. List what was dropped and why. Log the source and scout it for motion graphics (`video-inbox`, `motion-scout`); graphics still need Luke's two approvals.
 
 ## Editing rules (learned, keep adding)
 - **One best take per place.** Several takes of the same spot read as a repeat, not as more distance. Keep the one with the biggest action, the closest framing and the best light. (Huss valley: 3 river takes and 3 park takes became 1 each.)
@@ -28,7 +29,10 @@ Matt and Luke film; Claude cuts. They give the clips and the story in a line ("I
 - **Cut before a screen flicker** or a page still loading; start when GearBook is clearly on screen.
 - **A clip without the subject can still be a place beat.** Say so if you can't find them in it; if Matt wants it, keep it as a short establishing shot (about 1.5 s) and pick a window where nothing blocks the frame. (Huss valley: the town clip, 9657, went back in between the canyon and the street.)
 - **Vibe reel length: about 15 to 20 s** before graphics, so it loops. Leave room for the end card.
-- **No sound in the cut.** The trending sound goes on in the Instagram app; motion graphics get laid over after approval.
+- **No music in the cut.** The trending sound goes on in the Instagram app. Sound effects that belong to a graphic (the notification ding) go in with the composite.
+- **A phone notification has to look real.** Match a phone's own banner: full width with small margins, big rounded corners, the app icon, bold title with "now", two lines of body, a system-like font (Inter), frosted glass over a blur of the footage (`glass: true`), a soft spring down from the top, and the ding as it lands. Hold it about 3 s so it can be read, and get it gone before the action it causes.
+- **Time graphics to the footage.** The ding lands while the subject is still doing the thing (belaying), the banner leaves just before the reaction (dropping the rope). A screen graphic needs a still shot to grow from: start the laptop shot with the subject already seated.
+- **Use the real site.** Screen mockups use screenshots of gearbook.shop (`scripts/capture-site.mjs`), and land on a product that ties back to the footage (Huss valley: the Petzl GriGri he dropped).
 - **Flag safety.** Climbing, avalanche and diving moments are played straight (see `/identity`). If the joke looks unsafe (dropping a belay), say so and suggest how to show it was safe.
 
 ## Rules

@@ -53,6 +53,23 @@ export default function Library() {
           </div>
         </Section>
 
+        {[piece("M26")!, piece("M27")!].map((p) => {
+          const idea = ideas.find((i) => i.id === p.builtFrom);
+          const picked = new Set(idea?.pickedLetters ?? []);
+          return (
+            <Section key={p.id} label={`${p.id} · live · 9:16 · built for ${source(idea?.sourceId ?? "")?.title ?? ""}`} title={p.name} id={p.id} intro={p.description}>
+              <div className="looks" style={{ maxWidth: 720 }}>
+                {p.variants.map((v) => (
+                  <div key={v.label}>
+                    <div className="frame"><PieceFrame piece={p.html!} look={v.look} title={`${p.name} ${v.label}`} /></div>
+                    <p className="frame-cap">{v.label.toLowerCase()}{picked.has(v.label[0]) ? " · picked" : ""}</p>
+                  </div>
+                ))}
+              </div>
+            </Section>
+          );
+        })}
+
         <Section label={`${trail.id} · demo · sample data`} title={trail.name} id={trail.id} intro="Built from a sample idea to prove the loop: one engine, three looks. The numbers are made up.">
           <div className="looks" style={{ maxWidth: 720 }}>
             {trail.variants.map((v) => (

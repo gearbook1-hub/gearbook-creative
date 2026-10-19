@@ -297,9 +297,9 @@
       }
     ],
     "whyNew": "nothing shows a notification arriving over footage",
-    "status": "stills",
+    "status": "built",
     "pitchedOn": "2026-10-18",
-    "note": "Matt: it has to ding for my phone, then a pop-up comes down from the top of the screen about the new GearBook promo.",
+    "note": "Matt: it has to ding for my phone, then a pop-up comes down from the top of the screen about the new GearBook promo. Picked A, made to look like a real phone notification.",
     "stills": [
       {
         "letter": "A",
@@ -318,6 +318,27 @@
         "name": "Island",
         "line": "A black pill at the top opens out into the message, amber app name.",
         "ground": "ink"
+      }
+    ],
+    "pickedLetters": [
+      "A"
+    ],
+    "builtAs": "M26",
+    "renderCheck": [
+      {
+        "t": "0.9s",
+        "pass": true,
+        "note": "banner settled at the top, between y 230 and 1520"
+      },
+      {
+        "t": "1.8s",
+        "pass": true,
+        "note": "glass blur of the footage behind it, text readable"
+      },
+      {
+        "t": "2.6s",
+        "pass": true,
+        "note": "still in place before it slides away; ding at 0.45 s in the edit"
       }
     ]
   },
@@ -361,9 +382,9 @@
       }
     ],
     "whyNew": "nothing takes the viewer from footage into the site",
-    "status": "stills",
+    "status": "built",
     "pitchedOn": "2026-10-18",
-    "note": "Matt: when I get to the table, a mockup screen (or mograph) of me using the site.",
+    "note": "Matt: when I get to the table, a mockup screen (or mograph) of me using the site. Picked C, the pop-out.",
     "stills": [
       {
         "letter": "A",
@@ -382,6 +403,27 @@
         "name": "Pop-out",
         "line": "Over the footage: the browser grows out of the real laptop screen.",
         "ground": "ink"
+      }
+    ],
+    "pickedLetters": [
+      "C"
+    ],
+    "builtAs": "M27",
+    "renderCheck": [
+      {
+        "t": "1.25s",
+        "pass": true,
+        "note": "window out of the laptop screen, home page clicked"
+      },
+      {
+        "t": "3s",
+        "pass": true,
+        "note": "climbing page scrolled to the GriGri"
+      },
+      {
+        "t": "5s",
+        "pass": true,
+        "note": "amber ring and tag on, nothing in the button rail"
       }
     ]
   }
