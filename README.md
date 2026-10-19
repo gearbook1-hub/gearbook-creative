@@ -13,7 +13,7 @@ Built for Luke and Matt. Everything marked `sample` is example data until real r
 | `/` Overview | Who the posts are for, the three formats, what's next in the idea bank, the top posts, and the signup reel (R01) playing live | `data/social.json`, `data/content-ideas.json`, `data/posts.json` |
 | `/ideas` Idea bank | The 15 post ideas by format (presenter bit, vibe reel, poster), with beats and notes, a "this week" shortlist kept in the browser, the "maybe later" list and the copy rules | `data/content-ideas.json`, `data/social.json` |
 | `/feed` Feed | Everything posted on @gear.book with likes and comments, and the average per format | `data/posts.json` |
-| `/reels` Reels | Whole reels Claude made, ready to post: R01 the signup reel (built in code, playing live) and R02 Huss valley (cut from clips, with its shot list) | `data/reels.json`, `edits/` |
+| `/reels` Reels | Whole reels Claude made. Approved first, each playing live with a full-screen link: R01 Signup Reel, R03 Your clients ask, R04 One click, R05 Catalog Quest, R06 Season loading, R07 Every sport. Then drafts: R08 Four questions (waiting on the site FAQ copy), R09 Poster in motion, and R02 Huss valley (cut from clips, with its shot list) | `data/reels.json`, `edits/` |
 | `/library` Motion library | The pack any reel can use: M26 Ping, M27 Site Screen and M28 Pro Dashboard in their looks, M18 (demo, sample data), the build loop, and motion pitches to approve or pass | `data/pieces.json`, `data/ideas.json` |
 | `/identity` Identity | The presenter bit, formats, who's on camera, voice, the profile picture, logos, brand colour and type, and the gaps Luke still has to fill in | `data/social.json`, `lib/brand.ts` |
 
@@ -66,7 +66,7 @@ data/
   content-ideas.json     the post idea bank
   posts.json             what's been posted, with likes and comments
   pieces.json            the motion pack (M18 demo; M26 to M28 real; M01 to M24 are sample catalog entries; M25 moved to reels)
-  reels.json             whole reels Claude made: R01 signup reel (in code), R02 Huss valley (cut)
+  reels.json             whole reels Claude made, with status: R01 and R03 to R09 built in code, R02 Huss valley cut from clips
   sources.json           videos, inspo and requests, with transcripts
   ideas.json             every flagged motion moment: quote, catalog check, pitch, stills, build, render check
 lib/                     types, data helpers (data.ts, social.ts), brand tokens, Pulse decisions (localStorage)

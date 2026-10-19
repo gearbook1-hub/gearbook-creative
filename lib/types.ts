@@ -56,7 +56,10 @@ export interface Reel {
   id: string;
   name: string;
   kind: "animated" | "cut";
-  format: "A" | "B" | "C";
+  /** draft until Luke or Matt approves it; posted once it's on the feed. */
+  status: "draft" | "approved" | "posted";
+  /** The house format it fits, if any. Animated explainers often fit none of the three. */
+  format?: "A" | "B" | "C";
   /** What it shows, in a sentence or two. */
   description: string;
   /** Who asked for it and how it was made. */

@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>R09 Poster in Motion</title>
+<link rel="stylesheet" href="../pieces.css" />
+<style>
+  /* An editorial poster (format C) that prints itself: contours draw on, the Roca line
+     arrives word by word, the avatar's colour bars sweep in with the bookmark, and the
+     poster settles with the logo. A series template: line, label and ground are props. */
+  body[data-ground="cream"] #stage { --ground: var(--cream); --fg: var(--bark); --muted: var(--ink-muted); --logo: #000; }
+  body[data-ground="sage"]  #stage { --ground: var(--sage);  --fg: var(--bark); --muted: #2f3b2c; --logo: #000; }
+  body[data-ground="bark"]  #stage { --ground: var(--bark);  --fg: var(--cream); --muted: #b9b29c; --logo: #fff; }
+  body[data-ground="slate"] #stage { --ground: var(--slate); --fg: var(--cream); --muted: #c9d6df; --logo: #fff; }
+
+  .poster { position: absolute; inset: 0; transform-origin: 50% 45%; }
+  svg.contours { position: absolute; inset: 0; overflow: visible; }
+  svg.contours path { fill: none; stroke: var(--fg); }
+
+  .label { position: absolute; left: 90px; top: 250px; width: 810px; display: flex; justify-content: space-between; color: var(--fg); }
+  .label .issue { color: var(--muted); }
+  .rule { position: absolute; left: 90px; top: 306px; width: 810px; height: 3px; background: var(--fg); transform-origin: left; }
+  .line { position: absolute; left: 84px; top: 372px; width: 816px; font-family: var(--display); font-weight: 700;
+    font-size: 110px; line-height: 1.02; letter-spacing: -0.015em; color: var(--fg); }
+
+  .bars { position: absolute; left: 90px; top: 1300px; width: 810px; height: 220px; display: flex; }
+  .bars > div { height: 100%; position: relative; overflow: hidden; }
+  /* On a coloured ground a bar can match it (slate on slate), so the bars print on a cream strip. */
+  .bars > .paper { position: absolute; inset: -10px; height: auto; background: var(--cream); display: none; }
+  body:not([data-ground="cream"]) .bars > .paper { display: block; }
+  body:not([data-ground="cream"]) .bars { left: 100px; width: 790px; }
+  .bars .b1 { width: 45%; background: #000; }
+  .bars .b2 { width: 23%; background: var(--slate); }
+  .bars .b3 { width: 17%; background: var(--sage); }
+  .bars .b4 { width: 15%; background: var(--amber); }
+  .bookmark { position: absolute; left: 50%; top: 14px; width: 54px; height: 104px; margin-left: -27px; background: #000;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%); }
+
+  /* The official one-colour wordmark (logo pack: full length BW), black on light, white on dark. */
+  .mark { position: absolute; left: 90px; width: 470px; aspect-ratio: 512 / 129.364; top: 1180px; background: var(--logo);
+    -webkit-mask: url("../../brand/gearbook-full-length-bw.svg") center / contain no-repeat; mask: url("../../brand/gearbook-full-length-bw.svg") center / contain no-repeat; }
+  .cta { position: absolute; right: 180px; top: 1236px; font-family: var(--label); font-weight: 600; font-size: 34px;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg); }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<script src="../runtime.js"></script>
+<script src="../sound.js"></script>
+<script>
+  const { el, arrive, words } = Motion;
+  const GROUNDS = ["cream", "sage", "bark", "slate"];
+
+  Motion.init({
+    duration: 9.6,
+    hold: 1.2,
+    looks: ["main"],
+    // The poster's variables. Override any of them with ?props={...}.
+    defaults: {
+      line: "Recommend what you actually use.",
+      label: "GearBook · For outdoor pros",
+      issue: "No. 01",
+      ground: "cream",
+      cta: "Link in bio.",
+    },
+    build(stage, p) {
+      document.body.dataset.ground = GROUNDS.includes(p.ground) ? p.ground : "cream";
+      const ms = (s) => s * 1000;
+      const poster = el("div", { class: "poster" }, stage);
+
+      // The whole sheet settles very slowly, like a print laid flat.
+      poster.animate([{ transform: "scale(1.035)" }, { transform: "scale(1)" }],
+        { duration: ms(9.6), easing: "cubic-bezier(.15,.6,.25,1)", fill: "both" });
+
+      // Contours: rings around one summit, each ring a closed loop that draws itself on.
+      // r grows with the ring index and the wobble is a fraction of r, so rings never cross.
+      const svg = el("svg", { class: "contours", width: 1080, height: 1920 }, poster);
+      const cx = 700, cy = 950, rings = 20;
+      const wob = (th, k) => 0.16 * Math.sin(2 * th + 0.9 + k * 0.035) + 0.08 * Math.sin(3 * th + 2.1 - k * 0.03) + 0.035 * Math.sin(5 * th + 0.4 + k * 0.05);
+      for (let k = 0; k < rings; k++) {
+        const base = 70 + 74 * k, start = 0.7 * k, pts = [];
+        for (let i = 0; i <= 180; i++) {
+          const th = start + (i / 180) * Math.PI * 2, r = base * (1 + wob(th, k));
+          pts.push(`${(cx + r * Math.cos(th)).toFixed(1)},${(cy + 0.92 * r * Math.sin(th)).toFixed(1)}`);
+        }
+        const amber = k === 1, index = k % 4 === 3;
+        const path = el("path", {
+          d: "M" + pts.join("L") + "Z", pathLength: 1, "stroke-dasharray": "1 1",
+          "stroke-width": amber ? 5 : index ? 3.2 : 2,
+          style: amber ? { stroke: "var(--amber)" } : { strokeOpacity: index ? 0.26 : 0.15 },
+        }, svg);
+        const at = amber ? 2.9 : 0.1 + 0.07 * k;
+        path.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }],
+          { duration: ms(amber ? 1.5 : 2.2), delay: ms(at), easing: "cubic-bezier(.4,0,.2,1)", fill: "both" });
+      }
+      // The summit mark: one amber point at the top of the hill.
+      const dot = el("circle", { cx, cy, r: 11, style: { fill: "var(--amber)" } }, svg);
+      dot.style.transformOrigin = `${cx}px ${cy}px`;
+      dot.animate([{ transform: "scale(0)", easing: "cubic-bezier(.2,.7,.1,1)" }, { transform: "scale(1.5)", easing: "cubic-bezier(.45,0,.2,1)" }, { transform: "scale(1)" }],
+        { duration: 700, delay: ms(4.1), fill: "both" });
+
+      // Masthead: a small tracked label and a printed rule.
+      const label = el("div", { class: "label" }, poster);
+      const lab = el("div", { class: "eyebrow", text: p.label }, label);
+      const issue = el("div", { class: "eyebrow issue", text: p.issue }, label);
+      arrive(lab, 0.4); arrive(issue, 0.6);
+      el("div", { class: "rule" }, poster).animate([{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }],
+        { duration: 1100, delay: ms(0.5), easing: Motion.ease.travel, fill: "both" });
+
+      // The line, word by word, at a calm pace.
+      words(el("div", { class: "line" }, poster), p.line, 1.1, 0.24);
+
+      // The avatar's colour bars sweep in left to right, then the bookmark drops into the amber.
+      const bars = el("div", { class: "bars" }, poster);
+      el("div", { class: "paper" }, bars).animate([{ clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)" }],
+        { duration: 900, delay: ms(4.85), easing: Motion.ease.travel, fill: "both" });
+      ["b1", "b2", "b3", "b4"].forEach((c, i) => {
+        const b = el("div", { class: c }, bars);
+        b.animate([{ clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)" }],
+          { duration: 650, delay: ms(5.0 + 0.2 * i), easing: Motion.ease.travel, fill: "both" });
+        if (c === "b4") {
+          el("div", { class: "bookmark" }, b).animate(
+            [{ transform: "translateY(-130px)", easing: "cubic-bezier(.3,0,.2,1)" }, { transform: "translateY(10px)", easing: "cubic-bezier(.45,0,.2,1)" }, { transform: "translateY(0)" }],
+            { duration: 750, delay: ms(6.2), fill: "both" });
+        }
+      });
+
+      // Sound: calm and sparse. Paper as the contours print, one thump when the bars have landed,
+      // a tap as the bookmark seats, one soft swoosh as the logo settles. The line itself is silent.
+      Sound.cue(0.1, "paper", { gain: 0.6 });
+      Sound.cue(6.0, "thump", { gain: 0.7 });
+      Sound.cue(6.55, "tap", { gain: 0.5 });
+      Sound.cue(7.5, "swoosh", { gain: 0.4 });
+
+      // End card: the poster settles with the logo on the bars, like the profile picture.
+      arrive(el("div", { class: "mark", role: "img", "aria-label": "GearBook" }, poster), 7.5, { y: 18, dur: 0.7 });
+      arrive(el("div", { class: "cta", text: p.cta }, poster), 7.9, { y: 14 });
+    },
+  });
+</script>
+</body>
+</html>

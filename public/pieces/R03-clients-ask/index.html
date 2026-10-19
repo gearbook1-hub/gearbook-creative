@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>R03 Your Clients Ask</title>
+<link rel="stylesheet" href="../pieces.css" />
+<style>
+  /* R03 "Your clients ask". A whole reel in code, on cream and topo. A generic phone inbox
+     fills with the same gear questions across sports while the pro answers them one by one,
+     each answer shorter than the last. Then one GearBook catalog link, sent to all at once,
+     clears the pile. The pro's catalog, then the end card. The phone UI is deliberately
+     generic: no app's branding or layout. */
+  .titles { position: absolute; left: 90px; top: 236px; width: 810px; height: 190px; }
+  .tblock { position: absolute; left: 0; top: 0; width: 810px; }
+  .tblock .eyebrow { color: var(--ink-muted); }
+  .tblock .title { margin-top: 16px; font-size: 96px; }
+  .tblock.two .title { font-size: 80px; line-height: 1.06; }
+  .amber { color: var(--amber); }
+
+  /* The phone: a plain dark frame, a white screen, no app branding. */
+  .phone { position: absolute; left: 220px; top: 440px; width: 640px; height: 1040px; border-radius: 78px;
+    background: var(--bark); padding: 14px; box-shadow: 0 40px 90px rgba(61, 53, 34, 0.35); }
+  .screen { position: relative; width: 612px; height: 1012px; border-radius: 64px; overflow: hidden; background: var(--white); color: var(--bark); }
+  .notch { position: absolute; left: 50%; top: 14px; width: 150px; height: 36px; margin-left: -75px; border-radius: 20px; background: var(--bark); z-index: 5; }
+  .clock { position: absolute; left: 52px; top: 18px; font-family: var(--body); font-weight: 600; font-size: 26px; }
+  .head { position: absolute; left: 36px; right: 30px; top: 74px; height: 70px; display: flex; align-items: center; justify-content: space-between; }
+  .head h2 { margin: 0; font-family: var(--display); font-weight: 700; font-size: 50px; }
+  .badge { min-width: 70px; height: 56px; padding: 0 18px; border-radius: 28px; background: var(--amber); color: var(--bark);
+    display: grid; place-items: center; font-family: var(--display); font-weight: 700; font-size: 34px; white-space: nowrap; }
+  .badge.done { background: var(--sage); color: var(--white); font-family: var(--label); font-weight: 600; font-size: 26px; letter-spacing: 0.08em; }
+  .rows { z-index: 1; position: absolute; left: 0; right: 0; top: 156px; bottom: 132px; overflow: hidden; border-top: 2px solid rgba(61, 53, 34, 0.08); }
+  .row { position: absolute; left: 0; right: 0; top: 0; height: 124px; padding: 0 30px 0 26px; display: flex; align-items: center; gap: 20px;
+    background: var(--white); border-bottom: 2px solid rgba(61, 53, 34, 0.08); }
+  .av { width: 78px; height: 78px; flex: none; border-radius: 50%; display: grid; place-items: center; color: var(--white);
+    font-family: var(--display); font-weight: 700; font-size: 34px; }
+  .tx { flex: 1; min-width: 0; }
+  .l1 { display: flex; align-items: baseline; gap: 12px; }
+  .l1 b { font-family: var(--body); font-weight: 600; font-size: 31px; }
+  .l1 .sp { font-family: var(--label); font-weight: 600; font-size: 19px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-muted); }
+  .l1 .tm { margin-left: auto; font-family: var(--label); font-size: 21px; color: var(--ink-muted); }
+  .pv { margin-top: 4px; font-size: 31px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 8px; }
+  .pv svg { width: 26px; height: 26px; flex: none; }
+  .pv span { overflow: hidden; text-overflow: ellipsis; }
+  .row.read .pv { color: var(--sage-dark); }
+  .row.read .l1 b { font-weight: 400; }
+  .dot { width: 18px; height: 18px; flex: none; border-radius: 50%; background: var(--bark); }
+
+  /* The reply bar at the bottom of the screen. */
+  .composer { position: absolute; left: 0; right: 0; bottom: 0; height: 132px; padding: 22px 24px 30px; display: flex; align-items: center; gap: 14px;
+    border-top: 2px solid rgba(61, 53, 34, 0.08); background: var(--white); z-index: 3; }
+  .field { flex: 1; min-width: 0; height: 74px; border-radius: 37px; border: 2px solid rgba(61, 53, 34, 0.18); padding: 0 24px;
+    display: flex; align-items: center; font-size: 29px; white-space: nowrap; overflow: hidden; }
+  .field span { flex: none; }
+  .field .ph { color: var(--ink-muted); }
+  .field .caret { display: inline-block; width: 2px; height: 34px; background: var(--bark); margin-left: 2px; flex: none; }
+  .send { position: relative; height: 74px; flex: none; border-radius: 37px; background: var(--slate); color: var(--white);
+    display: grid; place-items: center; font-family: var(--label); font-weight: 600; font-size: 25px; letter-spacing: 0.06em; white-space: nowrap; overflow: hidden; }
+  .send svg { width: 32px; height: 32px; }
+  .ring { position: absolute; width: 90px; height: 90px; margin: -45px 0 0 -45px; border-radius: 50%; border: 4px solid var(--amber); opacity: 0; z-index: 4; pointer-events: none; }
+  /* The catalog link, attached above the reply bar before it is sent. */
+  .linkcard { position: absolute; left: 24px; right: 24px; bottom: 146px; height: 128px; border-radius: 26px; background: var(--cream);
+    border: 3px solid var(--amber); display: flex; align-items: center; gap: 20px; padding: 0 24px; z-index: 3; opacity: 0;
+    box-shadow: 0 12px 30px rgba(61, 53, 34, 0.18); }
+  .linkcard .lg { width: 84px; height: 84px; flex: none; border-radius: 20px; background: var(--white); display: grid; place-items: center; }
+  .linkcard .lg i { display: block; width: 70px; aspect-ratio: 512 / 129.364; background: #000;
+    -webkit-mask: url("../../brand/gearbook-full-length-bw.svg") center / contain no-repeat; mask: url("../../brand/gearbook-full-length-bw.svg") center / contain no-repeat; }
+  .linkcard b { display: block; font-family: var(--display); font-weight: 700; font-size: 33px; }
+  .linkcard small { display: block; font-family: var(--label); font-size: 24px; color: var(--slate); margin-top: 4px; letter-spacing: 0.02em; }
+  .sample { position: absolute; left: 220px; top: 1490px; width: 640px; text-align: center; font-family: var(--label); font-size: 22px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-muted); }
+
+  /* The pro's catalog. */
+  .cat { position: absolute; left: 140px; top: 560px; width: 760px; border-radius: 40px; background: var(--white); padding: 34px 34px 38px;
+    box-shadow: 0 30px 70px rgba(61, 53, 34, 0.22); opacity: 0; }
+  .cat .who { display: flex; align-items: center; gap: 20px; }
+  .cat .who .av { background: var(--sage-dark); }
+  .cat .who b { display: block; font-family: var(--display); font-weight: 700; font-size: 42px; }
+  .cat .who small { display: block; font-family: var(--label); font-size: 24px; letter-spacing: 0.08em; color: var(--ink-muted); }
+  .cat .url { margin-left: auto; font-family: var(--label); font-size: 24px; color: var(--slate); }
+  .cat .eyebrow { margin: 28px 0 18px; color: var(--ink-muted); font-size: 22px; }
+  .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 26px 24px; }
+  .tile .ph { height: 250px; border-radius: 24px; background: var(--white); border: 2px solid rgba(61, 53, 34, 0.1); padding: 16px; position: relative; }
+  .tile .ph img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .tile .star { position: absolute; right: 12px; top: 12px; background: var(--amber); color: var(--bark); border-radius: 14px; padding: 4px 12px;
+    font-family: var(--label); font-weight: 600; font-size: 19px; letter-spacing: 0.06em; }
+  .tile b { display: block; margin-top: 12px; font-family: var(--display); font-weight: 700; font-size: 29px; line-height: 1.1; }
+  .tile small { display: block; margin-top: 4px; font-size: 22px; color: var(--ink-muted); }
+
+  /* End card. */
+  .endcard { position: absolute; inset: 0; background: var(--cream); opacity: 0; z-index: 20; }
+  .endcard .eyebrow { position: absolute; left: 90px; top: 690px; width: 810px; text-align: center; color: var(--ink-muted); }
+  .endcard .logo { position: absolute; left: 190px; top: 760px; width: 610px; aspect-ratio: 512 / 129.364;
+    background: url("../../brand/gearbook-full-length.svg") center / contain no-repeat; }
+  .endcard .title { position: absolute; left: 90px; top: 1010px; width: 810px; text-align: center; font-size: 100px; }
+</style>
+</head>
+<body>
+<div id="stage"><div class="topo"></div></div>
+<script src="../runtime.js"></script>
+<script src="../sound.js"></script>
+<script>
+  const { el, arrive, words, tick, progress, outCubic } = Motion;
+  const inOut = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+  const LINK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 0 0 6 0l3-3a4 4 0 0 0-6-6l-1 1"/><path d="M14 10a4 4 0 0 0-6 0l-3 3a4 4 0 0 0 6 6l1-1"/></svg>';
+  const SEND_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5 M6 11l6-6 6 6"/></svg>';
+  const AV = ["var(--sage)", "var(--bark)", "var(--sage-dark)", "var(--ink-muted)"];
+
+  // A title whose "|" marks a line break; words arrive one by one across the lines.
+  const lines = (node, text, at, gap) => text.split("|").forEach((ln) => {
+    words(el("div", {}, node), ln.trim(), at, gap); at += ln.trim().split(" ").length * gap;
+  });
+  // Fade a node out between two times (opacity only, so arrive() transforms are untouched).
+  const leave = (node, at, dur = 0.35) =>
+    node.animate([{ opacity: 1 }, { opacity: 0 }], { duration: dur * 1000, delay: at * 1000, easing: "ease-in", fill: "forwards" });
+
+  Motion.init({
+    duration: 18,
+    hold: 0.8,
+    looks: ["main"],
+    // Every word and timing beat that might change. Override any of them with ?props={...}.
+    defaults: {
+      beats: [
+        { at: 0.2, until: 3.8, eyebrow: "Every pro's inbox", title: "Your clients ask." },
+        { at: 3.9, until: 6.0, title: "You answer." },
+        { at: 6.1, until: 8.1, title: "Again." },
+        { at: 8.2, until: 10.1, title: "And again." },
+        { at: 10.3, until: 13.3, eyebrow: "With GearBook", title: "Answer *once.*" },
+        { at: 13.5, until: 15.1, eyebrow: "Your GearBook catalog", title: "You pick the gear.|We build the links.", two: true },
+        { at: 15.2, until: 99, eyebrow: "Your GearBook catalog", title: "You get *paid*|when they buy.", two: true },
+      ],
+      // Sample clients (names are made up). "at" is when each message lands.
+      messages: [
+        { at: 1.0, name: "Maya", sport: "Climbing", text: "what harness do you use?" },
+        { at: 1.6, name: "Tom", sport: "Ski", text: "which skins should I get?" },
+        { at: 2.2, name: "Priya", sport: "Diving", text: "what fins for a beginner?" },
+        { at: 2.8, name: "Dan", sport: "Mountain", text: "link to that stove?" },
+        { at: 5.75, name: "Jules", sport: "Climbing", text: "what harness do you use?" },
+        { at: 7.4, name: "Kai", sport: "Sailing", text: "which foul weather jacket?" },
+        { at: 7.75, name: "Ana", sport: "Ski", text: "goggles from your last post?" },
+        { at: 8.05, name: "Ben", sport: "Spearfishing", text: "what wetsuit do you dive in?" },
+        { at: 8.35, name: "Rosa", sport: "Climbing", text: "same harness question lol" },
+        { at: 8.65, name: "Leo", sport: "Freediving", text: "what mask is that?" },
+        { at: 8.9, name: "Sid", sport: "Mountain", text: "what socks were those" },
+        { at: 9.15, name: "Nina", sport: "Diving", text: "fins again, sorry" },
+        { at: 9.4, name: "Ollie", sport: "Ski", text: "skins?? 🤙" },
+        { at: 9.7, name: "Mum", sport: "", text: "what harness do you use?" },
+      ],
+      // The pro's answers, each shorter than the last: typed from..to, sent at, clears message i.
+      answers: [
+        { from: 4.1, to: 5.1, send: 5.35, clears: 0, text: "The Black Diamond Solution. Love it." },
+        { from: 6.25, to: 6.85, send: 7.05, clears: 4, text: "Black Diamond Solution. Still love it." },
+        { from: 8.45, to: 8.8, send: 9.0, clears: 8, text: "Solution. BD. Yes." },
+      ],
+      linkText: "All my gear, one link.",
+      linkTyped: [10.4, 10.95],
+      linkCardAt: 11.0,
+      linkSendAt: 11.7,
+      clearFrom: 11.95,
+      linkTitle: "Sam's gear catalog",
+      linkUrl: "www.gearbook.shop",
+      sendAll: "Send to all",
+      caughtUp: "All caught up",
+      sampleNote: "Sample messages and member",
+      phoneOut: 13.4,
+      pro: "Sam Appleseed",
+      proRole: "Pro (sample)",
+      products: [
+        { img: "solution", name: "Black Diamond Solution Harness", retailer: "Backcountry", pick: true },
+        { img: "grigri", name: "Petzl GRIGRI+ Belay Device", retailer: "Backcountry" },
+        { img: "bent-chetler", name: "Atomic Bent Chetler 100", retailer: "Backcountry" },
+        { img: "r1", name: "Patagonia R1", retailer: "Backcountry" },
+      ],
+      endAt: 16.8,
+      endEyebrow: "For outdoor professionals",
+      endLine: "Free to join.|Link in bio.",
+    },
+    build(stage, p) {
+      // ---- Titles: one per beat, each arriving word by word and leaving before the next.
+      const titles = el("div", { class: "titles" }, stage);
+      p.beats.forEach((b) => {
+        const blk = el("div", { class: "tblock" + (b.two ? " two" : "") }, titles);
+        let at = b.at;
+        if (b.eyebrow) { const e = el("div", { class: "eyebrow", text: b.eyebrow }, blk); arrive(e, at); at += 0.12; }
+        else el("div", { class: "eyebrow", text: " " }, blk);
+        const tt = el("div", { class: "title" }, blk);
+        lines(tt, b.title.replace(/\*/g, ""), at, b.two ? 0.11 : 0.14);
+        // *word* marks the amber word.
+        const marked = (b.title.match(/\*([^*]+)\*/) || [])[1];
+        if (marked) [...tt.querySelectorAll("span")].forEach((s) => { if (s.textContent.trim() === marked) s.classList.add("amber"); });
+        if (b.until < 90) leave(blk, b.until);
+      });
+
+      // ---- The phone.
+      const phone = el("div", { class: "phone" }, stage);
+      phone.animate(
+        [{ opacity: 0, transform: "translateY(140px) scale(0.92)" }, { opacity: 1, transform: "none" }],
+        { duration: 700, delay: 300, easing: Motion.ease.arrive, fill: "both" });
+      phone.animate(
+        [{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translateY(160px) scale(0.94)" }],
+        { duration: 500, delay: p.phoneOut * 1000, easing: "cubic-bezier(.5,0,.8,.4)", fill: "forwards" });
+      const screen = el("div", { class: "screen" }, phone);
+      el("div", { class: "notch" }, screen);
+      el("div", { class: "clock", text: "9:41" }, screen);
+      const head = el("div", { class: "head" }, screen);
+      el("h2", { text: "Messages" }, head);
+      const badge = el("div", { class: "badge", text: "0" }, head);
+      const rowsBox = el("div", { class: "rows" }, screen);
+      const sample = el("div", { class: "sample", text: p.sampleNote }, stage);
+      arrive(sample, 1.0);
+      leave(sample, p.phoneOut);
+
+      // When each message is answered: by a typed answer, or by the link (top of the list first).
+      const n = p.messages.length;
+      const cleared = new Array(n).fill(Infinity);
+      const how = new Array(n).fill(null);
+      p.answers.forEach((a) => { cleared[a.clears] = a.send + 0.1; how[a.clears] = a.text; });
+      let rank = 0;
+      for (let i = n - 1; i >= 0; i--) {
+        if (cleared[i] !== Infinity) continue;
+        cleared[i] = p.clearFrom + rank * 0.08; how[i] = "link"; rank++;
+      }
+      const clearEnd = p.clearFrom + rank * 0.08;
+
+      const ROW = 124;
+      const rows = p.messages.map((m, i) => {
+        const r = el("div", { class: "row" }, rowsBox);
+        r.style.zIndex = String(i + 1);
+        const av = el("div", { class: "av", text: m.name[0], style: { background: AV[i % AV.length] } }, r);
+        const tx = el("div", { class: "tx" }, r);
+        const l1 = el("div", { class: "l1" }, tx);
+        el("b", { text: m.name }, l1);
+        if (m.sport) el("span", { class: "sp", text: m.sport }, l1);
+        el("span", { class: "tm", text: "now" }, l1);
+        const pv = el("div", { class: "pv" }, tx);
+        const dot = el("div", { class: "dot" }, r);
+        return { r, pv, dot, state: "" };
+      });
+
+      tick((t) => {
+        let unread = 0, lastArrival = -1;
+        rows.forEach((row, i) => {
+          const m = p.messages[i];
+          // Pushed down by every message that lands after it.
+          let below = 0;
+          for (let j = i + 1; j < n; j++) below += outCubic(progress(t, p.messages[j].at, 0.35));
+          const k = outCubic(progress(t, m.at, 0.35));
+          row.r.style.transform = `translateY(${below * ROW + (1 - k) * -30}px)`;
+          row.r.style.opacity = String(k);
+          if (t >= m.at) { lastArrival = Math.max(lastArrival, m.at); }
+          const read = t >= cleared[i];
+          if (t >= m.at && !read) unread++;
+          const state = read ? "read" : "new";
+          if (row.state !== state) {
+            row.state = state;
+            row.r.classList.toggle("read", read);
+            if (!read) row.pv.textContent = m.text;
+            else if (how[i] === "link") row.pv.innerHTML = `You: ${LINK_ICON}<span>${p.linkTitle}</span>`;
+            else row.pv.innerHTML = `<span>You: ${how[i]}</span>`;
+          }
+          row.dot.style.opacity = read ? "0" : "1";
+          // A quick sage wash as each row is answered.
+          const wash = 1 - progress(t, cleared[i], 0.5);
+          row.r.style.background = read && wash > 0 ? `color-mix(in srgb, var(--sage) ${Math.round(wash * 22)}%, var(--white))` : "";
+        });
+        const done = t >= clearEnd + 0.15;
+        badge.classList.toggle("done", done);
+        badge.textContent = done ? p.caughtUp : String(unread);
+        badge.style.opacity = t < p.messages[0].at ? "0" : "1";
+        const bump = lastArrival >= 0 ? 1 - progress(t, lastArrival, 0.3) : 0;
+        badge.style.transform = `scale(${1 + 0.22 * bump})`;
+      });
+
+      // ---- Reply bar: typed answers, then the catalog link sent to everyone.
+      const comp = el("div", { class: "composer" }, screen);
+      const field = el("div", { class: "field" }, comp);
+      const ftxt = el("span", {}, field);
+      const caret = el("span", { class: "caret" }, field);
+      const send = el("div", { class: "send" }, comp);
+      send.innerHTML = SEND_ICON;
+      const ring = el("div", { class: "ring" }, screen);
+      const card = el("div", { class: "linkcard" }, screen);
+      card.innerHTML = `<div class="lg"><i></i></div><div><b>${p.linkTitle}</b><small>${p.linkUrl}</small></div>`;
+      card.animate(
+        [{ opacity: 0, transform: "translateY(40px) scale(0.96)" }, { opacity: 1, transform: "none" }],
+        { duration: 450, delay: p.linkCardAt * 1000, easing: Motion.ease.arrive, fill: "both" });
+      card.animate(
+        [{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translateY(-420px) scale(0.8)" }],
+        { duration: 450, delay: (p.linkSendAt + 0.05) * 1000, easing: "cubic-bezier(.5,0,.6,1)", fill: "forwards" });
+
+      const typing = [...p.answers.map((a) => ({ from: a.from, to: a.to, send: a.send, text: a.text })),
+        { from: p.linkTyped[0], to: p.linkTyped[1], send: p.linkSendAt, text: p.linkText }];
+      const sends = typing.map((s) => s.send);
+      tick((t) => {
+        let txt = "", active = false;
+        for (const s of typing) {
+          if (t >= s.from && t < s.send) {
+            const k = progress(t, s.from, s.to - s.from);
+            txt = s.text.slice(0, Math.round(s.text.length * k)); active = true;
+          }
+        }
+        if (txt) { ftxt.className = ""; ftxt.textContent = txt; }
+        else { ftxt.className = "ph"; ftxt.textContent = "Message..."; }
+        field.style.justifyContent = txt && ftxt.offsetWidth > field.clientWidth - 52 ? "flex-end" : "flex-start";
+        caret.style.opacity = active && Math.floor(t * 2.5) % 2 === 0 ? "1" : "0";
+        // The send button widens into "Send to all" for the link.
+        const w = 74 + 170 * inOut(progress(t, p.linkCardAt, 0.4));
+        send.style.width = `${w}px`;
+        if (t >= p.linkCardAt) { if (send.dataset.m !== "all") { send.dataset.m = "all"; send.textContent = p.sendAll; } }
+        else if (send.dataset.m !== "one") { send.dataset.m = "one"; send.innerHTML = SEND_ICON; }
+        // Each send: the button dips and an amber ring opens from it.
+        let dip = 0, rk = -1;
+        for (const s of sends) { const q = progress(t, s, 0.45); if (t >= s && q < 1) { rk = q; dip = Math.sin(Math.min(1, q * 3) * Math.PI); } }
+        send.style.transform = `scale(${1 - 0.12 * dip})`;
+        const cx = send.offsetLeft + w / 2, cy = comp.offsetTop + send.offsetTop + 37;
+        ring.style.left = `${cx}px`; ring.style.top = `${cy}px`;
+        ring.style.opacity = rk >= 0 ? String(1 - rk) : "0";
+        ring.style.transform = `scale(${rk >= 0 ? 0.6 + 1.2 * rk : 1})`;
+      });
+
+      // ---- The pro's catalog.
+      const cat = el("div", { class: "cat" }, stage);
+      cat.animate(
+        [{ opacity: 0, transform: "translateY(120px) scale(0.94)" }, { opacity: 1, transform: "none" }],
+        { duration: 700, delay: (p.phoneOut + 0.45) * 1000, easing: Motion.ease.arrive, fill: "both" });
+      const who = el("div", { class: "who" }, cat);
+      el("div", { class: "av", text: p.pro.split(" ").map((w) => w[0]).join(""), style: { fontSize: "30px" } }, who);
+      const wt = el("div", {}, who);
+      el("b", { text: p.pro }, wt);
+      el("small", { text: p.proRole }, wt);
+      el("div", { class: "url", text: p.linkUrl }, who);
+      el("div", { class: "eyebrow", text: "My gear" }, cat);
+      const tiles = el("div", { class: "tiles" }, cat);
+      p.products.forEach((pr, i) => {
+        const tl = el("div", { class: "tile" }, tiles);
+        tl.innerHTML = `<div class="ph"><img src="../M28-pro-dashboard/products/${pr.img}.jpg" alt="">${pr.pick ? '<span class="star">&#9733; TOP PICK</span>' : ""}</div><b>${pr.name}</b><small>Retailer: ${pr.retailer}</small>`;
+        arrive(tl, p.phoneOut + 0.75 + i * 0.12, { y: 30, dur: 0.5 });
+      });
+
+      // ---- Sound: few, soft cues, all read from the timeline above. The pile-up gets three
+      // dings only (the first message, one mid-pile, Mum's); the link send and the clearing
+      // are the moments that matter; the chime is "All caught up".
+      const firstAns = p.answers[0];
+      const mid = p.messages.find((m) => m.name === "Rosa") || p.messages[Math.floor(n / 2)];
+      Sound.cue(p.messages[0].at, "ding", { gain: 0.5 });
+      Sound.cue(firstAns.send, "tap", { gain: 0.5 });
+      Sound.cue(mid.at, "ding", { gain: 0.4 });
+      Sound.cue(p.messages[n - 1].at, "ding", { gain: 0.5 });
+      Sound.cue(p.linkSendAt, "tap", { gain: 0.7 });
+      Sound.cue(p.clearFrom, "swoosh", { gain: 0.6 });
+      Sound.cue(clearEnd + 0.15, "chime", { gain: 1 });
+      Sound.cue(p.phoneOut + 0.45, "whoosh", { gain: 0.5 });
+      Sound.cue(p.endAt + 0.25, "thump", { gain: 0.6 });
+
+      // ---- End card: full-colour logo and the line.
+      const end = el("div", { class: "endcard" }, stage);
+      el("div", { class: "topo" }, end);
+      end.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 350, delay: p.endAt * 1000, easing: "ease-out", fill: "both" });
+      const ee = el("div", { class: "eyebrow", text: p.endEyebrow }, end);
+      arrive(ee, p.endAt + 0.15);
+      const logo = el("div", { class: "logo", role: "img", "aria-label": "GearBook" }, end);
+      arrive(logo, p.endAt + 0.25, { y: 30 });
+      lines(el("div", { class: "title" }, end), p.endLine, p.endAt + 0.5, 0.11);
+    },
+  });
+</script>
+</body>
+</html>

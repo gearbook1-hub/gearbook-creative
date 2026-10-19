@@ -7,6 +7,8 @@ description: Use when Matt or Luke sends a folder of clips for a reel ("the clip
 
 Matt and Luke film; Claude cuts. They give the clips and the story in a line ("I'm belaying, look at my phone, run 1, run 2, through the door, land at the computer"). Don't hand back choices: pick the takes, set the timings, render, and explain the picks after. They change things by telling you what to change.
 
+Read the Rules in `docs/context/reel-feedback.md` before you start, and log their comments there after they review the cut.
+
 ## Steps
 1. **Find the clips.** Usually the GearBook Drive, `Marketing/Reels/<name>`. On Matt's PC that is `H:/.shortcut-targets-by-id/1qRhWO3ydiMbSjbModfox9XznVyRIJp2I/GearBook/Marketing/Reels/<name>`. Read them in place; never copy raw clips into the repo.
 2. **Probe.** `ffprobe` each clip. iPhone clips are stored 1920x1080 with a -90 rotation tag: they are portrait, and ffmpeg rotates them itself.

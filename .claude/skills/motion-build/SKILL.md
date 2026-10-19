@@ -17,7 +17,7 @@ Pieces are plain HTML pages, the same kind of fully animated page Claude built f
 5. Open the page in a browser to watch it loop, `?look=ledger` to switch looks, `?t=2.5` to freeze a frame.
 6. Hand off to `render-check`, then `motion-library`. `npm run render -- <piece>` records the MP4 at 60 fps.
 
-Before building, read `docs/context/motion-pieces.md`. In short:
+Before building, read the Rules in `docs/context/reel-feedback.md` (what Luke and Matt liked and didn't in past reviews) and `docs/context/motion-pieces.md`. After they review what you built, log their comments there and update its Rules. A whole reel built in code follows the same steps; it goes in `data/reels.json` with `status: "draft"` until they approve it. In short:
 - **Over footage?** Make it an overlay (`overlay: true`): no ground, headline or caption, the object pops forward like M27's look C, with `x`, `y`, `size` props. It renders to a transparent ProRes `.mov`.
 - **A mockup of GearBook?** Draw it from the real screen (`/dev-preview/dashboard` on staging for the dashboard), with real products that belong in each catalog and their photos (`docs/context/product-photos.md`).
 - **Clicking through?** Use M27's arrow cursor, never a dot.

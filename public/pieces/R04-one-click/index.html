@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>R04 One Click</title>
+<link rel="stylesheet" href="../pieces.css" />
+<style>
+  /* R04, a whole reel in code: follow one tap through GearBook. A client taps a pick in a
+     pro's catalog, buys it at a partner retailer (a plain card, the retailer named in text
+     only), and the pro's dashboard counts the click and the sale (counts only, no money).
+     The three scenes sit one under another in a tall "world"; a dotted amber trail draws the
+     click's journey and the camera follows it down, then pulls back to show the whole path.
+     Phones are drawn from M28 (the real dashboard on its 372 px grid, scaled 1.5x). */
+  .head { position: absolute; left: 90px; top: 250px; width: 800px; z-index: 4; }
+  .head .eyebrow { color: var(--ink-muted); }
+  .head .title { margin-top: 18px; font-size: 88px; }
+  .view { position: absolute; left: 0; top: 500px; width: 1080px; height: 1020px; overflow: hidden;
+    -webkit-mask-image: linear-gradient(transparent 0, #000 46px); mask-image: linear-gradient(transparent 0, #000 46px); }
+  .world { position: absolute; left: 0; top: 0; width: 1080px; height: 3300px; transform-origin: 0 0; }
+  svg.trail { position: absolute; left: 0; top: 0; overflow: visible; z-index: 3; }
+
+  /* ---------- Phones (from M28) ---------- */
+  .rig { position: absolute; width: 590px; height: 990px; transform-origin: 0 0; }
+  .pop { position: absolute; inset: 0; transform-origin: 50% 70%; }
+  .phone { position: absolute; left: 0; top: 0; width: 590px; height: 990px; border-radius: 76px;
+    background: #1b1810; padding: 16px; box-shadow: 0 30px 70px rgba(61, 53, 34, 0.35); }
+  .screen { position: relative; width: 558px; height: 958px; border-radius: 60px; overflow: hidden; background: #f0f7ee; }
+  .ui { position: absolute; left: 0; top: 0; width: 372px; height: 639px; transform: scale(1.5); transform-origin: 0 0;
+    color: #3d3522; font-family: var(--body); }
+  .notch { position: absolute; left: 50%; top: 10px; width: 78px; height: 20px; margin-left: -39px; border-radius: 12px; background: #1b1810; z-index: 5; }
+  .logo { display: block; width: 92px; aspect-ratio: 512 / 129.364; background: #000;
+    -webkit-mask: url("../../brand/gearbook-full-length-bw.svg") center / contain no-repeat; mask: url("../../brand/gearbook-full-length-bw.svg") center / contain no-repeat; }
+  .avatar { border-radius: 50%; background: #527060; color: #f0f7ee; display: grid; place-items: center; font-family: var(--display); font-weight: 700; }
+
+  /* The client's view: the pro's public catalog page. */
+  .urlbar { position: absolute; left: 40px; right: 40px; top: 36px; height: 20px; border-radius: 10px; background: #e2e8df;
+    display: grid; place-items: center; font-size: 7px; color: #5d5848; }
+  .apage { position: absolute; left: 0; right: 0; top: 64px; padding: 0 13px; }
+  .apage .logo { width: 74px; margin: 4px auto 10px; }
+  .pro { display: flex; align-items: center; gap: 9px; }
+  .pro .avatar { width: 38px; height: 38px; font-size: 16px; }
+  .pro b { display: block; font-family: var(--display); font-size: 15px; }
+  .pro small { display: block; font-size: 6.5px; color: #6b6450; margin-top: 2px; }
+  .chips { display: flex; gap: 5px; margin: 12px 0 10px; }
+  .chips span { border: 1.5px solid rgba(61, 53, 34, 0.18); border-radius: 10px; padding: 3px 8px; font-family: var(--label); font-size: 7px; }
+  .chips span.on { background: #3d3522; border-color: #3d3522; color: #f0f7ee; }
+  .agrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .acard { background: #fff; border: 2px solid rgba(61, 53, 34, 0.1); border-radius: 12px; padding: 5px 5px 6px; position: relative; }
+  .acard .ph { height: 112px; border-radius: 8px; background: #fff; display: grid; place-items: center; overflow: hidden; }
+  .acard .ph img { width: 100%; height: 100%; object-fit: contain; }
+  .acard b { display: block; font-family: var(--display); font-size: 8.5px; line-height: 1.2; margin: 4px 2px 0; height: 21px; }
+  .acard small { display: block; font-size: 6px; color: #6b6450; margin: 2px 2px 5px; }
+  .acard .shop { background: #33658a; color: #fff; border-radius: 8px; height: 18px; display: grid; place-items: center; font-family: var(--label); font-weight: 600; font-size: 7px; letter-spacing: 0.06em; }
+  .acard .tp { position: absolute; left: 9px; top: 9px; background: #f6ae2d; color: #3d3522; border-radius: 6px; padding: 1px 5px; font-family: var(--label); font-size: 6px; }
+
+  /* The pro's dashboard, as M28. */
+  .bar-top { position: absolute; left: 0; right: 0; top: 0; height: 74px; padding: 34px 14px 0; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(61, 53, 34, 0.08); }
+  .who { display: flex; align-items: center; gap: 7px; }
+  .who .avatar { width: 26px; height: 26px; font-size: 12px; }
+  .who b { display: block; font-family: var(--display); font-size: 11px; }
+  .who small { display: block; font-size: 7px; color: #6b6450; }
+  .tabpage { position: absolute; left: 0; right: 0; top: 74px; bottom: 44px; padding: 12px 11px 0; }
+  .card-dark { background: #3d3522; color: #f0f7ee; border-radius: 14px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; box-shadow: 0 6px 12px rgba(61, 53, 34, 0.18); }
+  .ring { width: 30px; height: 30px; }
+  .card-dark .k { font-family: var(--label); font-size: 6.5px; letter-spacing: 0.08em; color: #b9b29c; }
+  .card-dark .v { font-weight: 600; font-size: 10px; margin-top: 2px; }
+  .spec { font-family: var(--label); font-size: 7px; letter-spacing: 0.06em; color: #6b6450; margin: 12px 0 6px; }
+  .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .tile { border: 2px solid rgba(61, 53, 34, 0.12); background: #fff; border-radius: 14px; height: 48px; display: grid; place-content: center; text-align: center; position: relative; }
+  .tile.dark { background: #3d3522; border-color: #3d3522; color: #f0f7ee; }
+  .tile .k { font-family: var(--label); font-size: 5.5px; letter-spacing: 0.04em; color: #6b6450; }
+  .tile.dark .k { color: #b9b29c; }
+  .tile .v { font-family: var(--display); font-weight: 700; font-size: 15px; margin-top: 2px; }
+  .tile .plus { position: absolute; right: 4px; top: 4px; background: #f6ae2d; color: #3d3522; border-radius: 8px; padding: 1px 5px; font-family: var(--display); font-weight: 700; font-size: 9px; opacity: 0; }
+  .sec { display: flex; justify-content: space-between; align-items: baseline; margin: 14px 0 8px; }
+  .sec h3 { margin: 0; font-family: var(--display); font-size: 14px; }
+  .sec span { font-family: var(--label); font-size: 6.5px; color: #6b6450; letter-spacing: 0.04em; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+  .cat .img { height: 96px; border-radius: 12px; background: #dce7da; position: relative; overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; gap: 3px; padding: 5px; }
+  .cat .img i { border-radius: 7px; background: #fff; overflow: hidden; position: relative; }
+  .cat .img i img { position: absolute; inset: 3px; width: calc(100% - 6px); height: calc(100% - 6px); object-fit: contain; }
+  .cat .pill { position: absolute; left: 6px; top: 6px; background: #fff; border-radius: 9px; padding: 1px 5px; font-family: var(--label); font-size: 5.5px; z-index: 2; }
+  .cat b { display: block; font-family: var(--display); font-size: 10px; margin-top: 5px; }
+  .cat small { display: block; font-size: 6.5px; color: #6b6450; }
+  .cat.new .img { background: none; border: 1.5px dashed rgba(61, 53, 34, 0.22); place-content: center; text-align: center; grid-template-columns: 1fr; }
+  .cat.new .img span { font-family: var(--label); font-size: 6.5px; color: #6b6450; }
+  .nav { position: absolute; left: 0; right: 0; bottom: 0; height: 44px; background: #3d3522; color: #f0f7ee; display: grid; grid-template-columns: repeat(4, 1fr); padding-bottom: 6px; }
+  .nav div { display: grid; place-content: center; text-align: center; font-family: var(--label); font-size: 6px; letter-spacing: 0.04em; opacity: 0.6; }
+  .nav div.on { opacity: 1; }
+  .nav div svg { width: 12px; height: 12px; margin: 0 auto 2px; }
+  .nav .ind { position: absolute; top: 0; left: 0; height: 2px; width: 25%; background: #f6ae2d; }
+
+  /* ---------- The partner retailer: a plain neutral card, named in text only ---------- */
+  .shopcard { position: absolute; width: 540px; background: #fff; border: 3px solid rgba(61, 53, 34, 0.12); border-radius: 34px;
+    box-shadow: 0 30px 70px rgba(61, 53, 34, 0.22); padding: 0 0 34px; overflow: hidden; }
+  .shopcard .strip { background: #f2f2ee; padding: 26px 34px 24px; border-bottom: 2px solid rgba(61, 53, 34, 0.08); }
+  .shopcard .strip .eyebrow { font-size: 20px; color: var(--ink-muted); }
+  .shopcard .strip b { display: block; font-family: var(--body); font-weight: 600; font-size: 42px; margin-top: 6px; }
+  .shopcard .ph { position: relative; height: 300px; margin: 24px 34px 0; }
+  .shopcard .ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+  .shopcard .nm { font-family: var(--body); font-weight: 500; font-size: 34px; margin: 18px 34px 22px; }
+  .shopcard .buy { position: relative; margin: 0 34px; height: 92px; border-radius: 20px; background: var(--slate); color: #fff;
+    display: grid; place-items: center; font-family: var(--body); font-weight: 600; font-size: 38px; overflow: hidden; }
+  .shopcard .buy .done { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 14px; background: var(--sage-dark); opacity: 0; }
+  .shopcard .buy .done svg { width: 40px; height: 40px; }
+
+  /* ---------- Cursor (M27's arrow) and taps ---------- */
+  .cursor { position: absolute; left: 0; top: 0; width: 40px; height: 56px; transform-origin: 4px 4px; z-index: 6; opacity: 0;
+    filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.35)); }
+  .ripple { position: absolute; left: 0; top: 0; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; border: 6px solid var(--amber); z-index: 5; opacity: 0; }
+
+  /* ---------- Pull-back labels and the end card ---------- */
+  .olab { position: absolute; left: 470px; width: 430px; opacity: 0; z-index: 4; }
+  .olab .eyebrow { font-size: 24px; color: var(--ink-muted); }
+  .olab b { display: block; font-family: var(--display); font-weight: 700; font-size: 52px; line-height: 1.05; margin-top: 8px; }
+  .end { position: absolute; inset: 0; background: var(--cream); z-index: 8; opacity: 0; }
+  .end .full { position: absolute; left: 175px; top: 640px; width: 640px; }
+  .end .title { position: absolute; left: 90px; top: 900px; width: 810px; text-align: center; font-size: 104px; }
+  .end .sub { position: absolute; left: 90px; top: 1060px; width: 810px; text-align: center; font-family: var(--label); font-weight: 600; font-size: 40px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--ink-muted); }
+</style>
+</head>
+<body>
+<div id="stage"><div class="topo"></div></div>
+<script src="../runtime.js"></script>
+<script src="../sound.js"></script>
+<script>
+  const { el, arrive, words, tick, progress, outCubic } = Motion;
+  const inOut = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+  const lerp = (a, b, k) => a + (b - a) * k;
+  const P = "../M28-pro-dashboard/products/";
+  const photo = (name) => `<img src="${P}${name}.jpg" alt="">`;
+  const ICON = {
+    book: '<path d="M4 5h6a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H4z M20 5h-6a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h6z"/>',
+    wallet: '<path d="M4 7h15v12H4z M4 7l11-3v3 M15 13h2"/>',
+    mega: '<path d="M4 10v4h3l8 5V5L7 10z M18 9a4 4 0 0 1 0 6"/>',
+    user: '<circle cx="12" cy="9" r="4"/><path d="M5 20a7 7 0 0 1 14 0"/>',
+    check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  };
+  const icon = (name, color = "currentColor", w = 2) =>
+    `<svg viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round">${ICON[name]}</svg>`;
+
+  // World layout (px). The three scenes stack down a tall world; the camera follows the trail.
+  const SC = 0.9;                                // phone scale in the world
+  const A = { x: 495 - 295 * SC, y: 40 };        // the client's phone
+  const B = { x: 225, y: 1250 };                 // the retailer card
+  const C = { x: 495 - 295 * SC, y: 2250 };      // the pro's phone
+  const WORLD_TOP = 40, WORLD_BOT = C.y + 990 * SC;
+  // Camera: the world point at the window's centre (cx, cy) and the scale s.
+  const CAM = {
+    a: { cx: 540, cy: 510, s: 1 },
+    b: { cx: 540, cy: 1560, s: 1 },
+    c: { cx: 540, cy: C.y + 445, s: 1 },
+    // Close on the stat tiles so the two counts read big.
+    d: { cx: 526, cy: C.y + 300, s: 1.45 },
+  };
+  const OS = 960 / (WORLD_BOT - WORLD_TOP);
+  CAM.o = { cx: 495 + (495 - 300) / OS, cy: (WORLD_TOP + WORLD_BOT) / 2, s: OS };
+
+  Motion.init({
+    duration: 14.2,
+    hold: 0.8,
+    looks: ["main"],
+    // The reel's variables. Override any of them with ?props={...}.
+    // Counts only, no dollar figures (CLAUDE.md). Sample pro and numbers, as M28.
+    defaults: {
+      beats: [
+        { at: 0.15, out: 1.75, eyebrow: "How GearBook works", title: "Follow one click." },
+        { at: 1.95, out: 3.65, eyebrow: "Your catalog", title: "A client taps your pick." },
+        { at: 3.85, out: 6.1, eyebrow: "At a partner retailer", title: "They shop like normal." },
+        { at: 6.3, out: 8.8, eyebrow: "Later, on your dashboard", title: "You get credit for the sale." },
+        { at: 9.05, out: 11.35, eyebrow: "One click", title: "You get paid." },
+      ],
+      steps: ["Your catalog", "Their checkout", "Your dashboard"],
+      stepLabels: ["The tap", "The sale", "The credit"],
+      name: "Sam Appleseed",
+      role: "Pro",
+      specialty: "AMGA Rock and Ski Guide (sample)",
+      slug: "sam-appleseed",
+      catalog: "Trad Climbing",
+      chips: ["Trad Climbing", "Skiing", "Layers"],
+      products: [
+        { name: "Petzl GRIGRI+ Belay Device", img: "grigri", pick: true },
+        { name: "Black Diamond Solution Harness", img: "solution" },
+        { name: "Black Diamond Camalot Z4", img: "z4" },
+        { name: "Black Diamond Camalot C4", img: "c4" },
+      ],
+      tap: 3,
+      retailer: "Backcountry",
+      buy: "Buy",
+      bought: "Order placed",
+      month: "October",
+      clicks: 412,
+      sales: 9,
+      completion: 80,
+      nextStep: "Add a catalog cover photo",
+      covers: [["grigri", "solution", "z4", "c4"], ["bent-chetler", "ledge", "soelden", "lightyear"], ["base-top", "base-bottom", "r1", "socks"]],
+      endLine: "Free to join.",
+      endSub: "Link in bio.",
+    },
+    build(stage, p) {
+      // ---------- Captions, one per beat ----------
+      p.beats.forEach((b) => {
+        const head = el("div", { class: "head" }, stage);
+        arrive(el("div", { class: "eyebrow", text: b.eyebrow }, head), b.at, { y: 12 });
+        words(el("div", { class: "title" }, head), b.title, b.at + 0.12, 0.11);
+        head.animate([{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translateY(-18px)" }],
+          { duration: 300, delay: b.out * 1000, easing: Motion.ease.travel, fill: "both" });
+      });
+
+      const view = el("div", { class: "view" }, stage);
+      const world = el("div", { class: "world" }, view);
+
+      const phoneAt = (pos) => {
+        const rig = el("div", { class: "rig", style: { left: `${pos.x}px`, top: `${pos.y}px`, transform: `scale(${SC})` } }, world);
+        const pop = el("div", { class: "pop" }, rig);
+        const screen = el("div", { class: "screen" }, el("div", { class: "phone" }, pop));
+        el("div", { class: "notch" }, screen);
+        return { rig, pop, ui: el("div", { class: "ui" }, screen) };
+      };
+      // A UI point on a phone (372 px grid) in world coordinates. Layout ignores transforms.
+      const uiPos = (node, root) => { let x = 0, y = 0, n = node; while (n && n !== root) { x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; } return [x, y, node.offsetWidth, node.offsetHeight]; };
+      const onPhone = (pos, node, root, fx = 0.5, fy = 0.5) => {
+        const [x, y, w, h] = uiPos(node, root);
+        return [pos.x + SC * (16 + 1.5 * (x + w * fx)), pos.y + SC * (16 + 1.5 * (y + h * fy))];
+      };
+
+      // ---------- A: the client's phone on the pro's catalog page ----------
+      const pa = phoneAt(A);
+      el("div", { class: "urlbar", text: `gearbook.shop/catalog/${p.slug}` }, pa.ui);
+      const apage = el("div", { class: "apage" }, pa.ui);
+      el("span", { class: "logo", role: "img", "aria-label": "gearbook" }, apage);
+      const pro = el("div", { class: "pro" }, apage);
+      pro.innerHTML = `<div class="avatar">${p.name[0]}</div><div><b>${p.name}</b><small>${p.role} · ${p.specialty}</small></div>`;
+      const chips = el("div", { class: "chips" }, apage);
+      p.chips.forEach((c) => el("span", { class: c === p.catalog ? "on" : "", text: c }, chips));
+      const agrid = el("div", { class: "agrid" }, apage);
+      const acards = p.products.map((pr) => {
+        const c = el("div", { class: "acard" }, agrid);
+        c.innerHTML = `<div class="ph">${photo(pr.img)}</div><b>${pr.name}</b><small>Retailer: ${p.retailer}</small><div class="shop">Shop</div>${pr.pick ? '<span class="tp">Top Pick</span>' : ""}`;
+        return c;
+      });
+      const tapCard = acards[Math.min(p.tap, acards.length - 1)];
+      tick((t) => {
+        const k = outCubic(progress(t, 0.25, 0.75));
+        pa.pop.style.transform = `translateY(${(1 - k) * 220}px) perspective(1600px) rotateX(${(1 - k) * 14}deg) scale(${0.4 + 0.6 * k})`;
+        pa.pop.style.opacity = progress(t, 0.25, 0.15);
+        const press = 1 - 0.05 * Math.max(0, 1 - Math.abs(t - 2.55) / 0.12);
+        tapCard.style.transform = `scale(${press})`;
+        tapCard.style.borderColor = t >= 2.55 ? "#f6ae2d" : "";
+      });
+
+      // ---------- B: the partner retailer, a neutral card ----------
+      const shop = el("div", { class: "shopcard", style: { left: `${B.x}px`, top: `${B.y}px` } }, world);
+      shop.innerHTML = `<div class="strip"><div class="eyebrow">Partner retailer</div><b>${p.retailer}</b></div>
+        <div class="ph">${photo(p.products[p.tap].img)}</div><div class="nm">${p.products[p.tap].name}</div>`;
+      const buy = el("div", { class: "buy", text: p.buy }, shop);
+      const done = el("div", { class: "done" }, buy);
+      done.innerHTML = `${icon("check", "#fff", 3)}<span>${p.bought}</span>`;
+      tick((t) => {
+        const k = outCubic(progress(t, 5.05, 0.3));
+        done.style.opacity = k;
+        buy.style.transform = `scale(${1 - 0.05 * Math.max(0, 1 - Math.abs(t - 5.0) / 0.12)})`;
+      });
+
+      // ---------- C: the pro's dashboard (M28) ----------
+      const pc = phoneAt(C);
+      const top = el("div", { class: "bar-top" }, pc.ui);
+      top.innerHTML = `<span class="logo" role="img" aria-label="gearbook"></span>
+        <div class="who"><div class="avatar">${p.name[0]}</div><div><b>${p.name}</b><small>${p.role}</small></div></div>`;
+      const nav = el("div", { class: "nav" }, pc.ui);
+      [["book", "My Catalog"], ["wallet", "Earnings"], ["mega", "Marketing"], ["user", "My Profile"]].forEach(([i, txt], k) => {
+        const d = el("div", { class: k === 0 ? "on" : "" }, nav);
+        d.innerHTML = icon(i) + txt;
+      });
+      el("div", { class: "ind" }, nav);
+      const cat = el("div", { class: "tabpage" }, pc.ui);
+      const prog = el("div", { class: "card-dark" }, cat);
+      const arc = (94.2 * p.completion) / 100;
+      prog.innerHTML = `<svg class="ring" viewBox="0 0 36 36"><circle cx="18" cy="18" r="15" fill="none" stroke="rgba(240,247,238,.18)" stroke-width="4"/>
+        <circle cx="18" cy="18" r="15" fill="none" stroke="#6a8d73" stroke-width="4" stroke-linecap="round" transform="rotate(-90 18 18)" stroke-dasharray="${arc} 95"/>
+        <text x="18" y="21.5" text-anchor="middle" font-family="Outfit" font-weight="600" font-size="9" fill="#f0f7ee">${p.completion}%</text></svg>
+        <div><div class="k">PROFILE COMPLETION</div><div class="v">${p.nextStep}</div></div>`;
+      el("div", { class: "spec", text: p.specialty }, cat);
+      const tiles = el("div", { class: "tiles" }, cat);
+      const conv = (c, s) => `${((100 * s) / c).toFixed(1)}%`;
+      const tileDefs = [
+        { k: `Clicks: ${p.month}`, a: String(p.clicks), b: String(p.clicks + 1), at: 7.55 },
+        { k: `Sales: ${p.month}`, a: String(p.sales), b: String(p.sales + 1), at: 8.05 },
+        { k: "Conversion", a: conv(p.clicks, p.sales), b: conv(p.clicks + 1, p.sales + 1), at: 8.05, dark: true },
+      ];
+      const tileEls = tileDefs.map((d, i) => {
+        const tl = el("div", { class: "tile" + (d.dark ? " dark" : "") }, tiles);
+        el("div", { class: "k", text: d.k }, tl);
+        const v = el("div", { class: "v", text: d.a }, tl);
+        const plus = i < 2 ? el("span", { class: "plus", text: "+1" }, tl) : null;
+        return { tl, v, plus, d };
+      });
+      const sec = el("div", { class: "sec" }, cat);
+      sec.innerHTML = `<h3>My Catalogs</h3><span>${p.chips.length} of 5</span>`;
+      const grid = el("div", { class: "grid" }, cat);
+      p.chips.forEach((c, ci) => {
+        const card = el("div", { class: "cat" }, grid);
+        const img = el("div", { class: "img" }, card);
+        (p.covers[ci] || p.covers[0]).forEach((cv) => { el("i", {}, img).innerHTML = photo(cv); });
+        if (ci === 0) el("div", { class: "pill", text: "Main" }, img);
+        el("b", { text: c }, card);
+        el("small", { text: "4 products" }, card);
+      });
+      el("div", { class: "cat new" }, grid).innerHTML = `<div class="img"><span>+<br>New Catalog</span></div>`;
+      tick((t) => tileEls.forEach(({ tl, v, plus, d }) => {
+        const on = t >= d.at;
+        v.textContent = on ? d.b : d.a;
+        const pulse = Math.max(0, 1 - Math.abs(t - d.at - 0.12) / 0.3);
+        v.style.transform = `scale(${1 + 0.35 * pulse})`;
+        if (!d.dark) {
+          v.style.color = on && t < d.at + 1.6 ? "#c98a12" : "";
+          tl.style.borderColor = on ? "#f6ae2d" : "";
+          plus.style.opacity = outCubic(progress(t, d.at, 0.3)) * (1 - progress(t, d.at + 1.8, 0.4));
+          plus.style.transform = `translateY(${-6 * outCubic(progress(t, d.at, 0.5))}px)`;
+        }
+      }));
+
+      // ---------- The trail, the cursor and the taps ----------
+      const svg = el("svg", { class: "trail", width: 1080, height: 3300 }, world);
+      const cursor = el("svg", { class: "cursor", viewBox: "0 0 40 56" }, world);
+      el("path", { d: "M4 4 L4 46 L15 35 L23 53 L31 49 L23 32 L38 32 Z", fill: "#111", stroke: "#fff", "stroke-width": 3, "stroke-linejoin": "round" }, cursor);
+      const ripple = el("div", { class: "ripple" }, world);
+      const glowG = el("g", {}, svg);
+      const glowRing = el("circle", { r: 26, fill: "#f6ae2d", opacity: 0.3 }, glowG);
+      const glow = el("circle", { r: 13, fill: "#f6ae2d", stroke: "#3d3522", "stroke-width": 3 }, glowG);
+
+      // Built on the first frame, once fonts and layout have settled.
+      let G = null;
+      const geo = () => {
+        if (G) return G;
+        const tapAt = onPhone(A, tapCard, pa.ui, 0.5, 0.42);
+        const [bx, by, bw, bh] = uiPos(buy, world);
+        const buyAt = [bx + bw * 0.5, by + bh * 0.5];
+        const shopTop = [B.x + 270, B.y - 4];
+        const tilesAt = onPhone(C, tileEls[0].tl, pc.ui, 0, 0.5);
+        const segs = [
+          `M${tapAt[0]} ${tapAt[1]} C ${tapAt[0] + 330} ${tapAt[1] + 40}, 860 ${B.y - 260}, ${shopTop[0]} ${shopTop[1]}`,
+          `M${buyAt[0]} ${buyAt[1] + 46} C ${buyAt[0] - 240} ${buyAt[1] + 300}, ${tilesAt[0] - 30} ${tilesAt[1] - 60}, ${tilesAt[0] - 4} ${tilesAt[1]}`,
+        ].map((d) => {
+          const path = el("path", { d, fill: "none" }, svg);
+          const L = path.getTotalLength(), n = Math.floor(L / 30);
+          const dots = [];
+          for (let i = 0; i <= n; i++) {
+            const pt = path.getPointAtLength((L * i) / n);
+            dots.push(el("circle", { cx: pt.x, cy: pt.y, r: 7, fill: "#f6ae2d", stroke: "#3d3522", "stroke-width": 2.5 }, svg));
+          }
+          return { path, L, n, dots };
+        });
+        svg.appendChild(glowG);
+        G = { tapAt, buyAt, shopTop, segs };
+        return G;
+      };
+      const SEG_TIME = [[2.7, 4.3], [5.55, 7.25]];
+
+      tick((t) => {
+        const g = geo();
+        // Camera.
+        const keys = [[0, CAM.a], [2.9, CAM.a], [4.4, CAM.b], [5.65, CAM.b], [7.4, CAM.d], [8.9, CAM.d], [10.1, CAM.o]];
+        let cam = keys[keys.length - 1][1];
+        for (let i = 0; i < keys.length - 1; i++) {
+          const [t0, c0] = keys[i], [t1, c1] = keys[i + 1];
+          if (t < t1) { const k = inOut(progress(t, t0, t1 - t0)); cam = { cx: lerp(c0.cx, c1.cx, k), cy: lerp(c0.cy, c1.cy, k), s: lerp(c0.s, c1.s, k) }; break; }
+        }
+        world.style.transform = `translate(${540 - cam.cx * cam.s}px, ${510 - cam.cy * cam.s}px) scale(${cam.s})`;
+
+        // Dots: each trail draws over its time; dots grow as the camera pulls back so they still read.
+        const r = 7 / Math.pow(cam.s, 0.85);
+        const heads = g.segs.map((sg, si) => {
+          const [s0, s1] = SEG_TIME[si];
+          const k = inOut(progress(t, s0, s1 - s0));
+          sg.dots.forEach((d, i) => {
+            const on = i / sg.n <= k + 1e-6 && t >= s0;
+            d.setAttribute("opacity", on ? 1 : 0);
+            d.setAttribute("r", r);
+            d.setAttribute("stroke-width", 2.5 / Math.pow(cam.s, 0.85));
+          });
+          const pt = sg.path.getPointAtLength(sg.L * k);
+          return [pt.x, pt.y];
+        });
+
+        // The cursor: taps the pick, rides the trail to the retailer, taps Buy, then leaves.
+        let xy, press = 1, rk = -1, rxy = null;
+        const start = [g.tapAt[0] + 230, g.tapAt[1] + 190];
+        if (t < 2.7) {
+          xy = [lerp(start[0], g.tapAt[0], inOut(progress(t, 1.65, 0.8))), lerp(start[1], g.tapAt[1], inOut(progress(t, 1.65, 0.8)))];
+        } else if (t < 4.3) {
+          xy = heads[0];
+        } else {
+          const k = inOut(progress(t, 4.3, 0.6));
+          xy = [lerp(g.shopTop[0], g.buyAt[0] + 40, k), lerp(g.shopTop[1], g.buyAt[1] + 10, k)];
+        }
+        [[2.55, g.tapAt], [5.0, [g.buyAt[0] + 40, g.buyAt[1] + 10]]].forEach(([at, p0]) => {
+          press = Math.min(press, 1 - 0.18 * Math.max(0, 1 - Math.abs(t - at) / 0.08));
+          if (t >= at && t < at + 0.5) { rk = (t - at) / 0.5; rxy = p0; }
+        });
+        cursor.style.opacity = progress(t, 1.4, 0.25) * (1 - progress(t, 5.35, 0.3));
+        cursor.style.transform = `translate(${xy[0] - 4}px, ${xy[1] - 4}px) scale(${press})`;
+        ripple.style.opacity = rk < 0 ? 0 : 1 - rk;
+        if (rxy) ripple.style.transform = `translate(${rxy[0]}px, ${rxy[1]}px) scale(${1 + 1.4 * rk})`;
+
+        // The credit travels as an amber spark along the second trail.
+        const gOn = progress(t, 5.55, 0.2) * (1 - progress(t, 7.25, 0.35));
+        glowG.setAttribute("opacity", gOn);
+        glowG.setAttribute("transform", `translate(${heads[1][0]} ${heads[1][1]})`);
+        glowRing.setAttribute("r", 22 + 8 * Math.abs(Math.sin(t * 6)));
+      });
+
+      // ---------- Pull-back labels: the three stops of the one click ----------
+      const stageY = (wy) => 1010 + (wy - CAM.o.cy) * CAM.o.s;
+      [A.y + 445, B.y + 330, C.y + 445].forEach((wy, i) => {
+        const lab = el("div", { class: "olab", style: { top: `${stageY(wy) - 60}px` } }, stage);
+        el("div", { class: "eyebrow", text: p.stepLabels[i] }, lab);
+        el("b", { text: p.steps[i] }, lab);
+        arrive(lab, 9.9 + i * 0.2, { y: 16 });
+        lab.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, delay: 11.3 * 1000, fill: "forwards" });
+      });
+
+      // ---------- End card ----------
+      const end = el("div", { class: "end" }, stage);
+      el("div", { class: "topo" }, end);
+      el("img", { class: "full", src: "../../brand/gearbook-full-length.svg", alt: "GearBook" }, end);
+      words(el("div", { class: "title" }, end), p.endLine, 11.85, 0.12);
+      const sub = el("div", { class: "sub", text: p.endSub }, end);
+      arrive(sub, 12.3, { y: 14 });
+      end.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 450, delay: 11.45 * 1000, easing: Motion.ease.travel, fill: "both" });
+      // ---------- Sound: few, soft cues on the moments that matter ----------
+      Sound.cue(2.55, "tap", { gain: 0.7 });    // the client taps the C4
+      Sound.cue(2.9, "whoosh", { gain: 0.6 });  // camera follows the trail to the retailer
+      Sound.cue(5.0, "tap", { gain: 0.7 });     // Buy
+      Sound.cue(5.6, "whoosh", { gain: 0.5 });  // the credit travels to the dashboard
+      Sound.cue(7.55, "tick", { gain: 0.5 });   // Clicks +1
+      Sound.cue(8.05, "tick", { gain: 0.5 });  // Sales +1
+      Sound.cue(8.15, "chime", { gain: 1 });   // the sale lands: the payoff
+      Sound.cue(11.6, "thump", { gain: 0.6 }); // end card logo lands
+      end.querySelector(".full").animate([{ opacity: 0, transform: "scale(.94)" }, { opacity: 1, transform: "none" }], { duration: 600, delay: 11.6 * 1000, easing: Motion.ease.arrive, fill: "both" });
+    },
+  });
+</script>
+</body>
+</html>

@@ -22,7 +22,7 @@ The creative hub for GearBook. Read README.md first; the loop and which skill ru
 - Nothing is built without two approvals: approve the pitch (Approve or pass on /library), then pick a still. Never skip either. Luke or Matt can give them, and one person's two yeses are enough: whoever is making the piece decides, without waiting on the other (Luke, 2026-10-19). Pulse decisions are saved per browser, so if both send decisions on the same idea and they disagree, ask before applying either.
 - Run `npm run render:check` before delivering any render, and `npm run build` before pushing. Every push to `main` deploys https://gearbook1-hub.github.io/gearbook-creative/.
 - Brand values come from `public/pieces/pieces.css` (pieces), `lib/brand.ts` and `app/globals.css` (hub). Don't hard-code new colours.
-- GearBook copy rules: no em or en dashes, never promise earnings or quote a commission rate, "outdoor professional" or "pro" rather than "guide" (unless a mountain guide), links use https://www.gearbook.shop.
+- GearBook copy rules: no em or en dashes, never promise earnings or quote a commission rate, "outdoor professional" or "pro" for members in general (discipline titles like "Rock guide" or "Spearfishing guide" are fine, Luke 2026-10-19), links use https://www.gearbook.shop.
 - Before taking a new `M` or `R` id, `git pull`: Matt and his cloud sessions add pieces and reels too. M28 was first numbered M26 and collided with Matt's Ping, pushed the same day (2026-10-18).
 - Screen mockups of GearBook show what GearBook really is: the real dashboard layout, real products that belong in their catalog, each with its photo, a normal arrow cursor. Detail in `docs/context/motion-pieces.md`.
 - Luke or Matt sends changes while a piece is being built ("catalog 2: …", "use a normal cursor"). Fold each into the work in progress, stop any render that would bake in the old version, and re-render once at the end.
@@ -34,6 +34,8 @@ Feature knowledge, one file per area, with dated facts and the reason for each r
 | File | Covers |
 |---|---|
 | `data/social.json` (source: gearbook `docs/marketing/social-identity.md`) | GearBook's social identity: audiences, on camera, the presenter bit, formats, voice, copy rules, taste, open gaps |
+| `docs/context/reel-feedback.md` | **Read before making any reel or piece.** Luke's and Matt's reactions, distilled into firm and leaning rules, plus the review log. Record every review there |
+| `docs/context/making-reels.md` | How to make an animated reel in fewer rounds: what the first batch (R03 to R09) showed, a checklist for next time, working with parallel builders, what to do after a review |
 | `docs/context/motion-pieces.md` | Grounded pieces vs overlays (transparent `.mov`), accurate screen mockups, example catalogs, the cursor, technical traps |
 | `docs/context/product-photos.md` | Where product pictures come from (gearbook.shop, Backcountry via the browser), preparing them, names, the open rights question |
 | `docs/context/hosting-and-access.md` | Who can see the public hub, the downloads question, confirming a Pages deploy, stale `.next` |

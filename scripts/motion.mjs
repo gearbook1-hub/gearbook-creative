@@ -9,7 +9,7 @@ import { execFileSync } from "node:child_process";
 import puppeteer from "puppeteer-core";
 
 const ROOT = path.resolve("public");
-const TYPES = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".svg": "image/svg+xml", ".png": "image/png", ".mp4": "video/mp4", ".json": "application/json" };
+const TYPES = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".mp4": "video/mp4", ".json": "application/json" };
 
 export const BROWSERS = [
   process.env.BROWSER_PATH,
@@ -59,6 +59,13 @@ export async function openPiece(piece, { look, props } = {}) {
     async frame(t, out) {
       await page.evaluate((s) => window.Motion.seek(s), t);
       await page.screenshot({ path: out, type: "png", omitBackground: overlay });
+    },
+    /** The piece's sound cues (public/pieces/sound.js) mixed to a WAV file, or false if it has none. */
+    async audio(seconds, out) {
+      const b64 = await page.evaluate((s) => (window.Sound ? window.Sound.wav(s) : null), seconds);
+      if (!b64) return false;
+      fs.writeFileSync(out, Buffer.from(b64, "base64"));
+      return true;
     },
     async close() {
       await browser.close();

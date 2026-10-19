@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>R07 Every Sport</title>
+<link rel="stylesheet" href="../pieces.css" />
+<style>
+  /* R07: GearBook is not mountain-only. Hard rhythmic cuts through seven sports, each on its
+     own ground with its own drawn texture (granite, ridgelines, snowy hills, depth lines, waves),
+     the pro and their kit as type, and the partners who sell that kit as their real logo files.
+     Then all seven at once, the line, the partner logos together, the end card.
+     Review 2026-10-19 (Luke): guide titles, GearBook blue (slate) on the water beats, bolder
+     textures, one bark ground at most, partner logos per sport.
+     v3 (Luke): longer sport beats so everything can be read, and sailing off amber (no amber
+     ground anywhere): white with bold slate swell and sage wind.
+     v4 (Luke): 2.6 s per sport; rock is a granite face with cracks and a dotted route (no topo);
+     ski gets snowy hills and a carved S-track; freediving goes light blue to deep; fish for
+     spearfishing; land and water alternate.
+     v5 (Luke): rock simplified to the other beats' level of detail: flat granite, one cliff
+     shape, two bold cracks, the dotted route and climber. Timing unchanged. */
+  .layer { position: absolute; inset: 0; display: none; }
+  .layer svg.tex { position: absolute; inset: 0; overflow: visible; }
+  .g-cream { background: var(--cream); color: var(--bark); --muted: var(--ink-muted); }
+  .g-bark { background: var(--bark); color: var(--cream); --muted: #b9b29c; }
+  .g-sage { background: var(--sage); color: var(--cream); --muted: #dfe8dc; }
+  .g-deep { background: var(--sage-dark); color: var(--cream); --muted: #cfdccd; }
+  .g-slate { background: var(--slate); color: var(--cream); --muted: #c4d4e0; }
+  .g-dive { background: linear-gradient(180deg, var(--slate) 0%, var(--sage-dark) 100%); color: var(--cream); --muted: #c9d8dc; }
+  .g-white { background: var(--white); color: var(--bark); --muted: var(--ink-muted); }
+  /* v4: rock on granite (bark and slate mixed; v5 a flat ground with one cliff shape in the svg), freediving getting darker as you go down. */
+  .g-granite { background: color-mix(in srgb, var(--bark) 62%, var(--slate)); color: var(--cream); --muted: #d3d6cf; }
+  /* Darker blue all the way down: slate shaded with black (not bark), so the deep water stays blue. */
+  .g-freedive { color: var(--cream); --muted: #d6e3ec; --navy: color-mix(in srgb, var(--slate) 55%, #000);
+    background: linear-gradient(180deg,
+      color-mix(in srgb, var(--slate) 30%, var(--white)) 0%,
+      color-mix(in srgb, var(--slate) 55%, var(--white)) 24%,
+      var(--slate) 46%,
+      color-mix(in srgb, var(--slate) 62%, #000) 74%,
+      color-mix(in srgb, var(--slate) 36%, #000) 100%); }
+  /* Near the light surface the words go dark; from the kit down the water is deep enough for cream. */
+  .g-freedive .count, .g-freedive .pro { color: var(--navy); }
+  .g-freedive .count { --muted: var(--navy); }
+  .band.g-freedive { background: linear-gradient(90deg,
+      color-mix(in srgb, var(--slate) 45%, #000) 0%, var(--slate) 55%, color-mix(in srgb, var(--slate) 45%, var(--white)) 100%); }
+  .band.g-freedive .s { color: var(--navy); }
+
+  .count { position: absolute; left: 90px; top: 270px; display: flex; gap: 26px; color: var(--muted); }
+  .count b { font-weight: 600; color: inherit; }
+  .pro { position: absolute; left: 90px; top: 330px; width: 800px; font-size: 108px; line-height: 1.0; }
+  .kit { position: absolute; left: 90px; top: 850px; width: 720px; }
+  /* Partner logos: the real files, never redrawn or recoloured, each on a white chip. */
+  .shop { position: absolute; left: 90px; top: 1236px; width: 810px; }
+  .shop .eyebrow { color: var(--muted); }
+  .chips { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 18px; }
+  .chip { height: 150px; padding: 0 26px; border-radius: 16px; background: var(--white);
+    display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 26px rgba(0, 0, 0, 0.18); }
+  .g-cream .chip, .g-white .chip { box-shadow: 0 0 0 2px rgba(61, 53, 34, 0.14), 0 10px 22px rgba(61, 53, 34, 0.12); }
+  .chip img { display: block; width: auto; }
+  .wall { position: absolute; left: 90px; top: 1100px; width: 810px; }
+  .wall .eyebrow { color: var(--ink-muted); font-size: 24px; }
+  .wall .chips { gap: 14px; margin-top: 16px; }
+  .wall .chip { height: 100px; padding: 0 20px; border-radius: 12px; }
+  .kit .eyebrow { color: var(--muted); padding-bottom: 18px; border-bottom: 2px solid currentColor; border-color: var(--muted); }
+  .kit .item { font-family: var(--body); font-weight: 500; font-size: 52px; line-height: 1.0; margin-top: 30px; }
+
+  .open .eyebrow { position: absolute; left: 90px; top: 700px; color: var(--ink-muted); }
+  .open .title { position: absolute; left: 90px; top: 760px; width: 820px; font-size: 118px; line-height: 1.0; }
+
+  .band { position: absolute; left: 90px; width: 810px; height: 82px; border-radius: 6px; overflow: hidden;
+    display: flex; align-items: center; justify-content: space-between; padding: 0 26px; }
+  .band svg { position: absolute; inset: 0; }
+  .band.g-cream, .band.g-white { box-shadow: inset 0 0 0 2px rgba(61, 53, 34, 0.35); }
+  .band .n { position: relative; font-family: var(--display); font-weight: 700; font-size: 46px; }
+  .band .s { position: relative; font-family: var(--label); font-weight: 600; font-size: 22px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--muted); }
+  .tag { position: absolute; left: 90px; top: 900px; width: 810px; font-size: 84px; }
+
+  .end .logo { position: absolute; left: 135px; top: 760px; width: 720px; aspect-ratio: 512 / 129.364;
+    background: url("../../brand/gearbook-full-length.svg") center / contain no-repeat; }
+  .end .line { position: absolute; left: 90px; top: 1020px; width: 810px; text-align: center; font-size: 76px; }
+  .end .line .amb { color: var(--bark); box-shadow: inset 0 -0.22em 0 var(--amber); }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<script src="../runtime.js"></script>
+<script src="../sound.js"></script>
+<script>
+  const { el, arrive, words, tick, progress, outCubic } = Motion;
+  const BARK = "#3d3522", CREAM = "#eef5ed", SLATE = "#33658a", AMBER = "#f6ae2d", SAGE = "#6a8d73";
+
+  // Timing (seconds). Opener, seven sport beats on a fixed rhythm, all seven at once, end card.
+  // Each sport beat holds a title, three kit lines and logos, so it runs 2.6 s (1.7 was too short
+  // to read, Luke v2; 2.3 still wanted 0.3 s more, v3) and everything is in by about 0.8 s.
+  const OPEN = 1.4, BEAT = 2.6, N = 7;
+  const ALL = OPEN + N * BEAT;      // 19.6
+  const END = ALL + 4.0;            // 23.6
+  const DURATION = END + 1.9;       // 25.5
+
+  // Mix two palette colours (for shades of the palette, never new hues).
+  const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+  const mix = (a, b, k) => "#" + hex(a).map((v, i) => Math.round(v + (hex(b)[i] - v) * k).toString(16).padStart(2, "0")).join("");
+  const WHITE = "#ffffff", SAGE_DARK = "#527060";
+
+  // Partner logo files (copied from the gearbook repo's public/logos), with the height each is
+  // drawn at so wordmarks and badge logos read about the same size.
+  const LOGOS = {
+    backcountry: { file: "backcountry.png", name: "Backcountry", h: 92 },
+    kailas: { file: "kailas.png", name: "Kailas", h: 118 },
+    osprey: { file: "osprey.png", name: "Osprey", h: 116 },
+    gregory: { file: "gregory.png", name: "Gregory", h: 100 },
+    sunnysports: { file: "sunnysports.png", name: "SunnySports", h: 118 },
+    suunto: { file: "suunto.png", name: "Suunto", h: 62 },
+    scuba: { file: "scuba.png", name: "Scuba.com", h: 48 },
+    westmarine: { file: "west-marine.png", name: "West Marine", h: 40 },
+  };
+  // Heights on the end wall: smaller chips, but wordmarks kept big enough to read.
+  const WALL = { backcountry: 62, kailas: 78, osprey: 78, gregory: 66, sunnysports: 78, suunto: 52, scuba: 44, westmarine: 40 };
+  function chip(parent, id, scale) {
+    const L = LOGOS[id];
+    if (!L) return null;
+    const c = el("div", { class: "chip" }, parent);
+    el("img", { src: "logos/" + L.file, alt: L.name, style: { height: Math.round(L.h * scale) + "px" } }, c);
+    return c;
+  }
+
+  // Seeded random so every frame and every render is the same.
+  function rng(seed) { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); }
+  const pathOf = (pts, close) => "M" + pts.map((p) => p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" L") + (close ? " Z" : "");
+
+  function line(svg, d, color, opacity, sw, draw) {
+    const p = el("path", { d, fill: "none", stroke: color, "stroke-opacity": opacity, "stroke-width": sw, "stroke-linecap": "round", "stroke-linejoin": "round" }, svg);
+    if (draw) {
+      p.setAttribute("pathLength", "1");
+      p.style.strokeDasharray = "1";
+      p.animate([{ strokeDashoffset: 1, easing: Motion.ease.arrive }, { strokeDashoffset: 0 }], { duration: draw.dur * 1000, delay: draw.at * 1000, fill: "both" });
+    }
+    return p;
+  }
+
+  // Drawn textures, in stage coordinates (1080x1920). Each takes the svg, a stroke scale and
+  // `at` (the beat start, or null for a static swatch) and returns a per-frame updater or null.
+  const TEX = {
+    // Rock (v5, Luke: the faceted granite was "way too detailed compared to everything else"):
+    // the same level of detail as the other beats. Flat granite ground, one cliff face as a
+    // single lighter shape up the right with a bold edge, two bold cracks split up it, and the
+    // dotted amber route with the climber drawing up the main crack. Not a topo pattern anywhere.
+    granite(svg, sw, at) {
+      const base = mix(BARK, SLATE, 0.38);
+      const draw = (o, d) => (at == null ? null : { at: at + o, dur: d });
+      // The cliff: its left edge a few bold kinks from the foot to the top of the frame.
+      const edge = [[600, 1980], [680, 1560], [700, 1240], [770, 930], [745, 640], [810, 330], [790, -60]];
+      el("path", { d: pathOf([...edge, [1140, -60], [1140, 1980]], true), fill: mix(base, CREAM, 0.16) }, svg);
+      line(svg, pathOf(edge), CREAM, 0.9, 5 * sw, draw(0, 0.6));
+      // Two cracks: a long splitter up the face and a short one off to the right.
+      const main = [[935, 1980], [905, 1600], [940, 1250], [895, 900], [930, 560], [890, 200], [905, -60]];
+      line(svg, pathOf(main), BARK, 0.85, 9 * sw, draw(0.1, 0.6));
+      line(svg, pathOf([[1090, 1560], [1005, 1260], [1030, 960], [990, 700]]), BARK, 0.85, 7 * sw, draw(0.2, 0.4));
+      // The route: amber dots up the face beside the splitter, the climber at their head.
+      const dots = [];
+      for (let k = 0; k < main.length - 1; k++) {
+        const p = main[k], q = main[k + 1];
+        for (let s = 0; s < 4; s++) {
+          const f = s / 4, x = p[0] + (q[0] - p[0]) * f - 44, y = p[1] + (q[1] - p[1]) * f;
+          if (y < 260 || y > 1880) continue;
+          dots.push(el("circle", { cx: x.toFixed(1), cy: y.toFixed(1), r: 8 * sw, fill: AMBER }, svg));
+        }
+      }
+      const climber = el("circle", { r: 18 * sw, fill: AMBER, stroke: CREAM, "stroke-width": 5 * sw }, svg);
+      const place = (n) => {
+        dots.forEach((d, k) => d.setAttribute("opacity", k < n ? 1 : 0));
+        const top = dots[Math.max(0, n - 1)];
+        climber.setAttribute("cx", top.getAttribute("cx"));
+        climber.setAttribute("cy", (Number(top.getAttribute("cy")) - 22).toFixed(1));
+      };
+      // dots run bottom to top; the route climbs from 0.2 s to 2.0 s into the beat.
+      // On the all-seven band (stage y 700 to 809) the climber sits inside the slice.
+      if (at == null) { place(Math.max(1, dots.filter((d) => Number(d.getAttribute("cy")) >= 790).length)); return null; }
+      place(1);
+      return (t) => place(Math.max(1, Math.round(dots.length * outCubic(Math.min(1, Math.max(0, (t - 0.2) / 1.8))))));
+    },
+    // Mountain: stacked ridgelines, drawn left to right.
+    ridges(svg, sw, at, c) {
+      const r = rng(21);
+      const peaks = [[300, 420], [700, 300], [1000, 360]];
+      for (let k = 0; k < 13; k++) {
+        const base = 760 + k * 92, pts = [];
+        for (let x = -40; x <= 1120; x += 30) {
+          let h = 0;
+          peaks.forEach(([px, ph]) => { h = Math.max(h, ph * (1 - k * 0.07) - Math.abs(x - px - k * 14) * 0.9); });
+          pts.push([x, base - Math.max(0, h) + (r() - 0.5) * 16]);
+        }
+        line(svg, pathOf(pts), c, k === 0 ? 0.85 : 0.42, (k === 0 ? 4.5 : 2.4) * sw, at == null ? null : { at: at + k * 0.03, dur: 0.8 });
+      }
+      return null;
+    },
+    // Ski (v4, Luke: "add some hills and maybe something symbolic of someone skiing down a line"):
+    // layered snowy hills under the night sky, one carved S-track drawing itself down from the
+    // summit with an amber skier at its head, and the falling snow over everything.
+    snow(svg, sw, at, c) {
+      const r = rng(5);
+      const snowTone = (k) => mix(mix(BARK, SLATE, 0.45), CREAM, k);
+      // Back hill: a sharp summit at the right, a long shoulder that stays low under the kit list.
+      const back = [[-40, 1310]];
+      // The back hill's ridge line at any x (the summit is at 960, 790), so the ski track can be
+      // kept on the snow: it must never cross into the dark sky (Luke, 2026-10-19).
+      const ridge = (x) => x <= 960 ? 790 + 520 * Math.pow(Math.max(0, 960 - x) / 1000, 0.2) + 6 * Math.sin(x / 47)
+        : x <= 1040 ? 790 + 60 * (x - 960) / 80 : 850 + 50 * (x - 1040) / 80;
+      for (let x = -40; x <= 960; x += 20) back.push([x, ridge(x)]);
+      back.push([960, 790], [1040, 850], [1120, 900], [1120, 2000], [-40, 2000]);
+      el("path", { d: pathOf(back, true), fill: snowTone(0.34) }, svg);
+      line(svg, pathOf(back.slice(1, -2)), CREAM, 0.9, 4 * sw, at == null ? null : { at, dur: 0.6 });
+      // Middle and front hills rolling in lower down.
+      const roll = (y0, y1, amp, ph) => {
+        const pts = [];
+        for (let x = -40; x <= 1120; x += 20) pts.push([x, y0 + (y1 - y0) * ((x + 40) / 1160) + amp * Math.sin(x / 230 + ph)]);
+        return pts;
+      };
+      const mid = roll(1560, 1300, 40, 1.2), front = roll(1790, 1640, 30, 2.6);
+      el("path", { d: pathOf([...mid, [1120, 2000], [-40, 2000]], true), fill: snowTone(0.6) }, svg);
+      line(svg, pathOf(mid), CREAM, 0.9, 3.5 * sw, at == null ? null : { at: at + 0.08, dur: 0.6 });
+      el("path", { d: pathOf([...front, [1120, 2000], [-40, 2000]], true), fill: snowTone(0.88) }, svg);
+      // The carved S-track: two ski lines from the summit down the face, turn after turn.
+      // The same silky S as v4 (x swings on a sine, y falls at a steady rate, so it only ever goes
+      // down the hill), lowered as a whole just enough that every point sits at least 45 below
+      // the ridge: it starts under the summit and never touches the sky (Luke, 2026-10-19).
+      const DROP = 660;
+      const xs = [];
+      for (let k = 0; k <= 90; k++) { const f = k / 90; xs.push(950 - f * 330 + 110 * Math.sin(f * Math.PI * 4) * (0.5 + f * 0.5)); }
+      const top = Math.max(...xs.map((x, k) => ridge(x) + 45 - (k / 90) * DROP));
+      const track = xs.map((x, k) => [x, top + (k / 90) * DROP]);
+      const d = pathOf(track);
+      const skis = [-7, 7].map((o) => {
+        const p = el("path", { d, fill: "none", stroke: WHITE, "stroke-width": 4.5 * sw, "stroke-linecap": "round", transform: `translate(${o} 0)` }, svg);
+        return p;
+      });
+      const skier = el("circle", { r: 16 * sw, fill: AMBER, stroke: CREAM, "stroke-width": 5 * sw }, svg);
+      const lay = (f) => {
+        skis.forEach((p) => { p.setAttribute("pathLength", "1"); p.style.strokeDasharray = `${f} 2`; });
+        // The skier sits exactly at the head of the drawn line (measured along the path, the same
+        // way the dash reveals it), between the two ski lines.
+        const len = skis[0].getTotalLength();
+        const pt = skis[0].getPointAtLength(f * len);
+        skier.setAttribute("cx", pt.x.toFixed(1));
+        skier.setAttribute("cy", (pt.y - 14).toFixed(1));
+      };
+      lay(at == null ? 0.45 : 0);
+      const flakes = [];
+      for (let i = 0; i < 120; i++) {
+        const f = { x: r() * 1080, y: r() * 1920, s: 70 + r() * 170, rad: 3.5 + r() * 8, ph: r() * 6 };
+        f.node = el("circle", { cx: f.x, cy: f.y, r: f.rad * Math.max(1, sw), fill: c, "fill-opacity": 0.5 + r() * 0.5 }, svg);
+        flakes.push(f);
+      }
+      if (at == null) return null;
+      return (t) => {
+        // The skier comes down the line from 0.15 s to 2.4 s into the beat.
+        const f = Math.min(1, Math.max(0, (t - 0.15) / 2.25));
+        lay(f < 0.5 ? 2 * f * f : 1 - 2 * (1 - f) * (1 - f));
+        flakes.forEach((fl) => {
+          const y = (fl.y + fl.s * t) % 1960 - 20;
+          fl.node.setAttribute("cy", y.toFixed(1));
+          fl.node.setAttribute("cx", (fl.x + 18 * Math.sin(t * 1.3 + fl.ph)).toFixed(1));
+        });
+      };
+    },
+    // Scuba: horizontal depth lines that fade with depth, and a column of rising bubbles.
+    depth(svg, sw, at, c) {
+      const r = rng(11), rows = [];
+      for (let i = 0; i < 24; i++) {
+        const y = 120 + Math.pow(i, 1.18) * 62;
+        rows.push({ y, node: line(svg, "", c, Math.max(0.14, 0.55 - i * 0.018), 2.8 * sw, null), ph: r() * 6 });
+      }
+      const wave = (row, t) => {
+        const pts = [];
+        for (let x = -40; x <= 1120; x += 40) pts.push([x, row.y + 5 * Math.sin(x / 140 + row.ph + t * 1.2)]);
+        row.node.setAttribute("d", pathOf(pts));
+      };
+      rows.forEach((row) => wave(row, 0));
+      const bubbles = [];
+      for (let i = 0; i < 28; i++) {
+        const b = { x: 760 + r() * 140, y: r() * 1920, s: 110 + r() * 120, rad: 4 + r() * 10, ph: r() * 6 };
+        b.node = el("circle", { cx: b.x, cy: b.y, r: b.rad * Math.max(1, sw), fill: "none", stroke: c, "stroke-opacity": 0.85, "stroke-width": 3 * sw }, svg);
+        bubbles.push(b);
+      }
+      if (at == null) return null;
+      return (t) => {
+        rows.forEach((row) => wave(row, t));
+        bubbles.forEach((b) => {
+          b.node.setAttribute("cy", (((b.y - b.s * t) % 1960) + 1960) % 1960 - 20);
+          b.node.setAttribute("cx", (b.x + 10 * Math.sin(t * 3 + b.ph)).toFixed(1));
+        });
+      };
+    },
+    // Freediving: the dive line straight down, marked at even intervals, the water sliding up past it.
+    line(svg, sw, at, c) {
+      const g = el("g", {}, svg);
+      for (let i = 0; i < 30; i++) line(g, `M -40 ${i * 90} L 1120 ${i * 90}`, c, 0.18, 2.4 * sw, null);
+      const lx = at == null ? 735 : 820; // in a band, the line sits between the name and the label
+      // The dive line and its depth marks in amber, so the one object in the frame pops.
+      line(g, `M ${lx} -200 L ${lx} 2900`, AMBER, 1, 6 * sw, null);
+      for (let i = 0; i < 26; i++) line(g, `M ${lx - 30} ${i * 120} L ${lx + 30} ${i * 120}`, AMBER, 0.95, 5 * sw, null);
+      if (at == null) return null;
+      return (t) => g.setAttribute("transform", `translate(0 ${(-90 * t).toFixed(1)})`);
+    },
+    // Spearfishing: the surface rippling overhead, light shafts falling through it.
+    surface(svg, sw, at, c) {
+      const shafts = [];
+      for (let i = 0; i < 6; i++) {
+        const x = 80 + i * 190;
+        shafts.push(el("path", { d: `M ${x} 0 L ${x + 90} 0 L ${x + 330} 1920 L ${x + 170} 1920 Z`, fill: c, "fill-opacity": 0.1 + (i % 2) * 0.07 }, svg));
+      }
+      const rows = [];
+      for (let k = 0; k < 9; k++) rows.push({ y: 60 + k * 26 + k * k * 3, node: line(svg, "", c, 0.8 - k * 0.06, 3.5 * sw, null), k });
+      const wave = (row, t) => {
+        const pts = [];
+        for (let x = -40; x <= 1120; x += 20) pts.push([x, row.y + 10 * Math.sin(x / 70 + t * 2.2 + row.k) + 6 * Math.sin(x / 31 - t * 1.6)]);
+        row.node.setAttribute("d", pathOf(pts));
+      };
+      rows.forEach((row) => wave(row, 0));
+      // v4 (Luke: "could have some fish swimming around"): a few drawn fish crossing on the clock,
+      // in slate and sage-dark, under the ripples and through the light.
+      // [start x, y, direction, speed px/s, size, colour]
+      const school = [
+        [-160, 650, 1, 230, 1.15, SLATE], [1220, 805, -1, 170, 1.5, mix(SLATE, BARK, 0.35)],
+        [-300, 1170, 1, 260, 0.9, SAGE_DARK], [1150, 1540, -1, 210, 1.25, SLATE],
+        [-90, 1660, 1, 190, 0.8, SAGE_DARK], [1300, 690, -1, 280, 0.75, mix(SLATE, BARK, 0.35)],
+      ];
+      const fish = school.map(([x, y, dir, v, k, col], i) => {
+        const g = el("g", {}, svg);
+        el("path", { d: "M 64 0 C 34 -30, -24 -30, -46 0 C -24 30, 34 30, 64 0 Z", fill: col }, g);
+        const tail = el("path", { d: "M -40 0 L -84 -28 L -74 0 L -84 28 Z", fill: col }, g);
+        el("path", { d: "M 8 -24 L 24 -40 L 36 -22 Z", fill: col }, g);
+        el("circle", { cx: 40, cy: -6, r: 5, fill: CREAM }, g);
+        return { g, tail, x, y, dir, v, k, ph: i * 1.7 };
+      });
+      const swim = (t) => fish.forEach((f) => {
+        const x = f.x + f.dir * f.v * t, y = f.y + 12 * Math.sin(t * 2.4 + f.ph);
+        f.g.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${(f.dir * f.k * sw).toFixed(3)} ${(f.k * sw).toFixed(3)}) rotate(${(4 * Math.sin(t * 2.4 + f.ph + 1)).toFixed(2)})`);
+        f.tail.setAttribute("transform", `rotate(${(14 * Math.sin(t * 11 + f.ph)).toFixed(2)} -42 0)`);
+      });
+      if (at == null) {
+        // In the band, two fish sit in view.
+        fish[0].x = 682; fish[0].y = 812; fish[0].k = 0.8; fish.slice(1).forEach((f) => { f.y = -400; });
+        swim(0);
+        return null;
+      }
+      swim(0);
+      return (t) => {
+        rows.forEach((row) => wave(row, t));
+        shafts.forEach((s, i) => s.setAttribute("transform", `skewX(${(3 * Math.sin(t * 0.9 + i)).toFixed(2)})`));
+        swim(t);
+      };
+    },
+    // Sailing: rows of sharp-crested swell, rolling, and wind lines above.
+    swell(svg, sw, at, c, c2) {
+      // A light wash of the swell colour below the horizon, so sky and sea read as two grounds.
+      el("rect", { x: -40, y: 800, width: 1160, height: 1200, fill: c, "fill-opacity": 0.1 }, svg);
+      const rows = [];
+      for (let k = 0; k < 14; k++) rows.push({ y: 820 + k * 82, a: 16 + k * 3.5, lam: 70 + k * 9, node: line(svg, "", c, Math.min(0.95, 0.5 + k * 0.04), (3.6 + k * 0.25) * sw, null), k });
+      const wave = (row, t) => {
+        const pts = [];
+        for (let x = -40; x <= 1120; x += 10) pts.push([x, row.y + row.a * Math.pow(Math.abs(Math.sin(x / row.lam + t * (0.9 + row.k * 0.05) + row.k)), 1.4)]);
+        row.node.setAttribute("d", pathOf(pts));
+      };
+      rows.forEach((row) => wave(row, 0));
+      const r = rng(3), wind = [];
+      for (let i = 0; i < 9; i++) {
+        const w = { x: r() * 1080, y: 590 + r() * 190, len: 140 + r() * 220, s: 260 + r() * 160 };
+        w.node = line(svg, "", c2 || c, 1, 6 * sw, null);
+        wind.push(w);
+      }
+      const blow = (t) => wind.forEach((w) => {
+        const x = ((w.x + w.s * t) % 1500) - 300;
+        w.node.setAttribute("d", `M ${x.toFixed(1)} ${w.y.toFixed(1)} L ${(x + w.len).toFixed(1)} ${w.y.toFixed(1)}`);
+      });
+      blow(0);
+      if (at == null) return null;
+      return (t) => { rows.forEach((row) => wave(row, t)); blow(t); };
+    },
+  };
+  // [ground class, texture ink]. One bark ground at most (Luke: "less brown"); GearBook's blue on the water.
+  const GROUND = {
+    cream: ["g-cream", BARK], bark: ["g-bark", CREAM], sage: ["g-sage", CREAM], deep: ["g-deep", CREAM],
+    slate: ["g-slate", CREAM], dive: ["g-dive", CREAM], creamSlate: ["g-cream", SLATE], whiteSea: ["g-white", SLATE, SAGE],
+    granite: ["g-granite", CREAM], freedive: ["g-freedive", CREAM],
+  };
+  // Which slice of each texture shows in its band on the all-seven screen (stage y of the band's top).
+  const BAND_Y = { snow: 1150, granite: 700 };
+
+  Motion.init({
+    duration: DURATION,
+    hold: 1.2,
+    looks: ["main"],
+    // Every word is a prop: override any of them with ?props={...}.
+    defaults: {
+      openKicker: "Who GearBook is for",
+      openTitle: "Every outdoor pro.",
+      kitLabel: "The kit",
+      sports: [
+        // v4 order: land and water alternate (Luke: the mountain beats bunched at the start and the
+        // ocean ones at the end "seems redundant"), and no two neighbours share a ground.
+        { sport: "Climbing", pro: "Rock guide.", kit: ["Belay device", "Harness", "Cams"], ground: "granite", texture: "granite", logos: ["backcountry", "kailas"] },
+        { sport: "Diving", pro: "Dive instructor.", kit: ["Regulator", "BCD", "Dive computer"], ground: "slate", texture: "depth", logos: ["scuba", "suunto"], water: true },
+        { sport: "Ski", pro: "Ski instructor.", kit: ["Skis", "Helmet", "Goggles"], ground: "bark", texture: "snow", logos: ["backcountry", "sunnysports"] },
+        { sport: "Spearfishing", pro: "Spearfishing guide.", kit: ["Speargun", "Float line", "Weight belt"], ground: "creamSlate", texture: "surface", logos: ["scuba", "westmarine"], water: true },
+        { sport: "Mountain", pro: "Mountain guide.", kit: ["Crampons", "Ice axe", "Shell jacket"], ground: "sage", texture: "ridges", logos: ["osprey", "gregory", "suunto"] },
+        { sport: "Sailing", pro: "Sailing instructor.", kit: ["Foul weather gear", "Life jacket", "Deck shoes"], ground: "whiteSea", texture: "swell", logos: ["westmarine"], water: true },
+        { sport: "Freediving", pro: "Freediving instructor.", kit: ["Long fins", "Low volume mask", "Wetsuit"], ground: "freedive", texture: "line", logos: ["scuba"], water: true },
+      ],
+      shopLabel: "Shop it at",
+      tagline: "One page for whatever you teach.",
+      tagHighlight: "whatever you teach.",
+      partnersLabel: "Shop partners include",
+      // The partner wall at the end: badge logos in the first row, wordmarks after.
+      partnerLogos: ["backcountry", "kailas", "osprey", "gregory", "sunnysports", "suunto", "scuba", "westmarine"],
+      endLine: "Free to join.",
+      endCta: "Link in bio.",
+    },
+    build(stage, p) {
+      // Beats start hidden, so ask for every face now; fonts.ready then waits for them (an unloaded
+      // Outfit 500 rendered the kit lists invisible in the first stills).
+      ["700 100px roca", "500 52px Outfit", "600 26px 'Afacad Flux'"].forEach((f) => document.fonts.load(f));
+      const warm = el("div", { style: { position: "absolute", opacity: 0, fontFamily: "Outfit", fontWeight: 500 }, text: "kit" }, stage);
+      void warm.offsetHeight;
+      const sports = p.sports.slice(0, N);
+      const layers = [];
+      const show = (node, from, to) => layers.push([node, from, to]);
+      const updaters = [];
+
+      // Opener: cream and topo.
+      const open = el("div", { class: "layer g-cream open" }, stage);
+      el("div", { class: "topo" }, open);
+      arrive(el("div", { class: "eyebrow", text: p.openKicker }, open), 0.05);
+      words(el("div", { class: "title" }, open), p.openTitle, 0.2, 0.14);
+      show(open, 0, OPEN);
+
+      // Seven sport beats, hard cuts on the beat.
+      sports.forEach((s, i) => {
+        const at = OPEN + i * BEAT;
+        const [cls, ink, ink2] = GROUND[s.ground] || GROUND.cream;
+        const layer = el("div", { class: "layer " + cls }, stage);
+        const svg = el("svg", { class: "tex", width: 1080, height: 1920, viewBox: "0 0 1080 1920" }, layer);
+        const up = (TEX[s.texture] || TEX.granite)(svg, 1, at, ink, ink2);
+        if (up) updaters.push([up, at, at + BEAT]);
+        // A slow push-in on the texture for movement inside each beat.
+        svg.animate([{ transform: "scale(1.06)", easing: "linear" }, { transform: "scale(1)" }], { duration: BEAT * 1000, delay: at * 1000, fill: "both" });
+
+        const count = el("div", { class: "count eyebrow" }, layer);
+        el("b", { text: String(i + 1).padStart(2, "0") + " / " + String(N).padStart(2, "0") }, count);
+        el("span", { text: s.sport }, count);
+        arrive(count, at, { y: 10, dur: 0.35 });
+        words(el("div", { class: "pro title" }, layer), s.pro, at + 0.05, 0.07);
+        const kit = el("div", { class: "kit" }, layer);
+        arrive(el("div", { class: "eyebrow", text: p.kitLabel }, kit), at + 0.15, { y: 10, dur: 0.35 });
+        s.kit.slice(0, 3).forEach((k, j) => arrive(el("div", { class: "item", text: k }, kit), at + 0.2 + j * 0.07, { y: 16, dur: 0.35 }));
+        // The partners who sell that kit, as their real logos.
+        const ids = (s.logos || []).filter((id) => LOGOS[id]);
+        if (ids.length) {
+          const shop = el("div", { class: "shop" }, layer);
+          arrive(el("div", { class: "eyebrow", text: p.shopLabel }, shop), at + 0.3, { y: 10, dur: 0.3 });
+          const row = el("div", { class: "chips" }, shop);
+          const scale = ids.length === 1 ? 1.35 : 1;
+          ids.forEach((id, j) => {
+            const c = chip(row, id, scale);
+            c.animate(
+              [{ opacity: 0, transform: "translateY(26px) scale(0.92)", easing: Motion.ease.arrive }, { opacity: 1, transform: "none" }],
+              { duration: 350, delay: (at + 0.35 + j * 0.06) * 1000, fill: "both" },
+            );
+          });
+        }
+        show(layer, at, at + BEAT);
+      });
+
+      // All seven at once: one band per sport, each with its own ground and texture.
+      const all = el("div", { class: "layer g-cream" }, stage);
+      el("div", { class: "topo" }, all);
+      sports.forEach((s, i) => {
+        const [cls, ink, ink2] = GROUND[s.ground] || GROUND.cream;
+        const band = el("div", { class: "band " + cls, style: { top: 250 + i * 90 + "px" } }, all);
+        const svg = el("svg", { width: 810, height: 82, viewBox: `0 ${BAND_Y[s.texture] || 760} 1080 109`, preserveAspectRatio: "xMidYMid slice" }, band);
+        (TEX[s.texture] || TEX.granite)(svg, 1.2, null, ink, ink2);
+        el("div", { class: "n", text: s.pro.replace(/\.$/, "") }, band);
+        el("div", { class: "s", text: s.sport }, band);
+        band.animate(
+          [{ opacity: 0, transform: "translateX(120px)", easing: Motion.ease.arrive }, { opacity: 1, transform: "none" }],
+          { duration: 450, delay: (ALL + 0.05 + i * 0.09) * 1000, fill: "both" },
+        );
+      });
+      const tag = el("div", { class: "tag title" }, all);
+      words(tag, p.tagline, ALL + 1.0, 0.11);
+      // The words that matter turn GearBook blue once the line has landed.
+      const hlCount = p.tagHighlight ? p.tagHighlight.split(" ").length : 0;
+      [...tag.children].slice(-hlCount || tag.children.length).forEach((w) => {
+        if (!hlCount) return;
+        w.animate([{ color: BARK, easing: "ease-out" }, { color: SLATE }], { duration: 400, delay: (ALL + 1.75) * 1000, fill: "both" });
+      });
+      // The partners together, as a wall of their logos.
+      const wall = el("div", { class: "wall" }, all);
+      arrive(el("div", { class: "eyebrow", text: p.partnersLabel }, wall), ALL + 1.85, { y: 10, dur: 0.4 });
+      const wrow = el("div", { class: "chips" }, wall);
+      (p.partnerLogos || []).forEach((id, j) => {
+        const c = chip(wrow, id, (WALL[id] || 50) / (LOGOS[id] ? LOGOS[id].h : 1));
+        if (!c) return;
+        c.animate(
+          [{ opacity: 0, transform: "translateY(22px) scale(0.92)", easing: Motion.ease.arrive }, { opacity: 1, transform: "none" }],
+          { duration: 400, delay: (ALL + 1.95 + j * 0.07) * 1000, fill: "both" },
+        );
+      });
+      show(all, ALL, END);
+
+      // End card: the full colour logo and the line.
+      const end = el("div", { class: "layer g-cream end" }, stage);
+      el("div", { class: "topo" }, end);
+      const logo = el("div", { class: "logo", role: "img", "aria-label": "GearBook" }, end);
+      arrive(logo, END + 0.05, { y: 20, dur: 0.6 });
+      const lineEl = el("div", { class: "line title" }, end);
+      const a = el("span", { text: p.endLine + " " }, lineEl);
+      el("br", {}, lineEl);
+      const b = el("span", { class: "amb", text: p.endCta }, lineEl);
+      arrive(a, END + 0.35);
+      arrive(b, END + 0.6);
+      show(end, END, Infinity);
+
+      // Sound: few and soft. Seven identical cuts would be seven identical sounds, so only the
+      // first and last cuts get air, one quiet tick marks the move into water, the bands get one
+      // thump once all seven have landed, and the end card one swoosh. No chime: no single payoff needs it.
+      const firstWater = Math.max(1, sports.findIndex((s) => s.water));
+      Sound.cue(OPEN, "whoosh", { gain: 0.6 });                      // first cut
+      Sound.cue(OPEN + firstWater * BEAT, "tick", { gain: 0.4 });    // cut to the first water beat (diving in v4)
+      Sound.cue(OPEN + 6 * BEAT, "whoosh", { gain: 0.5 });           // last cut
+      Sound.cue(ALL + 0.05 + 6 * 0.09 + 0.15, "thump", { gain: 0.8 }); // seventh band settles
+      Sound.cue(END + 0.05, "swoosh", { gain: 0.5 });                // end card lands
+
+      // Hard cuts: exactly one layer on screen at a time; textures move only while their beat shows.
+      tick((t) => {
+        layers.forEach(([node, from, to]) => { node.style.display = t >= from && t < to ? "block" : "none"; });
+        if (t >= DURATION) layers[layers.length - 1][0].style.display = "block";
+        updaters.forEach(([fn, from, to]) => { if (t >= from && t < to) fn(t - from); });
+      });
+    },
+  });
+</script>
+</body>
+</html>

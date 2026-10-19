@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>R08 Four Questions</title>
+<link rel="stylesheet" href="../pieces.css" />
+<style>
+  /* A deadpan FAQ. Each beat: a pro's question types into a chat bubble, GearBook's answer
+     slams in under it with an amber underline. The ground changes every beat (cream, bark,
+     sage, cream) and a bark end card closes it. */
+  .scene { position: absolute; inset: 0; overflow: hidden; background: var(--ground); color: var(--fg); }
+  .scene.cream { --ground: var(--cream); --fg: var(--bark); --muted: var(--ink-muted); --ghost: rgba(61, 53, 34, 0.08); }
+  .scene.bark { --ground: var(--bark); --fg: var(--cream); --muted: #b9b29c; --ghost: rgba(238, 245, 237, 0.07); }
+  .scene.sage { --ground: var(--sage); --fg: var(--bark); --muted: #2f3b2c; --ghost: rgba(61, 53, 34, 0.1); }
+  .scene.bark .topo { filter: invert(1); opacity: 0.3; }
+  .scene.sage .topo { opacity: 0.45; }
+
+  /* Progress: four bars across the top of the safe area. */
+  .steps { position: absolute; left: 90px; top: 240px; width: 810px; display: flex; gap: 14px; }
+  .steps i { flex: 1; height: 8px; border-radius: 4px; background: var(--ghost); overflow: hidden; }
+  .steps i b { display: block; height: 100%; background: var(--muted); }
+  .steps i.now b { background: var(--amber); transform-origin: left; }
+  .scene .eyebrow { position: absolute; left: 90px; top: 290px; color: var(--muted); }
+
+  .ghostq { position: absolute; right: 110px; top: 820px; font-family: var(--display); font-weight: 700; font-size: 720px; line-height: 1; color: var(--ghost); }
+
+  /* The pro's question: an incoming chat bubble. */
+  .asker { position: absolute; left: 90px; top: 452px; font-family: var(--label); font-weight: 600; font-size: 26px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+  .bubble { position: absolute; left: 90px; top: 500px; max-width: 810px; padding: 30px 40px 34px; background: var(--white); color: var(--bark);
+    border-radius: 44px 44px 44px 10px; box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12); font-size: 58px; font-weight: 500; line-height: 1.14; transform-origin: 0 100%; }
+  .bubble .rest { color: transparent; }
+  .bubble .caret { display: inline-block; width: 4px; height: 0.95em; margin: 0 -4px 0 0; vertical-align: -0.12em; background: var(--bark); }
+  .dots { position: absolute; left: 90px; top: 500px; display: flex; gap: 14px; padding: 36px 40px; background: var(--white); border-radius: 44px 44px 44px 10px; box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12); }
+  .dots i { width: 20px; height: 20px; border-radius: 50%; background: var(--ink-muted); }
+
+  /* GearBook's answer. */
+  .answer { position: absolute; left: 90px; width: 810px; }
+  .answer .who { font-family: var(--label); font-weight: 600; font-size: 26px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--muted); }
+  .answer .big { margin-top: 18px; font-family: var(--display); font-weight: 700; font-size: 136px; line-height: 1.02; letter-spacing: -0.02em; transform-origin: 0 60%; }
+  .answer .big.long { font-size: 104px; }
+  .answer .mark { position: relative; display: inline-block; }
+  .answer .mark u { position: absolute; left: 0; right: 0.06em; bottom: -0.02em; height: 0.11em; border-radius: 99px; background: var(--amber); transform-origin: left; text-decoration: none; }
+  .answer .sub { margin-top: 34px; font-size: 56px; font-weight: 500; line-height: 1.2; }
+  .answer .url { display: inline-block; margin-top: 34px; padding: 18px 30px; border-radius: 18px; background: var(--white); color: var(--slate); font-size: 44px; font-weight: 500; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1); }
+
+  /* End card. */
+  .end .logo { position: absolute; left: 90px; top: 620px; width: 640px; aspect-ratio: 512 / 129.364; background: #fff;
+    -webkit-mask: url("../../brand/gearbook-full-length-bw.svg") center / contain no-repeat; mask: url("../../brand/gearbook-full-length-bw.svg") center / contain no-repeat; }
+  .end .title { position: absolute; left: 90px; top: 880px; width: 810px; font-size: 110px; }
+  .end .bio { position: absolute; left: 90px; top: 1030px; font-size: 56px; font-weight: 500; color: var(--amber); }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<script src="../runtime.js"></script>
+<script src="../sound.js"></script>
+<script>
+  const { el, arrive, words, tick, progress, ease } = Motion;
+
+  const BEAT = 4.6;   // seconds per question
+  const END = 2.2;    // end card length
+
+  Motion.init({
+    duration: 4 * BEAT + END,
+    hold: 1,
+    looks: ["main"],
+    // Every word is a prop. `mark` is the part of the answer that gets the amber underline
+    // (the whole answer if left out); `url` shows as a link chip instead of `sub`.
+    defaults: {
+      asker: "A pro asks",
+      answerer: "GearBook",
+      eyebrow: "Question {n} of {total}",
+      grounds: ["cream", "bark", "sage", "cream"],
+      items: [
+        { q: "What does it cost?", a: "Nothing.", sub: "Free to join." },
+        { q: "Do I need a website?", a: "No.", sub: "We host your page." },
+        { q: "Do I have to make the links?", a: "No.", sub: "We build every one." },
+        { q: "How much do I make?", a: "Every rate is public.", mark: "public.", url: "gearbook.shop/commission-rates" },
+      ],
+      endTitle: "Apply free.",
+      endLine: "Link in bio.",
+      endGround: "bark",
+    },
+    build(stage, p) {
+      const n = p.items.length;
+
+      p.items.forEach((item, i) => {
+        const s = i * BEAT;
+        const at = (x) => (s + x) * 1000;
+        const scene = el("div", { class: "scene " + (p.grounds[i % p.grounds.length] || "cream") }, stage);
+        el("div", { class: "topo" }, scene);
+
+        // Each new ground slams up from the bottom; the first one is simply there.
+        if (i > 0) {
+          scene.animate(
+            [{ clipPath: "inset(100% 0 0 0)", easing: "cubic-bezier(.7,0,.2,1)" }, { clipPath: "inset(0 0 0 0)" }],
+            { duration: 380, delay: at(-0.05), fill: "both" },
+          );
+        }
+
+        const ghost = el("div", { class: "ghostq", text: "?" }, scene);
+        ghost.animate(
+          [{ opacity: 0, transform: "rotate(-14deg) scale(.8)", easing: ease.arrive },
+           { opacity: 1, transform: "rotate(6deg) scale(1)", offset: 0.25, easing: "linear" },
+           { opacity: 1, transform: "rotate(10deg) scale(1.04)" }],
+          { duration: BEAT * 1000, delay: at(0.15), fill: "both" },
+        );
+
+        const steps = el("div", { class: "steps" }, scene);
+        for (let k = 0; k < n; k++) {
+          const bar = el("b", {}, el("i", { class: k === i ? "now" : "" }, steps));
+          if (k > i) bar.style.width = "0";
+          if (k === i) bar.animate([{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], { duration: (BEAT - 0.3) * 1000, delay: at(0.2), fill: "both" });
+        }
+        const eyebrow = el("div", { class: "eyebrow", text: p.eyebrow.replace("{n}", i + 1).replace("{total}", n) }, scene);
+        arrive(eyebrow, s + 0.15, { y: 12 });
+
+        // The question: typing dots, then the bubble types itself out.
+        arrive(el("div", { class: "asker", text: p.asker }, scene), s + 0.25, { y: 10 });
+        const dots = el("div", { class: "dots" }, scene);
+        const dotEls = [0, 1, 2].map(() => el("i", {}, dots));
+        dots.animate(
+          [{ opacity: 0, transform: "scale(.6)", easing: ease.arrive }, { opacity: 1, transform: "scale(1)", offset: 0.4, easing: "linear" },
+           { opacity: 1, transform: "scale(1)", offset: 0.85, easing: "linear" }, { opacity: 0, transform: "scale(1)" }],
+          { duration: 700, delay: at(0.3), fill: "both" },
+        );
+        const bubble = el("div", { class: "bubble" }, scene);
+        const shown = el("span", {}, bubble);
+        const caret = el("span", { class: "caret" }, bubble);
+        const rest = el("span", { class: "rest", text: item.q }, bubble);
+        bubble.animate([{ opacity: 0, transform: "scale(.85)" }, { opacity: 1, transform: "scale(1)" }],
+          { duration: 220, delay: at(0.9), easing: ease.arrive, fill: "both" });
+        const typeStart = s + 0.95, typeLen = Math.min(1.1, 0.045 * item.q.length);
+
+        // The answer slams in under it.
+        const answer = el("div", { class: "answer", style: { top: "860px" } }, scene);
+        arrive(el("div", { class: "who", text: p.answerer }, answer), s + 2.05, { y: 10, dur: 0.4 });
+        const big = el("div", { class: "big" + (item.a.length > 12 ? " long" : "") }, answer);
+        const markText = item.mark && item.a.includes(item.mark) ? item.mark : item.a;
+        const cut = item.a.lastIndexOf(markText);
+        if (cut > 0) big.appendChild(document.createTextNode(item.a.slice(0, cut)));
+        const mark = el("span", { class: "mark", text: markText }, big);
+        if (cut + markText.length < item.a.length) big.appendChild(document.createTextNode(item.a.slice(cut + markText.length)));
+        const line = el("u", {}, mark);
+        big.animate(
+          [{ opacity: 0, transform: "scale(1.45)", easing: "cubic-bezier(.5,0,.9,.4)" },
+           { opacity: 1, transform: "scale(.96)", offset: 0.55, easing: "cubic-bezier(.2,.7,.3,1)" },
+           { opacity: 1, transform: "scale(1)" }],
+          { duration: 380, delay: at(2.15), fill: "both" },
+        );
+        // A small jolt of the whole scene on impact.
+        scene.firstChild.animate(
+          [{ transform: "translateY(0)", easing: "ease-out" }, { transform: "translateY(10px)", offset: 0.3, easing: "ease-in-out" }, { transform: "translateY(0)" }],
+          { duration: 260, delay: at(2.35), fill: "both" },
+        );
+        line.animate([{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], { duration: 420, delay: at(2.5), easing: ease.arrive, fill: "both" });
+        if (item.url) {
+          const url = el("div", { class: "url", text: item.url }, answer);
+          arrive(url, s + 2.75, { y: 16 });
+        } else if (item.sub) {
+          arrive(el("div", { class: "sub", text: item.sub }, answer), s + 2.7, { y: 16 });
+        }
+
+        // Sound: one quiet whoosh as a new ground wipes in, one thump as the answer lands.
+        // The typing stays silent.
+        if (i > 0) Sound.cue(s - 0.05, "whoosh", { gain: 0.4 });
+        Sound.cue(s + 2.35, "thump", { gain: 0.8 });
+
+        tick((t) => {
+          const k = progress(t, typeStart, typeLen);
+          const count = Math.round(k * item.q.length);
+          shown.textContent = item.q.slice(0, count);
+          rest.textContent = item.q.slice(count);
+          const typing = t >= typeStart - 0.05 && k < 1;
+          const blinkOn = Math.floor((t - typeStart) / 0.45) % 2 === 0;
+          caret.style.opacity = t < typeStart - 0.05 || t > s + 2.15 ? 0 : typing || blinkOn ? 1 : 0;
+          dotEls.forEach((d, j) => {
+            const ph = Math.sin((t - s) * 14 - j * 0.9);
+            d.style.transform = `translateY(${ph > 0 ? -ph * 9 : 0}px)`;
+          });
+        });
+      });
+
+      // End card.
+      const e = n * BEAT;
+      const end = el("div", { class: "scene end " + p.endGround }, stage);
+      el("div", { class: "topo" }, end);
+      end.animate(
+        [{ clipPath: "inset(100% 0 0 0)", easing: "cubic-bezier(.7,0,.2,1)" }, { clipPath: "inset(0 0 0 0)" }],
+        { duration: 380, delay: (e - 0.05) * 1000, fill: "both" },
+      );
+      Sound.cue(e + 0.3, "swoosh", { gain: 0.5 }); // the end card settling; no chime
+      const logo = el("div", { class: "logo", role: "img", "aria-label": "GearBook" }, end);
+      arrive(logo, e + 0.2, { y: 20 });
+      words(el("div", { class: "title" }, end), p.endTitle, e + 0.45);
+      arrive(el("div", { class: "bio", text: p.endLine }, end), e + 0.8, { y: 14 });
+    },
+  });
+</script>
+</body>
+</html>

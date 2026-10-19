@@ -1,0 +1,740 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>R05 Catalog Quest</title>
+<link rel="stylesheet" href="../pieces.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=block" />
+<style>
+  /* R05 v3, a whole reel in code: "Catalog Quest", an 8-bit RPG of building a GearBook catalog.
+     Luke on v2 (2026-10-19): "Content is all good", but it's game themed, so the graphics go
+     8-bit and it breaks the house structure (no cream ground, topo or Roca). Modelled on the
+     "Creator Quest" segment of @alexeidelacuesta's reel: a top-down pixel map, a hero walking a
+     path, a dark HUD with a segmented XP bar, a tilted paper note per level, a castle at the end.
+     Same content as v2: create catalogs, add real products, every product described (the 100%
+     rule; a ghost that skipped descriptions is DQ'd), share the page, get paid. No amounts.
+     Everything pixel is drawn cell by cell on canvases at 1:1 (never scaled), so it stays crisp.
+     v4 (Luke, 2026-10-19): the four products are one Trad Climbing catalog: Camalot C4, Solution
+     harness, La Sportiva TC Pro and a Mammut 9.5 Crag Dry rope (were Bent Chetler and Giro Ledge). */
+  #stage {
+    --red: #d8483a;   /* game red, an accent only (Luke's brief allows game reds and gold) */
+    --px: "Press Start 2P", monospace; --vt: VT323, monospace;
+    --card: var(--body);  /* Luke, 2026-10-19: the pop-up note cards read as AI-made in Anton; they use Outfit, the game stays pixel */
+    background: var(--sage);
+  }
+  canvas { display: block; image-rendering: pixelated; }
+  .layer { position: absolute; inset: 0; }
+  .sign, .pick-label, .ghost-tag, .dq, .gate-sign { width: max-content; }
+  .abs { position: absolute; }
+
+  /* ---------- The map (world layer, scrolled by the camera) ---------- */
+  .world { position: absolute; left: 0; top: 0; width: 1080px; }
+  .sign { position: absolute; transform: translateX(-50%); text-align: center; }
+  .sign .board { background: color-mix(in srgb, var(--bark) 55%, var(--amber)); color: var(--cream); font-family: var(--px); font-size: 16px;
+    line-height: 1; padding: 12px 14px 10px; border: 6px solid var(--bark); white-space: nowrap; box-shadow: 6px 6px 0 color-mix(in srgb, var(--bark) 45%, transparent); }
+  .sign .post { width: 12px; height: 30px; margin: 0 auto; background: var(--bark); }
+  .pick-label { position: absolute; transform: translateX(-50%); white-space: nowrap; font-family: var(--px); font-size: 20px; line-height: 1;
+    color: var(--cream); background: var(--bark); padding: 12px 12px 10px; box-shadow: inset 0 -6px 0 var(--amber), 6px 6px 0 color-mix(in srgb, var(--bark) 40%, transparent); }
+  .pick-label b { color: var(--amber); font-weight: 400; }
+  .ghost-tag { position: absolute; transform: translateX(-50%); font-family: var(--px); font-size: 16px; line-height: 1; padding: 6px 8px 4px; background: color-mix(in srgb, var(--slate) 70%, var(--bark)); color: var(--white); white-space: nowrap; text-shadow: 3px 3px 0 color-mix(in srgb, var(--bark) 50%, transparent); }
+  .dq { position: absolute; transform: translateX(-50%) rotate(-2deg); white-space: nowrap; font-family: var(--px); font-size: 22px; line-height: 1;
+    color: var(--white); background: var(--red); padding: 14px 16px 12px; border: 6px solid var(--bark); box-shadow: 8px 8px 0 color-mix(in srgb, var(--bark) 50%, transparent); }
+  .gate-sign { position: absolute; transform: translateX(-50%); font-family: var(--px); font-size: 18px; line-height: 1; color: var(--bark); background: var(--amber);
+    padding: 9px 10px 7px; border: 5px solid var(--bark); white-space: nowrap; }
+  .bars { position: absolute; overflow: hidden; }
+  .bars i { position: absolute; left: 0; right: 0; bottom: 0; height: 100%;
+    background: repeating-linear-gradient(90deg, var(--bark) 0 12px, transparent 12px 24px); }
+  .bars i::before, .bars i::after { content: ""; position: absolute; left: 0; right: 0; height: 12px; background: var(--bark); }
+  .bars i::before { top: 6px; } .bars i::after { top: 42px; }
+
+  /* ---------- HUD ---------- */
+  .hud { position: absolute; left: 0; top: 0; width: 1080px; height: 456px; background: var(--bark);
+    box-shadow: 0 6px 0 color-mix(in srgb, var(--bark) 60%, var(--amber)), 0 12px 0 color-mix(in srgb, var(--bark) 35%, transparent); }
+  .hud .ttl { position: absolute; left: 90px; top: 246px; font-family: var(--px); font-size: 30px; color: var(--cream); line-height: 1; }
+  .hud .lvlv { position: absolute; right: 180px; top: 246px; font-family: var(--px); font-size: 30px; color: var(--amber); line-height: 1; }
+  .xp { position: absolute; left: 90px; top: 298px; width: 810px; height: 36px; display: flex; gap: 10px; }
+  .xp .seg { flex: 1; background: color-mix(in srgb, var(--cream) 14%, var(--bark)); box-shadow: inset 0 -6px 0 color-mix(in srgb, var(--bark) 70%, transparent); position: relative; }
+  .xp .seg i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--amber); box-shadow: inset 0 -6px 0 color-mix(in srgb, var(--amber) 70%, var(--red)), inset 0 6px 0 color-mix(in srgb, var(--amber) 55%, var(--white)); }
+  .slots { position: absolute; left: 90px; top: 356px; display: flex; gap: 12px; }
+  .slot { width: 76px; height: 76px; background: color-mix(in srgb, var(--cream) 10%, var(--bark)); border: 4px solid color-mix(in srgb, var(--cream) 28%, var(--bark)); position: relative; }
+  .slot > canvas { position: absolute; left: 1px; top: 1px; }
+  .slot.done { border-color: var(--amber); }
+  .slot .ok { position: absolute; right: -12px; bottom: -12px; width: 32px; height: 32px; background: var(--amber); border: 4px solid var(--bark); }
+  .slot .ok canvas { position: absolute; left: 1px; top: 3px; }
+  .desc { position: absolute; left: 470px; top: 366px; width: 430px; text-align: right; font-family: var(--px); line-height: 1; }
+  .desc small { display: block; font-size: 16px; color: color-mix(in srgb, var(--cream) 65%, var(--bark)); margin-bottom: 14px; }
+  .desc b { font-weight: 400; font-size: 34px; color: var(--cream); }
+  .desc.full b { color: var(--amber); }
+  .xp-pop { position: absolute; font-family: var(--px); font-size: 22px; line-height: 1; color: var(--white); white-space: nowrap; text-shadow: 4px 4px 0 var(--bark); }
+
+  /* ---------- Note cards (screen layer) ---------- */
+  .card { position: absolute; background: var(--white); color: var(--bark); padding: 26px 28px 26px; width: 440px;
+    box-shadow: 12px 12px 0 color-mix(in srgb, var(--bark) 45%, transparent); }
+  .card::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 8px; background: color-mix(in srgb, var(--cream) 60%, var(--sage)); }
+  .card .ctag { display: inline-block; background: var(--bark); color: var(--white); font-family: var(--card); font-weight: 600; font-size: 22px; letter-spacing: 0.08em; line-height: 1; padding: 8px 12px 8px; margin-top: 4px; }
+  .card .lv { position: absolute; right: -16px; top: -18px; background: var(--red); color: var(--white); font-family: var(--px); font-size: 20px; line-height: 1;
+    padding: 11px 12px 9px; border: 5px solid var(--bark); transform: rotate(4deg); }
+  .card .big { font-family: var(--card); font-weight: 600; font-size: 56px; line-height: 1.04; letter-spacing: 0.01em; text-transform: uppercase; margin-top: 16px; }
+  .card .big em { font-style: normal; color: var(--slate); }
+  .card .sub { font-family: var(--card); font-weight: 500; font-size: 24px; line-height: 1.3; letter-spacing: 0.04em; margin-top: 16px; color: var(--ink-muted); }
+  .card .url { font-family: var(--card); font-weight: 500; font-size: 30px; line-height: 1; margin-top: 18px; color: var(--white); background: var(--slate); padding: 14px 14px 12px; white-space: nowrap; display: inline-block; }
+
+  /* ---------- Description scroll (screen layer) ---------- */
+  .scroll { position: absolute; left: 90px; top: 1150px; width: 810px; height: 340px; background: var(--cream); color: var(--bark);
+    border: 6px solid var(--bark); box-shadow: 10px 10px 0 color-mix(in srgb, var(--bark) 45%, transparent), inset 0 0 0 6px color-mix(in srgb, var(--amber) 35%, var(--cream)); }
+  .scroll .rule { position: absolute; left: -6px; top: -50px; background: var(--bark); color: var(--amber); font-family: var(--px); font-size: 17px; line-height: 1; padding: 13px 16px 14px; white-space: nowrap; }
+  .scroll .it { position: absolute; left: 30px; top: 30px; width: 96px; height: 96px; background: var(--white); border: 5px solid var(--bark); }
+  .scroll .it canvas { position: absolute; left: 8px; top: 8px; }
+  .scroll .nm { position: absolute; left: 150px; top: 36px; right: 24px; font-family: var(--px); font-size: 21px; line-height: 1.4; }
+  .scroll .ct { position: absolute; left: 150px; top: 108px; font-family: var(--px); font-size: 14px; line-height: 1; color: var(--ink-muted); }
+  .scroll .bl { position: absolute; left: 30px; top: 150px; right: 30px; font-family: var(--vt); font-size: 64px; line-height: 0.92; color: var(--slate); }
+  .scroll .who { position: absolute; left: 30px; bottom: 26px; font-family: var(--px); font-size: 13px; line-height: 1; color: var(--ink-muted); }
+  .scroll .plus { position: absolute; right: 22px; bottom: 16px; font-family: var(--px); font-size: 20px; line-height: 1; color: var(--bark); background: var(--amber);
+    padding: 11px 12px 9px; border: 5px solid var(--bark); white-space: nowrap; transform-origin: 100% 100%; }
+
+  /* ---------- Arcade screens (title and Quest Complete) ---------- */
+  .arcade { position: absolute; inset: 0; overflow: hidden;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--slate) 45%, var(--bark)) 0%, color-mix(in srgb, var(--slate) 85%, var(--bark)) 52%, color-mix(in srgb, var(--slate) 65%, var(--red)) 68%); }
+  .arcade .star { position: absolute; background: var(--white); }
+  .arcade .floor { position: absolute; left: 0; top: 1300px; width: 1080px; height: 620px; background: color-mix(in srgb, var(--bark) 80%, var(--slate)); }
+  .arcade svg { position: absolute; left: 0; top: 1300px; }
+  .ptext { font-family: var(--px); line-height: 1; text-align: center; position: absolute; left: 0; width: 1080px; white-space: nowrap; }
+  .t-big { font-size: 104px; color: var(--cream); text-shadow: 8px 8px 0 var(--red), 16px 16px 0 var(--bark); }
+  .t-small { font-size: 20px; color: var(--cream); }
+  .t-amber { color: var(--amber); }
+  .badge { display: inline-block; background: var(--amber); color: var(--bark); padding: 14px 18px 12px; font-size: 26px; border: 6px solid var(--bark); }
+  .end-logo { position: absolute; left: 230px; width: 620px; height: 157px; background: var(--white);
+    -webkit-mask: url("../../brand/gearbook-full-length-bw.svg") center / contain no-repeat; mask: url("../../brand/gearbook-full-length-bw.svg") center / contain no-repeat; }
+  .vt { font-family: var(--vt); }
+  .wipe { position: absolute; left: 0; top: 0; pointer-events: none; }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<script src="../runtime.js"></script>
+<script src="../sound.js"></script>
+<script>
+  const { el, progress, outCubic, clamp } = Motion;
+  // Hidden layers need their faces requested before the first frame (motion-pieces.md, traps).
+  ["32px \"Press Start 2P\"", "32px VT323", "500 32px Outfit", "600 32px Outfit"].forEach((f) => document.fonts.load(f));
+
+  // ---------- Colours: every one from pieces.css, mixes of them, and the game red ----------
+  const css = getComputedStyle(document.documentElement);
+  const V = (n) => css.getPropertyValue(`--${n}`).trim();
+  const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+  const mix = (a, b, k) => { const A = hex(a), B = hex(b); return "#" + A.map((x, i) => Math.round(x + (B[i] - x) * k).toString(16).padStart(2, "0")).join(""); };
+  const C = { bark: V("bark"), sage: V("sage"), sageD: V("sage-dark"), cream: V("cream"), amber: V("amber"), slate: V("slate"), muted: V("ink-muted"), white: V("white"), red: "#d8483a" };
+  const PAL = {
+    grass: C.sage, grassL: mix(C.sage, C.cream, 0.16), grassD: C.sageD,
+    path: C.cream, pathE: mix(C.cream, C.bark, 0.2), pebble: mix(C.cream, C.muted, 0.45),
+    water: C.slate, waterL: mix(C.slate, C.white, 0.4), waterD: mix(C.slate, C.bark, 0.35), bank: mix(C.cream, C.bark, 0.35),
+    wood: mix(C.bark, C.amber, 0.38), woodL: mix(C.bark, C.amber, 0.55), woodD: C.bark,
+    leaf: mix(C.sageD, C.bark, 0.42), leafM: C.sageD, leafL: mix(C.sage, C.cream, 0.1), trunk: C.bark,
+    rock: mix(C.cream, C.muted, 0.5), rockD: C.muted, rockL: mix(C.cream, C.muted, 0.2),
+    stone: mix(C.cream, C.muted, 0.32), stoneD: mix(C.cream, C.muted, 0.7), stoneL: mix(C.cream, C.white, 0.5),
+    roof: C.slate, roofD: mix(C.slate, C.bark, 0.4),
+    mtn: mix(C.slate, C.bark, 0.25), mtnL: mix(C.slate, C.cream, 0.25), snow: C.white, sky: mix(C.slate, C.cream, 0.62),
+  };
+
+  // ---------- Pixel sprites: rows of characters, one per cell, drawn with fillRect ----------
+  function drawRows(ctx, rows, pal, x0, y0, cell) {
+    rows.forEach((r, j) => { for (let i = 0; i < r.length; i++) { const c = pal[r[i]]; if (c) { ctx.fillStyle = c; ctx.fillRect(x0 + i * cell, y0 + j * cell, cell, cell); } } });
+  }
+  function sprite(rows, pal, cell) {
+    const cv = document.createElement("canvas");
+    cv.width = rows[0].length * cell; cv.height = rows.length * cell;
+    drawRows(cv.getContext("2d"), rows, pal, 0, 0, cell);
+    return cv;
+  }
+  const o = C.bark;
+  const ITEM_ROWS = {
+    cam: [
+      "...oo....oo...",
+      "..oaao..oaao..",
+      ".oaaaao.aaaao.",
+      ".oaaaaoaaaaao.",
+      ".oaayaggayaao.",
+      "..oaaaggaaao..",
+      "...ooogggoo...",
+      "......gg......",
+      "...ttttgttt...",
+      "......gg......",
+      "......gg......",
+      ".....rrrr.....",
+      "....r....r....",
+      ".....rrrr.....",
+    ],
+    harness: [
+      "..............",
+      ".oooooooooooo.",
+      "ossssyyysssso.",
+      "osssoyyyossso.",
+      ".oooo.y.oooo..",
+      "..os..y..so...",
+      ".osso.y.osso..",
+      "os..soyos..so.",
+      "os...oyo...so.",
+      "os...soo...so.",
+      ".os.os..so.so.",
+      "..oso....oso..",
+      "...o......o...",
+      "..............",
+    ],
+    // La Sportiva TC Pro: a high-top trad shoe, toe to the right, laces up the tongue, a rubber rand.
+    shoes: [
+      "..............",
+      "..ooooo.......",
+      "..osssso......",
+      "..oyyyyo......",
+      "..osssso......",
+      "..oyyyysoo....",
+      "..osssssyyoo..",
+      ".odssssssssoo.",
+      ".odssssssssso.",
+      ".oddsssssssso.",
+      ".orrrrrrrrrrro",
+      "..oooooooooooo",
+      "..............",
+      "..............",
+    ],
+    // Mammut 9.5 Crag Dry: a coiled rope, twisted strands, an amber tie at the top and the two ends hanging.
+    rope: [
+      "....ooyyoo....",
+      "..oorRyyRroo..",
+      ".orRooyyooRro.",
+      "orRo......oRro",
+      "oRro......orRo",
+      "orRo......oRro",
+      "oRro......orRo",
+      ".orRo....oRro.",
+      ".oRrRooooRrRo.",
+      "..ooRrRrRrRo..",
+      "....oorroo....",
+      ".....orro.....",
+      ".....or.ro....",
+      ".....oo..oo...",
+    ],
+  };
+  const ITEM_PAL = {
+    cam: { o, a: C.amber, y: mix(C.amber, C.white, 0.5), g: mix(C.cream, C.muted, 0.4), t: C.muted, r: C.red },
+    harness: { o, s: C.slate, y: C.amber },
+    shoes: { o, s: C.sageD, d: mix(C.sageD, C.bark, 0.4), y: C.amber, r: mix(C.bark, C.muted, 0.35) },
+    rope: { o, r: C.red, R: mix(C.red, C.bark, 0.35), y: C.amber },
+  };
+  const CHECK = ["......k", ".....kk", "k...kk.", "kk.kk..", ".kkk...", "..k...."];
+  // The hero, seen from behind as he walks up the map (back of the beanie, the pack).
+  const HERO_TOP = [
+    "....kkkk....",
+    "..kkhhhhkk..",
+    ".khhhhhhhhk.",
+    ".khhHhhhHhk.",
+    ".kHHHHHHHHk.",
+    ".krrrrrrrrk.",
+    "..krrrrrrk..",
+    ".kjjppppjjk.",
+    "kjjpPPPPpjjk",
+    "kjjppppppjjk",
+    "kjjpPppPpjjk",
+    "kskppppppksk",
+    ".kkjjjjjjkk.",
+    "..kllllllk..",
+  ];
+  const LEGS = [
+    ["..kll..llk..", "..kll..llk..", "..kkk..kkk.."],
+    ["..kll..llk..", "..kkk..llk..", ".......kkk.."],
+    ["..kll..llk..", "..kll..llk..", "..kkk..kkk.."],
+    ["..kll..llk..", "..kll..kkk..", "..kkk......."],
+  ];
+  const HERO_PAL = { k: C.bark, h: C.amber, H: mix(C.amber, C.red, 0.45), r: mix(C.bark, C.amber, 0.25), j: C.slate, p: C.red, P: mix(C.red, C.bark, 0.35), s: mix(C.cream, C.amber, 0.4), l: mix(C.bark, C.slate, 0.3) };
+  const GHOST_PAL = { k: mix(C.slate, C.bark, 0.3), h: mix(C.white, C.slate, 0.2), H: mix(C.white, C.slate, 0.45), r: mix(C.white, C.slate, 0.45), j: mix(C.white, C.slate, 0.3), p: mix(C.white, C.slate, 0.55), P: mix(C.white, C.slate, 0.7), s: C.white, l: mix(C.white, C.slate, 0.5) };
+  const heroFrames = (pal) => LEGS.map((l) => sprite([...HERO_TOP, ...l], pal, 7));
+  // A pixel ellipse: the white ring on a gold base under the hero.
+  function ring(cell, rx, ry) {
+    const W = rx * 2 + 1, H = ry * 2 + 1, cv = document.createElement("canvas");
+    cv.width = W * cell; cv.height = H * cell;
+    const g = cv.getContext("2d");
+    for (let j = 0; j < H; j++) for (let i = 0; i < W; i++) {
+      const d = ((i - rx) / (rx + 0.5)) ** 2 + ((j - ry) / (ry + 0.5)) ** 2;
+      const d2 = ((i - rx) / (rx - 1.5)) ** 2 + ((j - ry) / (ry - 1.2)) ** 2;
+      if (d <= 1) { g.fillStyle = d2 <= 1 ? mix(C.amber, C.red, 0.15) : C.white; g.fillRect(i * cell, j * cell, cell, cell); }
+    }
+    return cv;
+  }
+  const TREE = [
+    "....a....",
+    "...aab...",
+    "...abd...",
+    "..aabbd..",
+    "...abd...",
+    "..aabbdd.",
+    ".aaabbbd.",
+    "..aabbdd.",
+    ".aaabbddd",
+    "aaabbbbdd",
+    "..ddddd..",
+    "....t....",
+    "....t....",
+  ];
+  const TREE_PAL = { a: PAL.leafL, b: PAL.leafM, d: PAL.leaf, t: PAL.trunk };
+  const ROCK = [".rrr..", "rLrrr.", "rrrrRr", ".rRRR."];
+  const ROCK_PAL = { r: PAL.rock, L: PAL.rockL, R: PAL.rockD };
+  const FLOWERS = [[".w.", "wyw", ".w."], [".r.", "ryr", ".r."], [".y.", "y.y", ".y."]];
+  const FLOWER_PAL = { w: C.white, y: C.amber, r: C.red };
+  const HEART = [".rr.rr.", "rrrrrrr", "rrrrrrr", ".rrrrr.", "..rrr..", "...r..."];
+  const FLAG = [
+    ["ffffffff..", "fffffffff.", "ffFFffffff", "fffffffff.", "ffffffff.."],
+    ["fffffff...", "ffffffffff", "ffFFfffff.", "ffffffffff", "fffffff..."],
+  ];
+
+  // ---------- The world: a tall top-down map, read bottom to top ----------
+  const WH = 4320, CELL = 6, HERO_Y = 1020;  // the hero's feet sit at screen y 1020
+  const RIVER = [1760, 1915], GATE_Y = 1990, CASTLE = { x0: 300, x1: 780, y0: 930, y1: 1250 };
+  // The path winds while the hero gathers gear, then runs straight over the bridge to the castle.
+  const amp = (y) => 170 * clamp((y - 2000) / 250);
+  const pathX = (y) => Math.round(540 + amp(y) * Math.sin((y - 1950) / 230));
+  function rng(seed) { let s = seed >>> 0; return () => { s = (s + 0x6d2b79f5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+  const hash = (i, j) => { let h = (i * 374761393 + j * 668265263) >>> 0; h = Math.imul(h ^ (h >>> 13), 1274126177) >>> 0; return ((h ^ (h >>> 16)) >>> 0) / 4294967296; };
+
+  function drawMap(cv) {
+    cv.width = 1080; cv.height = WH;
+    const g = cv.getContext("2d");
+    const cols = 1080 / CELL, rows = WH / CELL;
+    const cell = (i, j, c) => { g.fillStyle = c; g.fillRect(Math.floor(i) * CELL, Math.floor(j) * CELL, CELL, CELL); };
+    const F = (y) => Math.floor(y / CELL);
+    // Grass, with darker tufts and a few light flecks.
+    g.fillStyle = PAL.grass; g.fillRect(0, 0, 1080, WH);
+    for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) {
+      const h = hash(i, j);
+      if (h < 0.035) { cell(i, j, PAL.grassD); cell(i - 1, j + 1, PAL.grassD); cell(i + 1, j + 1, PAL.grassD); }
+      else if (h > 0.985) cell(i, j, PAL.grassL);
+    }
+    // Sky and mountains at the top, behind the castle.
+    g.fillStyle = PAL.sky; g.fillRect(0, 0, 1080, 960);
+    const peaks = [[60, 560, 300], [270, 470, 330], [520, 420, 360], [770, 480, 330], [1000, 540, 300]];
+    for (const [px, py, hw] of peaks) {
+      for (let j = F(py); j < F(1000); j++) {
+        const y = j * CELL, half = ((y - py) / (1000 - py)) * hw;
+        for (let i = F(px - half); i <= F(px + half); i++) {
+          const x = i * CELL, left = x < px;
+          let c = left ? PAL.mtnL : PAL.mtn;
+          if (y - py < 70 + 12 * Math.sin(x / 23)) c = left ? PAL.snow : mix(C.white, C.slate, 0.2);
+          cell(i, j, c);
+        }
+      }
+    }
+    // A band of grass at the mountains' feet.
+    for (let j = F(950); j < F(1010); j++) for (let i = 0; i < cols; i++) cell(i, j, hash(i, j) < 0.2 ? PAL.grassD : PAL.grass);
+    // The path, with a darker edge and a few pebbles.
+    for (let j = F(1180); j < rows; j++) {
+      const y = j * CELL + 3, cx = pathX(y);
+      for (let i = F(cx - 60); i <= F(cx + 60); i++) {
+        const d = Math.abs(i * CELL + 3 - cx);
+        if (d < 40) cell(i, j, hash(i, j) < 0.04 ? PAL.pebble : PAL.path);
+        else if (d < 47) cell(i, j, PAL.pathE);
+        else if (d < 53 && hash(j, i) < 0.5) cell(i, j, PAL.grassD);
+      }
+    }
+    // The river, with ripples and banks.
+    const rTop = (x) => RIVER[0] + 10 * Math.sin(x / 70), rBot = (x) => RIVER[1] + 10 * Math.sin(x / 90 + 1);
+    for (let i = 0; i < cols; i++) {
+      const x = i * CELL + 3;
+      for (let j = F(RIVER[0] - 30); j < F(RIVER[1] + 30); j++) {
+        const y = j * CELL + 3, a = rTop(x), b = rBot(x);
+        if (y >= a - 12 && y < a) cell(i, j, PAL.bank);
+        else if (y > b && y <= b + 12) cell(i, j, PAL.bank);
+        else if (y >= a && y <= b) {
+          let c = y < a + 12 ? PAL.waterD : PAL.water;
+          if (hash(Math.floor(i / 4), j) < 0.12 && y > a + 18 && y < b - 6) c = PAL.waterL;
+          cell(i, j, c);
+        }
+      }
+    }
+    // The bridge: planks, rails and posts.
+    for (let j = F(RIVER[0] - 18); j < F(RIVER[1] + 24); j++) {
+      for (let i = F(540 - 66); i < F(540 + 66); i++) {
+        const x = i * CELL + 3, d = Math.abs(x - 540);
+        let c = Math.floor(j / 3) % 2 ? PAL.wood : PAL.woodL;
+        if (j % 3 === 2) c = PAL.woodD;
+        if (d > 50) c = (j % 8 < 2) ? PAL.woodD : PAL.wood;
+        if (d > 60) c = PAL.woodD;
+        cell(i, j, c);
+      }
+    }
+    // The 100% gate's stone pillars, just south of the bridge.
+    for (const px of [540 - 82, 540 + 58]) {
+      for (let j = F(GATE_Y - 84); j < F(GATE_Y); j++) for (let i = F(px); i < F(px + 24); i++) {
+        const jj = j - F(GATE_Y - 84);
+        cell(i, j, jj < 2 ? PAL.stoneL : (jj % 4 === 3 ? PAL.stoneD : PAL.stone));
+      }
+    }
+    // The castle: brick blocks, crenels, cone roofs on the side towers, windows and a gate.
+    const { x0, x1, y0, y1 } = CASTLE;
+    const block = (ax, ay, bx, by) => { for (let j = F(ay); j < F(by); j++) for (let i = F(ax); i < F(bx); i++) {
+      const top = j - F(ay);
+      let c = j % 4 === 3 || (j % 8 < 4 ? i % 6 === 0 : i % 6 === 3) ? PAL.stoneD : PAL.stone;
+      if (top < 2) c = PAL.stoneL;
+      cell(i, j, c);
+    } };
+    const crenel = (ax, bx, ay) => { for (let x = ax; x < bx; x += 36) block(x, ay - 24, x + 18, ay); };
+    block(x0 + 60, y0 + 80, x1 - 60, y1); crenel(x0 + 60, x1 - 60, y0 + 80);
+    block(x0, y0, x0 + 96, y1);
+    block(x1 - 96, y0, x1, y1);
+    block(468, y0 - 108, 612, y0 + 90); crenel(468, 612, y0 - 108);
+    for (const cx of [x0 + 48, x1 - 48]) for (let k = 0; k < 14; k++) {
+      const yy = y0 - 6 - k * 6, half = 60 - k * 4;
+      for (let i = F(cx - half); i < F(cx + half); i++) cell(i, F(yy), i * CELL < cx ? PAL.roof : PAL.roofD);
+    }
+    const dark = (ax, ay, bx, by) => { for (let j = F(ay); j < F(by); j++) for (let i = F(ax); i < F(bx); i++) cell(i, j, C.bark); };
+    dark(x0 + 36, y0 + 60, x0 + 60, y0 + 102); dark(x1 - 60, y0 + 60, x1 - 36, y0 + 102);
+    dark(492, y0 - 54, 516, y0 - 12); dark(564, y0 - 54, 588, y0 - 12);
+    dark(498, y1 - 120, 582, y1); dark(510, y1 - 132, 570, y1 - 120);
+    for (let i = F(498); i < F(582); i++) for (let j = F(y1 - 108); j < F(y1); j += 3) cell(i, j, mix(C.bark, C.amber, 0.2));
+    for (let j = F(y0 - 230); j < F(y0 - 132); j++) cell(F(540), j, C.bark);
+    // Trees, rocks and flowers, kept off the path, the river, the gate and the castle.
+    const R = rng(7), things = [];
+    const clear = (x, y, pad) => Math.abs(x - pathX(y)) > pad && !(y > RIVER[0] - 70 && y < RIVER[1] + 60) &&
+      !(y < CASTLE.y1 + 40 && x > CASTLE.x0 - 50 && x < CASTLE.x1 + 50) && y > 1000 && !(Math.abs(y - GATE_Y) < 110 && Math.abs(x - 540) < 170);
+    for (let n = 0; n < 900 && things.length < 105; n++) {
+      const x = 30 + R() * 1020, y = 1010 + R() * (WH - 1010);
+      if (clear(x, y, 110)) things.push(["tree", x, y]);
+    }
+    for (let n = 0; n < 220; n++) { const x = R() * 1080, y = 1020 + R() * (WH - 1020); if (clear(x, y, 70)) things.push([R() < 0.25 ? "rock" : "flower", x, y]); }
+    for (let x = -10; x < 1090; x += 44 + R() * 20) if (x < CASTLE.x0 - 40 || x > CASTLE.x1 + 40) things.push(["tree", x, 1000 + R() * 30]);
+    things.sort((a, b) => a[2] - b[2]);
+    for (const [k, x, y] of things) {
+      const sx = Math.round(x / CELL) * CELL, sy = Math.round(y / CELL) * CELL;
+      if (k === "tree") drawRows(g, TREE, TREE_PAL, sx - 24, sy - 78, CELL);
+      else if (k === "rock") drawRows(g, ROCK, ROCK_PAL, sx - 18, sy - 24, CELL);
+      else drawRows(g, FLOWERS[Math.floor(hash(sx, sy) * 3)], FLOWER_PAL, sx - 6, sy - 6, CELL);
+    }
+  }
+
+  // ---------- The clock (reel seconds) ----------
+  const T_WIPE1 = 1.95, T_MAP = 2.25;
+  const LV = [3.1, 6.95, 13.95, 16.25, 18.55];               // level ups
+  const CARD = [[3.15, 4.95], [7.0, 8.45], [13.95, 15.4], [16.25, 17.85], [18.55, 20.25]];
+  const WALK = [[2.3, 3250, 3.1, 3000, "out"], [4.95, 3000, 6.95, 2400, "lin"], [8.45, 2400, 12.3, 2150, "lin"],
+                [15.4, 2150, 16.2, 1600, "inout"], [17.85, 1600, 18.5, 1272, "inout"]];
+  const PICK_Y = [2850, 2720, 2590, 2460];
+  const pickT = (y) => 4.95 + (3000 - y) / 300;
+  const D0 = 8.45, D1 = 8.65, DSTEP = 1.05, D_OUT = 13.92;  // the description scroll, one item per DSTEP; the last blurb holds 1.5 s longer
+  const GHOST = [8.7, 9.35, 9.5];                            // ghost dashes in, hits the gate, bounces
+  const GATE_OPEN = 14.05, T_WIPE2 = 20.2, T_END = 20.5;
+  const ease = { lin: (x) => x, out: outCubic, inout: (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2) };
+  function heroY(t) {
+    let y = WALK[0][1];
+    for (const [a, ya, b, yb, e] of WALK) { if (t >= b) y = yb; else if (t > a) return ya + (yb - ya) * ease[e]((t - a) / (b - a)); }
+    return y;
+  }
+  const moving = (t) => WALK.some(([a, , b]) => t > a && t < b);
+  const camY = (t) => Math.round(Math.max(0, Math.min(WH - 1920, heroY(t) - HERO_Y)));
+  // Pixel-game pops: stepped, not smooth.
+  const pop = (node, at, { dur = 0.24, from = 0.55, rot = 0 } = {}) => node.animate(
+    [{ transform: `scale(${from}) rotate(${rot}deg)`, opacity: 0 }, { transform: `scale(1.06) rotate(${rot}deg)`, opacity: 1, offset: 0.7 }, { transform: `scale(1) rotate(${rot}deg)`, opacity: 1 }],
+    { duration: dur * 1000, delay: at * 1000, easing: "steps(4, end)", fill: "both" });
+  const out = (node, at, { dur = 0.16, rot = 0 } = {}) => node.animate(
+    [{ opacity: 1, transform: `scale(1) rotate(${rot}deg)` }, { opacity: 0, transform: `scale(.85) rotate(${rot}deg)` }],
+    { duration: dur * 1000, delay: at * 1000, easing: "steps(3, end)", fill: "forwards" });
+
+  Motion.init({
+    duration: 23.4,
+    hold: 1.0,
+    looks: ["main"],
+    // Every word can be changed with ?props={...}. The blurbs are sample copy in a pro's voice.
+    defaults: {
+      title: ["CATALOG", "QUEST"],
+      presents: "A GEARBOOK GAME",
+      mode: "100% RUN",
+      rule: "EVERY ITEM NEEDS A DESCRIPTION",
+      player: "P1 SAM APPLESEED",
+      sample: "(sample pro)",
+      start: "PRESS START",
+      hud: "CATALOG QUEST",
+      descLabel: "DESCRIPTIONS",
+      catalog: "TRAD CLIMBING",
+      items: [
+        { key: "cam", short: "CAMALOT C4", name: "Black Diamond Camalot C4", cat: "TRAD CLIMBING", blurb: "The first cam on my rack." },
+        { key: "harness", short: "SOLUTION HARNESS", name: "Black Diamond Solution Harness", cat: "TRAD CLIMBING", blurb: "All-day comfort on long routes." },
+        { key: "shoes", short: "TC PRO", name: "La Sportiva TC Pro", cat: "TRAD CLIMBING", blurb: "Edges like nothing else on granite." },
+        { key: "rope", short: "9.5 CRAG DRY", name: "Mammut 9.5 Crag Dry Rope", cat: "TRAD CLIMBING", blurb: "Dry treated. Shrugs off a wet day." },
+      ],
+      cards: [
+        { tag: "WORLD 1-1", big: "Create your<br>catalog", sub: "TRAD CLIMBING.<br>MAKE UP TO 5." },
+        { tag: "WORLD 1-2", big: "Add real<br>products", sub: "THE GEAR YOU<br>ACTUALLY USE." },
+        { tag: "100% RULE", big: "Every product <em>described</em>", sub: "DESCRIPTIONS 4/4. THE GATE OPENS." },
+        { tag: "WORLD 1-4", big: "Share your page", sub: "NO WEBSITE. NO CODE.", url: "gearbook.shop/catalog/sam-appleseed" },
+        { tag: "THE CASTLE", big: "First sale.<br><em>You get paid.</em>", sub: "WHEN YOUR CLIENTS BUY YOUR PICKS." },
+      ],
+      scrollRule: "WRITE EACH DESCRIPTION",
+      who: "SAM APPLESEED, PRO (SAMPLE)",
+      plusOne: "+1 DESCRIPTION",
+      ghost: "GHOST",
+      dq: "DQ: MISSING DESCRIPTIONS",
+      gate: "100%",
+      shareSign: "MY PAGE",
+      complete: ["QUEST", "COMPLETE"],
+      completeSub: "100% CATALOG",
+      endLine: "Free to join.",
+      endLink: "Link in bio.",
+      footnote: "Sample pro: Sam Appleseed",
+    },
+    build(stage, p) {
+      // ===================== The map =====================
+      const world = el("div", { class: "world", style: { height: WH + "px" } }, stage);
+      drawMap(el("canvas", {}, world));
+      const W = (cls, x, y, html, parent = world) => { const n = el("div", { class: cls, style: { left: x + "px", top: y + "px" } }, parent); if (html !== undefined) n.innerHTML = html; return n; };
+      const grow = (n, at) => { n.style.transformOrigin = "50% 100%"; n.animate([{ transform: "translateX(-50%) scaleY(0)" }, { transform: "translateX(-50%) scaleY(1)" }], { duration: 220, delay: at * 1000, easing: "steps(4, end)", fill: "both" }); };
+
+      // LVL 1: the catalog's signpost pops up beside the hero, by the path.
+      grow(W("sign", 200, 3088, `<div class="board">${p.catalog}</div><div class="post"></div>`), LV[0] + 0.1);
+
+      // LVL 2: item pickups lying on the path, each with its real name as it's picked up.
+      const items = p.items.map((it, k) => {
+        const y = PICK_Y[k], x = pathX(y), at = pickT(y) - 0.04;
+        const node = sprite(ITEM_ROWS[it.key], ITEM_PAL[it.key], 5);
+        Object.assign(node.style, { position: "absolute", left: x - 35 + "px", top: y - 120 + "px" });
+        world.appendChild(node);
+        const lab = W("pick-label", Math.max(290, Math.min(700, x + (x < 540 ? 230 : -230))), y - 90, `<b>+</b> ${it.short}`);
+        lab.style.zIndex = 5;
+        lab.animate([{ opacity: 0, transform: "translate(-50%, 18px)" }, { opacity: 1, transform: "translate(-50%, 0)", offset: 0.15 }, { opacity: 1, transform: "translate(-50%, -24px)", offset: 0.82 }, { opacity: 0, transform: "translate(-50%, -30px)" }],
+          { duration: 620, delay: at * 1000, easing: "steps(8, end)", fill: "both" });
+        return { node, x, y, at };
+      });
+
+      // The 100% gate at the bridge: a sign, and bars that lift once every product is described.
+      W("gate-sign", 540, GATE_Y - 128, p.gate);
+      const bars = W("bars", 540 - 58, GATE_Y - 84);
+      Object.assign(bars.style, { width: "116px", height: "84px" });
+      el("i", {}, bars).animate([{ transform: "translateY(0)" }, { transform: "translateY(-100%)" }], { duration: 400, delay: GATE_OPEN * 1000, easing: "steps(7, end)", fill: "both" });
+
+      // The ghost that skipped descriptions: dashes past, hits the gate, is DQ'd and fades.
+      const ghostF = heroFrames(GHOST_PAL);
+      const ghost = el("div", { class: "abs", style: { opacity: 0.72 } }, world);
+      ghostF.forEach((f) => ghost.appendChild(f));
+      const gtag = W("ghost-tag", 0, 0, p.ghost);
+      const dq = W("dq", 540, GATE_Y - 236, p.dq);
+      pop(dq, GHOST[2], { rot: -2 });
+      out(dq, 11.7, { rot: -2 });
+      const ghostY = (t) => t < GHOST[1] ? 2540 + (GATE_Y + 10 - 2540) * progress(t, GHOST[0], GHOST[1] - GHOST[0]) : GATE_Y + 10 + 46 * outCubic(progress(t, GHOST[1], GHOST[2] - GHOST[1]));
+
+      // LVL 4: the page's sign, with hearts rising from it.
+      grow(W("sign", 770, 1560, `<div class="board">${p.shareSign}</div><div class="post"></div>`), LV[3] + 0.1);
+      [0, 1, 2].forEach((k) => {
+        const h = sprite(HEART, { r: C.red }, 6);
+        Object.assign(h.style, { position: "absolute", left: 708 + k * 48 + "px", top: 1500 + "px" });
+        world.appendChild(h);
+        h.animate([{ opacity: 0, transform: "translateY(0)" }, { opacity: 1, transform: "translateY(-30px)", offset: 0.2 }, { opacity: 1, transform: "translateY(-110px)", offset: 0.8 }, { opacity: 0, transform: "translateY(-130px)" }],
+          { duration: 1100, delay: (LV[3] + 0.35 + k * 0.22) * 1000, easing: "steps(9, end)", fill: "both" });
+      });
+
+      // The castle's flag, two frames.
+      const flag = el("div", { class: "abs", style: { left: 546 + "px", top: CASTLE.y0 - 230 + "px" } }, world);
+      const flags = FLAG.map((r) => { const f = sprite(r, { f: C.red, F: mix(C.red, C.white, 0.4) }, 6); f.style.position = "absolute"; flag.appendChild(f); return f; });
+
+      // The hero on his ring.
+      const ringC = ring(6, 8, 3);
+      ringC.style.position = "absolute";
+      world.appendChild(ringC);
+      const hero = el("div", { class: "abs" }, world);
+      const heroF = heroFrames(HERO_PAL);
+      heroF.forEach((f) => hero.appendChild(f));
+
+      // ===================== Screen layer =====================
+      const screen = el("div", { class: "layer" }, stage);
+
+      // HUD: title, level, the five-segment XP bar, the bag and the description counter.
+      const hud = el("div", { class: "hud" }, screen);
+      el("div", { class: "ttl", text: p.hud }, hud);
+      const lvl = el("div", { class: "lvlv" }, hud);
+      const xp = el("div", { class: "xp" }, hud);
+      const segs = [0, 1, 2, 3, 4].map(() => el("i", {}, el("div", { class: "seg" }, xp)));
+      segs.forEach((s, k) => s.animate([{ width: "0%" }, { width: "100%" }], { duration: 300, delay: (LV[k] + 0.05) * 1000, easing: "steps(6, end)", fill: "both" }));
+      const slots = el("div", { class: "slots" }, hud);
+      const slotEls = p.items.map((it) => {
+        const s = el("div", { class: "slot" }, slots);
+        const sp = sprite(ITEM_ROWS[it.key], ITEM_PAL[it.key], 5); s.appendChild(sp);
+        const ok = el("div", { class: "ok" }, s); ok.appendChild(sprite(CHECK, { k: C.bark }, 3));
+        return { s, sp, ok };
+      });
+      const desc = el("div", { class: "desc" }, hud);
+      desc.innerHTML = `<small>${p.descLabel}</small><b>0/4</b>`;
+      const descB = desc.querySelector("b");
+      // Each segment flashes white as it fills, the level-up blink.
+      segs.forEach((s, k) => Motion.tick((t) => { const u = t - LV[k] - 0.35; s.style.filter = u > 0 && u < 0.36 && Math.floor(u / 0.09) % 2 === 0 ? "brightness(2.2)" : "none"; }));
+      // Flying copies of each item, from the path into its bag slot.
+      const flyers = p.items.map((it) => { const f = sprite(ITEM_ROWS[it.key], ITEM_PAL[it.key], 5); Object.assign(f.style, { position: "absolute", visibility: "hidden" }); screen.appendChild(f); return f; });
+      const slotXY = (k) => ({ x: 90 + k * 88 + 5, y: 356 + 5 });
+
+      // Note cards beside the hero, or under him on the straight to the castle.
+      const cardPos = [
+        { left: pathX(3000) + 90, top: 640, rot: 3 },
+        { left: pathX(2400) - 530, top: 680, rot: -3 },
+        { left: 150, top: 1130, rot: 2, w: 780 },
+        { left: 150, top: 1130, rot: -2, w: 780 },
+        { left: 150, top: 1130, rot: 2, w: 780 },
+      ];
+      p.cards.forEach((c, k) => {
+        const pos = cardPos[k];
+        const n = el("div", { class: "card", style: { left: pos.left + "px", top: pos.top + "px", width: (pos.w || 440) + "px" } }, screen);
+        n.innerHTML = `<span class="ctag">${c.tag}</span><span class="lv">LVL ${k + 1}</span><div class="big">${c.big}</div>` +
+          (c.url ? `<div class="url">${c.url}</div>` : "") + `<div class="sub">${c.sub}</div>`;
+        pop(n, CARD[k][0], { rot: pos.rot, dur: 0.26 });
+        if (k < 4) out(n, CARD[k][1], { rot: pos.rot });
+      });
+
+      // The description scroll: each item counts once its description is written.
+      const sc = el("div", { class: "scroll" }, screen);
+      sc.innerHTML = `<div class="rule">${p.scrollRule}</div><div class="it"></div><div class="nm"></div><div class="ct"></div><div class="bl"></div><div class="who">${p.who}</div><div class="plus">${p.plusOne}</div>`;
+      const scIt = sc.querySelector(".it"), scNm = sc.querySelector(".nm"), scCt = sc.querySelector(".ct"), scBl = sc.querySelector(".bl"), scPlus = sc.querySelector(".plus");
+      const scSprites = p.items.map((it) => { const s = sprite(ITEM_ROWS[it.key], ITEM_PAL[it.key], 5); scIt.appendChild(s); return s; });
+      pop(sc, D0, { dur: 0.24 });
+      out(sc, D_OUT);
+
+      // Confetti at the castle: pixel squares on the clock.
+      const conf = el("div", { class: "layer" }, screen);
+      const CR = rng(11), CONF = [];
+      for (let k = 0; k < 64; k++) {
+        const c = [C.amber, C.red, C.white, C.slate, C.cream][k % 5];
+        const n = el("div", { class: "abs", style: { width: (CR() < 0.5 ? 12 : 18) + "px", height: "12px", background: c } }, conf);
+        CONF.push({ n, x: 540 + (CR() - 0.5) * 120, y: 820, vx: (CR() - 0.5) * 1300, vy: -700 - CR() * 900, d: CR() * 0.25 });
+      }
+
+      // ===================== Arcade screens =====================
+      function arcade(parent) {
+        const a = el("div", { class: "arcade" }, parent);
+        const SR = rng(3), stars = [];
+        for (let k = 0; k < 80; k++) {
+          const s = el("div", { class: "star", style: { left: Math.round(SR() * 178) * 6 + "px", top: Math.round(SR() * 210) * 6 + "px" } }, a);
+          const big = SR() < 0.25; s.style.width = s.style.height = big ? "12px" : "6px"; if (SR() < 0.3) s.style.background = C.amber; stars.push({ s, ph: SR() * 6 });
+        }
+        // A banded pixel sun sitting on the horizon.
+        const sun = document.createElement("canvas"); sun.width = 460; sun.height = 230; a.appendChild(sun);
+        Object.assign(sun.style, { position: "absolute", left: "310px", top: "1070px" });
+        const sg = sun.getContext("2d");
+        for (let j = 0; j < 23; j++) for (let i = 0; i < 46; i++) {
+          const dx = (i + 0.5 - 23) / 23, dy = (j + 0.5 - 23) / 23;
+          if (dx * dx + dy * dy > 1 || (j > 12 && j % 3 === 0)) continue;
+          sg.fillStyle = mix(C.amber, C.red, j / 26); sg.fillRect(i * 10, j * 10, 10, 10);
+        }
+        el("div", { class: "floor" }, a);
+        const NS = "http://www.w3.org/2000/svg", set = (n, at) => Object.entries(at).forEach(([q, v]) => n.setAttribute(q, v));
+        const svg = document.createElementNS(NS, "svg"); set(svg, { width: 1080, height: 620, "shape-rendering": "crispEdges" }); a.appendChild(svg);
+        const lineC = mix(C.amber, C.red, 0.3);
+        for (let k = -9; k <= 9; k++) { const l = document.createElementNS(NS, "line"); set(l, { x1: 540 + k * 44, y1: 0, x2: 540 + k * 300, y2: 620, stroke: lineC, "stroke-width": 4 }); svg.appendChild(l); }
+        const hl = []; for (let k = 0; k < 9; k++) { const l = document.createElementNS(NS, "rect"); set(l, { x: 0, width: 1080, height: 4, fill: lineC }); svg.appendChild(l); hl.push(l); }
+        const top = document.createElementNS(NS, "rect"); set(top, { x: 0, y: 0, width: 1080, height: 6, fill: C.amber }); svg.appendChild(top);
+        Motion.tick((t) => {
+          const ph = (t * 0.9) % 1;
+          hl.forEach((l, k) => { const u = (k + ph) / 9; l.setAttribute("y", Math.round((620 * u * u) / 4) * 4); });
+          stars.forEach(({ s, ph: q }) => { s.style.opacity = Math.floor(t * 3 + q) % 4 === 0 ? 0.35 : 1; });
+        });
+        return a;
+      }
+      const T = (parent, cls, y, html) => { const n = el("div", { class: "ptext " + cls, style: { top: y + "px" } }, parent); n.innerHTML = html; return n; };
+      const drop = (n, at) => n.animate([{ opacity: 0, transform: "translateY(-30px)" }, { opacity: 1, transform: "none" }], { duration: 240, delay: at * 1000, easing: "steps(4, end)", fill: "both" });
+
+      // Title card.
+      const title = el("div", { class: "layer" }, stage);
+      arcade(title);
+      const tP = T(title, "t-small t-amber", 420, p.presents);
+      const t1 = T(title, "t-big", 520, p.title[0]);
+      const t2 = T(title, "t-big", 660, p.title[1]);
+      const tM = T(title, "", 850, `<span class="badge">${p.mode}</span>`);
+      const tR = T(title, "t-small", 968, p.rule);
+      const tPl = T(title, "t-small", 1390, `${p.player} <span class="vt" style="font-size:34px">${p.sample}</span>`);
+      const tS = T(title, "t-amber", 1460, p.start); tS.style.fontSize = "34px";
+      [[tP, 0.05], [t1, 0.15], [t2, 0.3], [tM, 0.55], [tR, 0.7], [tPl, 0.85]].forEach(([n, at]) => drop(n, at));
+      Motion.tick((t) => {
+        title.style.visibility = t < T_MAP ? "visible" : "hidden";
+        // PRESS START blinks slowly, then fast once it's "pressed".
+        tS.style.visibility = t < 0.95 || t >= T_MAP ? "hidden" : t > 1.75 ? (Math.floor((t - 1.75) / 0.06) % 2 ? "hidden" : "visible") : (Math.floor((t - 0.95) / 0.4) % 2 ? "hidden" : "visible");
+      });
+
+      // Quest Complete end screen.
+      const endS = el("div", { class: "layer" }, stage);
+      arcade(endS);
+      const e1 = T(endS, "t-big", 330, p.complete[0]);
+      const e2 = T(endS, "t-big", 460, p.complete[1]);
+      [e1, e2].forEach((n) => (n.style.fontSize = "88px"));
+      const eS = T(endS, "", 610, `<span class="badge">${p.completeSub}</span>`);
+      const logo = el("div", { class: "end-logo", style: { top: "722px" } }, endS);
+      const eL = T(endS, "t-small", 936, `${p.endLine}<br><span class="t-amber">${p.endLink}</span>`);
+      eL.style.fontSize = "34px"; eL.style.lineHeight = "1.6";
+      const eF = T(endS, "vt", 1460, p.footnote); Object.assign(eF.style, { fontSize: "34px", color: mix(C.cream, C.slate, 0.35) });
+      [[e1, 0.1], [e2, 0.25], [eS, 0.5], [logo, 0.7], [eL, 0.95], [eF, 1.1]].forEach(([n, at]) => drop(n, T_END + at));
+      Motion.tick((t) => { endS.style.visibility = t >= T_END ? "visible" : "hidden"; });
+
+      // Block wipes between the screens.
+      const wipe = el("canvas", { class: "wipe", width: 1080, height: 1920 }, stage);
+      const wg = wipe.getContext("2d");
+      function wipeAt(t) {
+        let cov = 0;
+        for (const s of [T_WIPE1, T_WIPE2]) { const d = s + 0.3; if (t >= s && t < d + 0.3) cov = t < d ? (t - s) / 0.3 : 1 - (t - d) / 0.3; }
+        wg.clearRect(0, 0, 1080, 1920);
+        if (cov <= 0) return;
+        wg.fillStyle = C.bark;
+        for (let j = 0; j < 32; j++) for (let i = 0; i < 18; i++) if (hash(i, j + 50) < cov) wg.fillRect(i * 60, j * 60, 60, 60);
+      }
+
+      // ===================== The frame =====================
+      Motion.tick((t) => {
+        const cam = camY(t), hy = heroY(t), hx = pathX(hy);
+        world.style.transform = `translateY(${-cam}px)`;
+        // Hero, walking when he moves.
+        const fr = moving(t) ? Math.floor(t * 9) % 4 : 0;
+        heroF.forEach((f, k) => (f.style.display = k === fr ? "block" : "none"));
+        const bob = moving(t) && fr % 2 ? -6 : 0;
+        hero.style.left = Math.round(hx - 42) + "px"; hero.style.top = Math.round(hy - 112 + bob) + "px";
+        ringC.style.left = Math.round(hx - 51) + "px"; ringC.style.top = Math.round(hy - 24) + "px";
+        // Ghost.
+        const gOn = t >= GHOST[0] && t < 11.0 && !(t > 10.3 && Math.floor(t / 0.08) % 2);
+        const gy = ghostY(t), gx = pathX(gy);
+        ghost.style.visibility = gtag.style.visibility = gOn ? "visible" : "hidden";
+        const gfr = t < GHOST[1] ? Math.floor(t * 14) % 4 : 0;
+        ghostF.forEach((f, k) => (f.style.display = k === gfr ? "block" : "none"));
+        ghost.style.left = Math.round(gx - 42) + "px"; ghost.style.top = Math.round(gy - 112) + "px";
+        gtag.style.left = Math.round(gx) + "px"; gtag.style.top = Math.round(gy - 148) + "px";
+        // Items: on the path until picked, then they fly into the bag.
+        items.forEach((it, k) => {
+          it.node.style.visibility = t < it.at ? "visible" : "hidden";
+          it.node.style.transform = Math.floor(t * 3 + k) % 2 ? "translateY(-6px)" : "none";
+          const u = progress(t, it.at, 0.32), f = flyers[k];
+          f.style.visibility = t >= it.at && u < 1 ? "visible" : "hidden";
+          const sx = it.x - 35, sy = it.y - 120 - camY(it.at), d = slotXY(k);
+          f.style.left = Math.round(sx + (d.x - sx) * outCubic(u)) + "px"; f.style.top = Math.round(sy + (d.y - sy) * outCubic(u)) + "px";
+          slotEls[k].sp.style.visibility = u >= 1 ? "visible" : "hidden";
+        });
+        // HUD numbers.
+        lvl.textContent = `LVL ${LV.filter((a) => t >= a + 0.05).length}/5`;
+        const done = [0, 1, 2, 3].filter((i) => t >= D1 + i * DSTEP + 0.5).length;
+        descB.textContent = `${done}/4`;
+        desc.classList.toggle("full", done === 4);
+        slotEls.forEach((s, i) => { s.s.classList.toggle("done", i < done); s.ok.style.visibility = i < done ? "visible" : "hidden"; });
+        // Description scroll: which item, and how much of its blurb is written.
+        const di = Math.max(0, Math.min(3, Math.floor((t - D1) / DSTEP)));
+        const it = p.items[di], u = t - D1 - di * DSTEP;
+        scSprites.forEach((s, k) => (s.style.display = k === di ? "block" : "none"));
+        scNm.textContent = it.name.toUpperCase(); scCt.textContent = it.cat;
+        const n = Math.floor(clamp((u - 0.08) / 0.34) * it.blurb.length + 1e-6);
+        scBl.textContent = t < D1 ? "" : "“" + it.blurb.slice(0, n) + (n >= it.blurb.length ? "”" : (Math.floor(t / 0.1) % 2 ? "_" : ""));
+        scPlus.style.visibility = t >= D1 && u >= 0.5 ? "visible" : "hidden";
+        scPlus.style.transform = u < 0.56 ? "scale(1.25)" : "none";
+        // Flag waves; confetti falls.
+        const ff = Math.floor(t * 4) % 2; flags.forEach((f, k) => (f.style.display = k === ff ? "block" : "none"));
+        const ct = t - LV[4];
+        conf.style.visibility = ct > 0 && t < T_WIPE2 + 0.3 ? "visible" : "hidden";
+        if (ct > 0) CONF.forEach((c) => { const s = Math.max(0, ct - c.d); c.n.style.left = Math.round((c.x + c.vx * s * 0.6 + Math.sin(s * 6 + c.d * 20) * 20) / 6) * 6 + "px"; c.n.style.top = Math.round((c.y + c.vy * s + 1400 * s * s) / 6) * 6 + "px"; });
+        wipeAt(t);
+      });
+
+      // ---------- Sound: on hold, a few cues only at the moments that matter ----------
+      Sound.cue(1.8, "thump", { gain: 0.7 });                                      // PRESS START
+      LV.slice(0, 4).forEach((a) => Sound.cue(a + 0.05, "tick", { gain: 0.6 }));  // level ups
+      Sound.cue(LV[4], "chime", { gain: 1 });                                      // the castle: first sale
+      Sound.cue(T_WIPE2, "whoosh", { gain: 0.5 });                                 // into Quest Complete
+    },
+  });
+</script>
+</body>
+</html>

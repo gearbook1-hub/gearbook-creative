@@ -28,7 +28,20 @@ Luke's rule from M28 (2026-10-18): a mockup of GearBook must show what GearBook 
 - The cursor glides in, reaches each target just before its click (ease in and out, about 0.7 s per move), dips about 18% on the click, and an amber ring opens from the tip. It stays on screen between clicks.
 - M28 Build's script, for reuse: open the main catalog, star a product as Top Pick, tap "+ Add Product", type a search ("camalot c4") into the sheet, pick the result, and it lands at the top of the list with an amber outline (3 of 8 becomes 4 of 8). 9.5 s; the other looks stay 6 s (`duration` can depend on `Motion.look`).
 
+## Sound
+- **On hold since 2026-10-19:** Luke: "the sounds aren't great and will need to be redone". `sound.js` has `ENABLED` off: pieces keep their cues, but there's no Sound button and renders come out silent (`?sound=1` on a piece's URL auditions the kit). Redo the kit before building on it, and have a person listen before anything ships.
+- `public/pieces/sound.js` gives every piece a small sound kit: `Sound.cue(seconds, "tap" | "tick" | "whoosh" | "swoosh" | "thump" | "chime" | "paper" | "ding", { gain })`. The page shows a **Sound** button (and **Full screen** when opened on its own); `npm run render` mixes the same cues into the MP4. Added 2026-10-19 for R03 to R09.
+- Rules, because Matt was critical of the signup reel's busy effects: about 5 to 10 cues a reel with silence between; never one per keystroke, per item in a fast run or per bubble in a pile-up; no rising pitched sequences or cartoon sounds; `chime` once at most, on the payoff; `ding` only for a notification, three at most; the end card gets one soft landing or nothing.
+- Everything is synthesised (deterministic, so renders match) except `ding`, which is M26's real `ding.wav`. Phone speakers play nothing below about 150 Hz, so a low sound needs a higher knock too (the `thump` has one at 165 Hz).
+- Levels (2026-10-19, gain 1): thump peaks about -9 dBFS, ding -10, whoosh and swoosh -13, tap -14, chime -15, tick -17, paper -18. Music stays out: the trending sound goes on in the Instagram app.
+
+## Facts confirmed for reels
+- **Partners:** the nine in gearbook `lib/partners.ts` (`AFFILIATE_PARTNERS`) are current: Backcountry, Suunto, Osprey, West Marine, Adorama, Scuba.com, SunnySports, Kailas, Gregory. Luke confirmed Backcountry, Scuba.com and West Marine on 2026-10-19.
+- **Partner logos:** Luke wants them, matched to each sport, for colour (R07, 2026-10-19). Use the real files from gearbook `public/logos/`, copied into the piece's folder, on white chips; never redraw or recolour them. Backcountry's file is only 125 px wide and goes soft when large. Never draw a retailer's website.
+- **Public catalog URL:** `www.gearbook.shop/catalog/<member slug>` for a member's default catalog (gearbook `app/catalog/[slug]`, `catalogPath`).
+
 ## Technical traps (each one broke a render)
+- **Text in a layer that starts hidden can render blank in stills.** `document.fonts.ready` only waits for faces already requested, so a beat that's `display: none` at load can paint without its font. Call `document.fonts.load()` for each face the piece uses before the first frame (R07 does this). Found 2026-10-19.
 - **Easing in the `animate()` options bends the whole timeline.** With multi-keyframe animations (a tab marker that moves at 2 s and again at 4 s), put `easing` on each keyframe instead; otherwise every offset lands at the wrong time. M28's tab marker sat on the wrong tab until this was fixed.
 - **SVG elements have no `offsetLeft` or `offsetTop`.** To aim a cursor at an icon, measure its parent (or the row) and offset from that. M28's cursor clicked empty space until this was fixed.
 - **Measure positions through the `offsetParent` chain**, not `getBoundingClientRect()`: layout ignores transforms, so the numbers stay right while the phone pops in and scales. Measure inside `Motion.tick`, after fonts have loaded.

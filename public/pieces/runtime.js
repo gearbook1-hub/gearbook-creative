@@ -25,10 +25,17 @@
     return Object.assign({}, defaults, given);
   }
 
+  // Scale the 1080x1920 stage to the window and centre it, so a piece opened on its own (or full
+  // screen) sits in the middle. At 1080x1920 (renders, stills) this is scale 1 at 0,0.
   function fit(stage) {
     const s = Math.min(window.innerWidth / 1080, window.innerHeight / 1920);
-    stage.style.transform = `scale(${s})`;
+    const x = (window.innerWidth - 1080 * s) / 2, y = (window.innerHeight - 1920 * s) / 2;
+    stage.style.transform = `translate(${x}px, ${y}px) scale(${s})`;
   }
+
+  // The live loop's start time, and who wants to know when it wraps (sound.js restarts its track).
+  let loopStart = 0;
+  let onLoop = null;
 
   const Motion = {
     look: q.get("look"),
@@ -38,6 +45,9 @@
     checkRail: true,
     ready: null,
     get duration() { return duration; },
+    get hold() { return hold; },
+    onLoop(fn) { onLoop = fn; },
+    restart() { loopStart = performance.now(); },
     tick(fn) { ticks.push(fn); },
     seek(t) {
       for (const a of document.getAnimations()) {
@@ -98,9 +108,14 @@
         else if (t !== null) Motion.seek(Number(t));
         else {
           const loop = duration + hold;
-          const start = performance.now();
+          loopStart = performance.now();
+          let count = 0;
           const frame = (now) => {
-            Motion.seek(Math.min(((now - start) / 1000) % loop, duration));
+            const elapsed = (now - loopStart) / 1000;
+            const n = Math.floor(elapsed / loop);
+            if (n > count && onLoop) onLoop();
+            count = n;
+            Motion.seek(Math.min(elapsed % loop, duration));
             requestAnimationFrame(frame);
           };
           requestAnimationFrame(frame);
