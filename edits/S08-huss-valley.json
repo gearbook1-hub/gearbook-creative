@@ -11,6 +11,7 @@
     { "clip": "IMG_9652", "in": 3.25, "out": 3.85, "beat": "Forest", "why": "The bigger leap of the two forest takes." },
     { "clip": "IMG_9654", "in": 5.05, "out": 6.6, "beat": "River rocks", "why": "Best of three river takes: widest framing and the arms-up hop." },
     { "clip": "IMG_9656", "in": 5.15, "out": 5.85, "beat": "Canyon road", "why": "Full sprint in profile against the rock. Starts after the car has gone." },
+    { "clip": "IMG_9657", "in": 0.35, "out": 1.75, "beat": "Town", "why": "Matt asked for it back: the town beat between the canyon and the street. Window chosen between the passers-by who fill the foreground." },
     { "clip": "IMG_9659", "in": 0.25, "out": 1.45, "beat": "Street", "why": "Only take. Runs at the camera, so it changes the rhythm." },
     { "clip": "IMG_9660", "in": 0.25, "out": 1.3, "beat": "Park, hurdles the bench", "why": "Best of three park takes: closest, sun rays, clean hurdle." },
     { "clip": "IMG_9665", "in": 3.7, "out": 5.4, "beat": "Through the front door", "why": "Enters from the right like every run, cut the moment he is through the door." },
@@ -21,7 +22,6 @@
     { "clip": "IMG_9651", "why": "Same forest frame as 9652 with a smaller stride." },
     { "clip": "IMG_9653", "why": "Same river crossing as 9654, tighter and less dynamic." },
     { "clip": "IMG_9655", "why": "Same river frame as 9654, third repeat." },
-    { "clip": "IMG_9657", "why": "Pedestrian street, the runner isn't in it." },
     { "clip": "IMG_9661", "why": "Same benches as 9660, runner tiny in a wide frame." },
     { "clip": "IMG_9662", "why": "Same benches as 9660, third hurdle in a row." }
   ]

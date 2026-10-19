@@ -26,7 +26,7 @@ Matt and Luke film; Claude cuts. They give the clips and the story in a line ("I
 - **Jump cut inside a locked-off shot** to skip dull middles (rope handling, walking to a door). Same frame, time skip, reads as intentional.
 - **The landing gets room.** The payoff (arriving at the desk, the site on screen, the lean back) is the longest shot after the setup: 2.5 to 3 s.
 - **Cut before a screen flicker** or a page still loading; start when GearBook is clearly on screen.
-- **Drop clips the subject isn't in**, and say so in case they're meant to be there.
+- **A clip without the subject can still be a place beat.** Say so if you can't find them in it; if Matt wants it, keep it as a short establishing shot (about 1.5 s) and pick a window where nothing blocks the frame. (Huss valley: the town clip, 9657, went back in between the canyon and the street.)
 - **Vibe reel length: about 15 to 20 s** before graphics, so it loops. Leave room for the end card.
 - **No sound in the cut.** The trending sound goes on in the Instagram app; motion graphics get laid over after approval.
 - **Flag safety.** Climbing, avalanche and diving moments are played straight (see `/identity`). If the joke looks unsafe (dropping a belay), say so and suggest how to show it was safe.
