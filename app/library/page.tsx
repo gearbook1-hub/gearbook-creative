@@ -53,11 +53,13 @@ export default function Library() {
           </div>
         </Section>
 
-        {[piece("M26")!, piece("M27")!].map((p) => {
+        {[piece("M26")!, piece("M27")!, piece("M28")!].map((p) => {
           const idea = ideas.find((i) => i.id === p.builtFrom);
           const picked = new Set(idea?.pickedLetters ?? []);
+          // A piece Luke asked for directly has no idea or source behind it.
+          const made = idea ? `built for ${source(idea.sourceId)?.title ?? ""}` : "overlay, asked for by Luke";
           return (
-            <Section key={p.id} label={`${p.id} · live · 9:16 · built for ${source(idea?.sourceId ?? "")?.title ?? ""}`} title={p.name} id={p.id} intro={p.description}>
+            <Section key={p.id} label={`${p.id} · live · 9:16 · ${made}`} title={p.name} id={p.id} intro={p.description}>
               <div className="looks" style={{ maxWidth: 720 }}>
                 {p.variants.map((v) => (
                   <div key={v.label}>
