@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>M28 Pro Dashboard</title>
+<link rel="stylesheet" href="../pieces.css" />
+<style>
+  /* A pro's dashboard on a phone, drawn from the real member dashboard at phone width
+     (/dev-preview/dashboard, 2026-10-18). An overlay, like M27's pop-out: it records on a
+     transparent stage to lay over footage (Luke's presenter bit in the suit); in the browser
+     it sits on bark. The phone pops forward, tilting up into place, at x, y (props). Three
+     looks, one engine. Build: the screen assembles itself. Tour: the tab bar walks Catalog,
+     Clicks and Marketing. Zoom: the stat tiles pop out of the phone and count up. */
+  .rig { position: absolute; width: 590px; height: 990px; }
+  /* The phone. Its screen is laid out at the real dashboard's 376 px phone width and
+     scaled 1.5x, so every proportion matches what a pro sees. */
+  .phone { position: absolute; left: 0; top: 0; width: 590px; height: 990px; border-radius: 76px;
+    background: #1b1810; padding: 16px; box-shadow: 0 40px 90px rgba(0, 0, 0, 0.45); }
+  .screen { position: relative; width: 558px; height: 958px; border-radius: 60px; overflow: hidden; background: #f0f7ee; }
+  .ui { position: absolute; left: 0; top: 0; width: 372px; height: 639px; transform: scale(1.5); transform-origin: 0 0;
+    color: #3d3522; font-family: var(--body); }
+  .notch { position: absolute; left: 50%; top: 10px; width: 78px; height: 20px; margin-left: -39px; border-radius: 12px; background: #1b1810; z-index: 5; }
+
+  .bar-top { position: absolute; left: 0; right: 0; top: 0; height: 74px; padding: 34px 14px 0; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(61, 53, 34, 0.08); }
+  .logo { display: block; width: 92px; aspect-ratio: 512 / 129.364; background: #000;
+    -webkit-mask: url("../../brand/gearbook-full-length-bw.svg") center / contain no-repeat; mask: url("../../brand/gearbook-full-length-bw.svg") center / contain no-repeat; }
+  .who { display: flex; align-items: center; gap: 7px; }
+  .avatar { width: 26px; height: 26px; border-radius: 50%; background: #527060; color: #f0f7ee; display: grid; place-items: center; font-family: var(--display); font-weight: 700; font-size: 12px; }
+  .who b { display: block; font-family: var(--display); font-size: 11px; }
+  .who small { display: block; font-size: 7px; color: #6b6450; }
+
+  .tabpage { position: absolute; left: 0; right: 0; top: 74px; bottom: 44px; padding: 12px 11px 0; }
+  .card-dark { background: #3d3522; color: #f0f7ee; border-radius: 14px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; box-shadow: 0 6px 12px rgba(61, 53, 34, 0.18); }
+  .ring { width: 30px; height: 30px; }
+  .card-dark .k { font-family: var(--label); font-size: 6.5px; letter-spacing: 0.08em; color: #b9b29c; }
+  .card-dark .v { font-family: var(--body); font-weight: 600; font-size: 10px; margin-top: 2px; }
+  .spec { font-family: var(--label); font-size: 7px; letter-spacing: 0.06em; color: #6b6450; margin: 12px 0 6px; }
+  .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .tile { border: 2px solid rgba(61, 53, 34, 0.12); background: #fff; border-radius: 14px; height: 48px; display: grid; place-content: center; text-align: center; }
+  .tile.dark { background: #3d3522; border-color: #3d3522; color: #f0f7ee; }
+  .tile .k { font-family: var(--label); font-size: 5.5px; letter-spacing: 0.04em; color: #6b6450; }
+  .tile.dark .k { color: #b9b29c; }
+  .tile .v { font-family: var(--display); font-weight: 700; font-size: 15px; margin-top: 2px; }
+  .sec { display: flex; justify-content: space-between; align-items: baseline; margin: 14px 0 8px; }
+  .sec h3 { margin: 0; font-family: var(--display); font-size: 14px; }
+  .sec span { font-family: var(--label); font-size: 6.5px; color: #6b6450; letter-spacing: 0.04em; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px 9px; }
+  .cat .img { height: 96px; border-radius: 12px; background: #dce7da; position: relative; overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; gap: 3px; padding: 5px; }
+  .cat .img i { border-radius: 7px; background: #c8d8c6; display: grid; place-items: center; }
+  .cat .img i svg { width: 18px; height: 18px; }
+  .cat .pill { position: absolute; left: 6px; top: 6px; background: #fff; border-radius: 9px; padding: 1px 5px; font-family: var(--label); font-size: 5.5px; }
+  .cat b { display: block; font-family: var(--display); font-size: 10px; margin-top: 5px; }
+  .cat small { display: block; font-size: 6.5px; color: #6b6450; }
+  .cat.new .img { background: none; border: 1.5px dashed rgba(61, 53, 34, 0.22); display: grid; place-content: center; text-align: center; grid-template-columns: 1fr; }
+  .cat.new .img span { font-family: var(--label); font-size: 6.5px; color: #6b6450; }
+
+  .nav { position: absolute; left: 0; right: 0; bottom: 0; height: 44px; background: #3d3522; color: #f0f7ee; display: grid; grid-template-columns: repeat(4, 1fr); padding-bottom: 6px; }
+  .nav div { display: grid; place-content: center; text-align: center; font-family: var(--label); font-size: 6px; letter-spacing: 0.04em; opacity: 0.6; position: relative; }
+  .nav div svg { width: 12px; height: 12px; margin: 0 auto 2px; }
+  .nav .ind { position: absolute; top: 0; height: 2px; width: 25%; background: #f6ae2d; opacity: 1; }
+
+  .chartcard { border: 2px solid rgba(61, 53, 34, 0.12); background: #fff; border-radius: 14px; padding: 10px 12px 8px; }
+  .chartcard .k { font-family: var(--label); font-size: 6.5px; letter-spacing: 0.04em; color: #6b6450; }
+  .bars { display: flex; align-items: flex-end; gap: 14px; height: 120px; margin-top: 8px; padding: 0 6px; }
+  .bars div { flex: 1; text-align: center; font-family: var(--label); font-size: 6px; color: #6b6450; }
+  .bars i { display: block; width: 38px; margin-left: auto; margin-right: auto; border-radius: 6px 6px 2px 2px; background: #3d3522; transform-origin: bottom; margin-bottom: 4px; }
+  .bars div:last-child i { background: #6a8d73; }
+  .bars em { display: block; font-style: normal; font-family: var(--display); font-weight: 700; font-size: 10px; color: #3d3522; margin-bottom: 3px; }
+  .note { font-size: 6.5px; color: #6b6450; margin-top: 8px; line-height: 1.4; }
+  .kit { border: 2px solid rgba(61, 53, 34, 0.12); background: #fff; border-radius: 14px; padding: 10px 12px; margin-bottom: 8px; }
+  .kit b { display: block; font-family: var(--display); font-size: 10px; }
+  .kit small { display: block; font-size: 6.5px; color: #6b6450; margin-top: 2px; }
+  .poster { display: flex; gap: 10px; align-items: center; margin-top: 8px; }
+  .poster .qr { width: 64px; height: 64px; border-radius: 8px; background: #3d3522; padding: 5px; }
+  .poster .qr svg { width: 100%; height: 100%; }
+  .poster .btn { display: inline-block; margin-top: 6px; background: #f6ae2d; color: #3d3522; border-radius: 12px; padding: 4px 9px; font-family: var(--label); font-weight: 600; font-size: 6.5px; }
+  .url { font-family: var(--label); font-size: 6.5px; color: #527060; margin-top: 3px; }
+
+  .list { border: 2px solid rgba(61, 53, 34, 0.12); background: #fff; border-radius: 14px; padding: 9px 12px 4px; margin-top: 9px; }
+  .list .k { font-family: var(--label); font-size: 6.5px; letter-spacing: 0.04em; color: #6b6450; }
+  .list .r { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-top: 1px solid rgba(61, 53, 34, 0.08); font-size: 8px; }
+  .list .r:first-of-type { border-top: 0; }
+  .list .r i { width: 22px; height: 22px; border-radius: 6px; background: #dce7da; display: grid; place-items: center; }
+  .list .r i svg { width: 13px; height: 13px; }
+  .list .r span { flex: 1; }
+  .list .r b { font-family: var(--display); font-size: 9px; }
+  .tap { position: absolute; left: 0; top: 0; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%;
+    background: rgba(255, 255, 255, 0.55); border: 2px solid rgba(61, 53, 34, 0.55); box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25); z-index: 9; opacity: 0; }
+  .ripple { position: absolute; left: 0; top: 0; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%; border: 2px solid #f6ae2d; z-index: 9; opacity: 0; }
+  .detail { overflow: hidden; }
+  .dhead { background: #3d3522; color: #f0f7ee; border-radius: 14px; padding: 9px 11px; display: flex; align-items: center; gap: 7px; }
+  .dhead svg { width: 11px; height: 11px; }
+  .dhead b { font-family: var(--display); font-size: 13px; font-weight: 700; flex: 1; display: flex; align-items: center; gap: 6px; }
+  .dhead .badge { background: rgba(240, 247, 238, 0.95); color: #3d3522; border-radius: 9px; padding: 1px 5px; font-family: var(--label); font-size: 5.5px; font-weight: 400; }
+  .dhead .n { font-family: var(--label); font-size: 6.5px; letter-spacing: 0.12em; color: rgba(240, 247, 238, 0.7); }
+  .dbar { display: flex; justify-content: flex-end; margin: 8px 0 7px; }
+  .btn-add { background: #f6ae2d; color: #3d3522; border-radius: 12px; padding: 5px 10px; font-family: var(--label); font-weight: 600; font-size: 7px; letter-spacing: 0.04em; }
+  .plist { display: flex; flex-direction: column; gap: 5px; }
+  .prod { display: flex; gap: 8px; align-items: center; background: #fff; border: 2px solid rgba(61, 53, 34, 0.1); border-radius: 12px; padding: 5px 7px 5px 5px; }
+  .prod .th { width: 34px; height: 34px; flex: none; background: #dce7da; border-radius: 8px; display: grid; place-items: center; }
+  .prod .th svg { width: 18px; height: 18px; }
+  .prod .tx { flex: 1; min-width: 0; }
+  .prod b { display: block; font-family: var(--display); font-size: 8.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .prod small { display: block; font-size: 6px; color: #6b6450; margin-top: 1px; }
+  .prod em { display: block; font-size: 6px; color: #6b6450; margin-top: 2px; }
+  .prod .pick { display: inline-block; margin-left: 4px; background: #f6ae2d; color: #3d3522; border-radius: 6px; padding: 0 4px; font-family: var(--label); font-style: normal; font-size: 5.5px; vertical-align: 1px; }
+  .prod .st { width: 13px; height: 13px; flex: none; }
+  .prod.fresh { border-color: #f6ae2d; }
+  .sheet { position: absolute; left: 0; right: 0; bottom: 0; height: 330px; background: #f0f7ee; border-radius: 18px 18px 0 0; box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.22); padding: 12px 12px 0; z-index: 6; }
+  .sheet h4 { margin: 0 0 8px; font-family: var(--display); font-size: 13px; }
+  .field { display: flex; align-items: center; gap: 6px; background: #fff; border: 2px solid #3d3522; border-radius: 12px; padding: 6px 9px; font-size: 9px; min-height: 26px; }
+  .field svg { width: 11px; height: 11px; }
+  .field .caret { display: inline-block; width: 1px; height: 11px; background: #3d3522; margin-left: -5px; }
+  .res { margin-top: 7px; display: flex; flex-direction: column; gap: 5px; }
+  .shade { position: absolute; inset: 0; background: rgba(27, 24, 16, 0.35); z-index: 5; opacity: 0; }
+  .pop { position: absolute; left: 0; top: 0; width: 350px; transform-origin: 0 0; font-family: var(--body); color: #3d3522; }
+  .pop .tile { box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35); }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<script src="../runtime.js"></script>
+<script>
+  const { el, arrive, words, tick, progress, outCubic } = Motion;
+  // Tiny line icons, in the spirit of the dashboard's lucide set.
+  const ICON = {
+    pack: '<path d="M6 8a6 6 0 0 1 12 0v12H6z M9 4h6 M9 13h6"/>',
+    helmet: '<path d="M4 15a8 8 0 0 1 16 0z M3 15h18 M12 7v8"/>',
+    rope: '<circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="3"/>',
+    boot: '<path d="M7 4h5v8l7 3v5H5V4z M5 17h14"/>',
+    book: '<path d="M4 5h6a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H4z M20 5h-6a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h6z"/>',
+    wallet: '<path d="M4 7h15v12H4z M4 7l11-3v3 M15 13h2"/>',
+    mega: '<path d="M4 10v4h3l8 5V5L7 10z M18 9a4 4 0 0 1 0 6"/>',
+    user: '<circle cx="12" cy="9" r="4"/><path d="M5 20a7 7 0 0 1 14 0"/>',
+    belay: '<path d="M8 3h6a4 4 0 0 1 4 4v6a8 8 0 0 1-8 8 4 4 0 0 1-4-4V5a2 2 0 0 1 2-2z"/><circle cx="12" cy="9" r="2.5"/>',
+    harness: '<path d="M4 7c3 2 13 2 16 0 M5 7l3 11 M19 7l-3 11 M8 18c2-3 6-3 8 0 M12 9v5"/>',
+    cam: '<circle cx="9" cy="15" r="5"/><circle cx="15" cy="15" r="5"/><path d="M12 10V3 M9 3h6"/>',
+    star: '<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
+    search: '<circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/>',
+    back: '<path d="M15 5l-7 7 7 7"/>',
+  };
+  const icon = (name, color = "currentColor") =>
+    `<svg viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICON[name]}</svg>`;
+  const ITEMS = ["pack", "helmet", "rope", "boot"];
+
+  const fmt = (n, d = 0) => n.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
+
+  Motion.init({
+    // Build clicks through a catalog, so it runs longer than the other two.
+    duration: ["tour", "zoom"].includes(Motion.look) ? 6 : 9.5,
+    hold: 1.4,
+    looks: ["build", "tour", "zoom"],
+    overlay: true,
+    // The piece's variables. Override any of them with ?props={...}.
+    // No dollar figures by default: copy never promises earnings (CLAUDE.md).
+    defaults: {
+      // Where the phone's centre lands on the 1080x1920 frame, and its size (1 = 990 px tall).
+      // Keep it between y 230 and 1520 and left of x 900 (Instagram's caption and buttons).
+      x: 495,
+      y: 875,
+      size: 1,
+      name: "Sam Rivera",
+      role: "Pro",
+      specialty: "Rock climbing instructor (sample)",
+      completion: 80,
+      nextStep: "Add a catalog cover photo",
+      stats: [
+        { label: "Clicks: July", value: 412 },
+        { label: "Sales: July", value: 9 },
+        { label: "Conversion", value: 2.2, decimals: 1, suffix: "%" },
+      ],
+      catalogs: [
+        { name: "Crag Kit", products: 7, main: true },
+        { name: "Alpine Rack", products: 6 },
+        { name: "Gym Bag", products: 4 },
+      ],
+      months: ["May", "Jun", "Jul"],
+      clicks: [220, 305, 412],
+      topProducts: [["Petzl GRIGRI", 96], ["La Sportiva TC Pro", 71], ["Sterling Velocity 9.8 mm", 54]],
+      // Build look: the catalog the pro taps into. Real climbing gear from partner retailers
+      // (sample picks, not anyone's actual catalog). Up to 8 per catalog, as on the site.
+      products: [
+        { name: "Petzl GRIGRI", retailer: "Backcountry", icon: "belay", blurb: "On every client rope I set up." },
+        { name: "Black Diamond Momentum Harness", retailer: "Backcountry", icon: "harness" },
+        { name: "La Sportiva TC Pro", retailer: "Backcountry", icon: "boot", blurb: "Still my crack shoe." },
+        { name: "Petzl Boreo Helmet", retailer: "Backcountry", icon: "helmet" },
+        { name: "Sterling Velocity 9.8 mm Rope", retailer: "Backcountry", icon: "rope" },
+        { name: "Osprey Mutant 38", retailer: "Osprey", icon: "pack" },
+        { name: "Black Diamond ATC Guide", retailer: "Backcountry", icon: "belay" },
+      ],
+      topPick: 2,
+      search: "camalot",
+      added: { name: "Black Diamond Camalot C4", retailer: "Backcountry", icon: "cam" },
+      results: ["Black Diamond Camalot C4", "Black Diamond Camalot Z4"],
+      slug: "sam-rivera",
+    },
+    build(stage, p, look) {
+      const rig = el("div", { class: "rig", style: { left: `${p.x - 295}px`, top: `${p.y - 495}px` } }, stage);
+      const phone = el("div", { class: "phone" }, rig);
+      // Pops forward like M27: grows from small and low, tilting up into place.
+      tick((t) => {
+        const k = outCubic(progress(t, 0, 0.7));
+        rig.style.transform = `translateY(${(1 - k) * 260}px) perspective(1600px) rotateX(${(1 - k) * 14}deg) scale(${p.size * (0.35 + 0.65 * k)})`;
+        rig.style.opacity = progress(t, 0, 0.12);
+      });
+      const screen = el("div", { class: "screen" }, phone);
+      el("div", { class: "notch" }, screen);
+      const ui = el("div", { class: "ui" }, screen);
+
+      // Header: wordmark and the member.
+      const top = el("div", { class: "bar-top" }, ui);
+      top.innerHTML = `<span class="logo" role="img" aria-label="gearbook"></span>
+        <div class="who"><div class="avatar">${p.name[0]}</div><div><b>${p.name}</b><small>${p.role}</small></div></div>`;
+
+      // Bottom tab bar, the same four tabs as DASHBOARD_TABS.
+      const nav = el("div", { class: "nav" }, ui);
+      const tabs = [["book", "My Catalog"], ["wallet", "Earnings"], ["mega", "Marketing"], ["user", "My Profile"]].map(([i, t]) => {
+        const d = el("div", {}, nav);
+        d.innerHTML = icon(i) + t;
+        return d;
+      });
+      const ind = el("div", { class: "ind" }, nav);
+
+      // ---------- Catalog page ----------
+      const cat = el("div", { class: "tabpage" }, ui);
+      const prog = el("div", { class: "card-dark" }, cat);
+      prog.innerHTML = `<svg class="ring" viewBox="0 0 36 36"><circle cx="18" cy="18" r="15" fill="none" stroke="rgba(240,247,238,.18)" stroke-width="4"/>
+        <circle class="arc" cx="18" cy="18" r="15" fill="none" stroke="#6a8d73" stroke-width="4" stroke-linecap="round" transform="rotate(-90 18 18)" stroke-dasharray="0 95"/>
+        <text x="18" y="21.5" text-anchor="middle" font-family="Outfit" font-weight="600" font-size="9" fill="#f0f7ee" class="pct">0%</text></svg>
+        <div><div class="k">PROFILE COMPLETION</div><div class="v">${p.nextStep}</div></div>`;
+      el("div", { class: "spec", text: p.specialty }, cat);
+      const tiles = el("div", { class: "tiles" }, cat);
+      const tileEls = p.stats.map((s, i) => {
+        const t = el("div", { class: "tile" + (i === p.stats.length - 1 ? " dark" : "") }, tiles);
+        el("div", { class: "k", text: s.label }, t);
+        return el("div", { class: "v", text: "0" }, t);
+      });
+      const sec = el("div", { class: "sec" }, cat);
+      sec.innerHTML = `<h3>My Catalogs</h3><span>${p.catalogs.length} of 5</span>`;
+      const grid = el("div", { class: "grid" }, cat);
+      const cards = p.catalogs.map((c, ci) => {
+        const card = el("div", { class: "cat" }, grid);
+        const img = el("div", { class: "img" }, card);
+        const thumbs = ITEMS.map((n, k) => {
+          const th = el("i", {}, img);
+          th.innerHTML = icon(ITEMS[(k + ci) % 4], "#527060");
+          return th;
+        });
+        if (c.main) el("div", { class: "pill", text: "Main" }, img);
+        el("b", { text: c.name }, card);
+        const count = el("small", { text: "0 products" }, card);
+        return { card, thumbs, count, c };
+      });
+      const add = el("div", { class: "cat new" }, grid);
+      add.innerHTML = `<div class="img"><span>+<br>New Catalog</span></div>`;
+
+      // ---------- Earnings page (clicks and sales counts only) ----------
+      const earn = el("div", { class: "tabpage" }, ui);
+      const cc = el("div", { class: "chartcard" }, earn);
+      el("div", { class: "k", text: "CLICKS BY MONTH" }, cc);
+      const bars = el("div", { class: "bars" }, cc);
+      const maxC = Math.max(...p.clicks);
+      const barEls = p.clicks.map((v, i) => {
+        const d = el("div", {}, bars);
+        const em = el("em", { text: "0" }, d);
+        const b = el("i", { style: { height: `${(95 * v) / maxC}px` } }, d);
+        d.append(p.months[i] || "");
+        return { b, em, v };
+      });
+      el("div", { class: "note", text: "Clicks on your links, synced daily from the retailer networks." }, cc);
+      const tiles2 = el("div", { class: "tiles", style: { marginTop: "9px" } }, earn);
+      p.stats.forEach((s, i) => {
+        const t = el("div", { class: "tile" + (i === p.stats.length - 1 ? " dark" : "") }, tiles2);
+        el("div", { class: "k", text: s.label }, t);
+        el("div", { class: "v", text: fmt(s.value, s.decimals || 0) + (s.suffix || "") }, t);
+      });
+      const list = el("div", { class: "list" }, earn);
+      el("div", { class: "k", text: "TOP PRODUCTS BY CLICKS" }, list);
+      const rows = p.topProducts.map(([name, n], i) => {
+        const r = el("div", { class: "r" }, list);
+        r.innerHTML = `<i>${icon(ITEMS[i % 4], "#527060")}</i><span>${name}</span><b>${n}</b>`;
+        return r;
+      });
+
+      // ---------- Marketing page ----------
+      const mk = el("div", { class: "tabpage" }, ui);
+      const k1 = el("div", { class: "kit" }, mk);
+      k1.innerHTML = `<b>At the trailhead</b><small>A QR poster and a business card that open your catalog.</small>
+        <div class="poster"><div class="qr">${qr()}</div><div><b style="font-size:9px">QR poster</b>
+        <div class="url">gearbook.shop/catalog/${p.slug}</div><span class="btn">Download PNG</span></div></div>`;
+      const k2 = el("div", { class: "kit" }, mk);
+      k2.innerHTML = `<b>Client outreach</b><small>A gear announcement and a post-trip follow-up, ready to send.</small>`;
+      const k3 = el("div", { class: "kit" }, mk);
+      k3.innerHTML = `<b>Share on socials</b><small>Three captions with your catalog link.</small>`;
+      const k4 = el("div", { class: "kit" }, mk);
+      k4.innerHTML = `<b>Your everyday links</b><small>An email signature, a booking insert and a link-in-bio line.</small>`;
+      const k5 = el("div", { class: "kit" }, mk);
+      k5.innerHTML = `<b>Grow the network</b><small>Your referral link for other pros.</small>`;
+
+      // ---------- Catalog detail (Build look) ----------
+      const detail = el("div", { class: "tabpage detail" }, ui);
+      const prodRow = (pr, parent) => {
+        const r = el("div", { class: "prod" }, parent);
+        r.innerHTML = `<div class="th">${icon(pr.icon, "#527060")}</div><div class="tx"><b>${pr.name}</b><small>Retailer: ${pr.retailer}</small>${pr.blurb ? `<em>&ldquo;${pr.blurb}&rdquo;</em>` : ""}</div>${icon("star", "#b9b29c").replace("<svg", '<svg class="st"')}`;
+        return r;
+      };
+      const mainCat = p.catalogs.find((c) => c.main) || p.catalogs[0];
+      const dh = el("div", { class: "dhead" }, detail);
+      dh.innerHTML = `${icon("back")}<b>${mainCat.name}<span class="badge">Main</span></b><span class="n">0 of 8</span>`;
+      const dCount = dh.querySelector(".n");
+      const dbar = el("div", { class: "dbar" }, detail);
+      const addBtn = el("div", { class: "btn-add", text: "+ Add Product" }, dbar);
+      const plist = el("div", { class: "plist" }, detail);
+      const fresh = prodRow(p.added, plist);
+      fresh.classList.add("fresh");
+      const prodEls = p.products.slice(0, 7).map((pr) => prodRow(pr, plist));
+      const shade = el("div", { class: "shade" }, ui);
+      const sheet = el("div", { class: "sheet" }, ui);
+      el("h4", { text: "Add a product" }, sheet);
+      const field = el("div", { class: "field" }, sheet);
+      field.innerHTML = `${icon("search", "#6b6450")}<span class="q"></span><span class="caret"></span>`;
+      const res = el("div", { class: "res" }, sheet);
+      const resEls = p.results.map((name) => prodRow({ name, retailer: p.added.retailer, icon: p.added.icon }, res));
+      const tapDot = el("div", { class: "tap" }, ui);
+      const ripple = el("div", { class: "ripple" }, ui);
+
+      // A deterministic QR-looking pattern (decorative, not scannable).
+      function qr() {
+        let s = '<svg viewBox="0 0 21 21" shape-rendering="crispEdges">';
+        const finder = (x, y) => `<rect x="${x}" y="${y}" width="7" height="7" fill="#f0f7ee"/><rect x="${x + 1}" y="${y + 1}" width="5" height="5" fill="#3d3522"/><rect x="${x + 2}" y="${y + 2}" width="3" height="3" fill="#f0f7ee"/>`;
+        s += finder(0, 0) + finder(14, 0) + finder(0, 14);
+        let seed = 7;
+        for (let y = 0; y < 21; y++) for (let x = 0; x < 21; x++) {
+          if ((x < 8 && y < 8) || (x > 12 && y < 8) || (x < 8 && y > 12)) continue;
+          seed = (seed * 9301 + 49297) % 233280;
+          if (seed / 233280 > 0.52) s += `<rect x="${x}" y="${y}" width="1" height="1" fill="#f0f7ee"/>`;
+        }
+        return s + "</svg>";
+      }
+
+      // Shared counters on the catalog page.
+      const countUp = (start, len) => tick((t) => {
+        const k = outCubic(progress(t, start, len));
+        p.stats.forEach((s, i) => { tileEls[i].textContent = fmt(s.value * k, s.decimals || 0) + (s.suffix || ""); });
+        prog.querySelector(".arc").setAttribute("stroke-dasharray", `${(94.2 * p.completion * k) / 100} 95`);
+        prog.querySelector(".pct").textContent = Math.round(p.completion * k) + "%";
+      });
+      const fillCatalogs = (start) => cards.forEach(({ card, thumbs, count, c }, i) => {
+        const at = start + i * 0.35;
+        arrive(card, at, { y: 10, dur: 0.5 });
+        thumbs.forEach((th, k) => th.animate([{ opacity: 0, transform: "scale(.6)" }, { opacity: 1, transform: "none" }], { duration: 300, delay: (at + 0.15 + k * 0.08) * 1000, easing: Motion.ease.arrive, fill: "both" }));
+        tick((t) => { count.textContent = `${Math.round(c.products * outCubic(progress(t, at + 0.1, 0.9)))} products`; });
+      });
+      const setTab = (i) => { tabs.forEach((d, k) => { d.style.opacity = k === i ? 1 : 0.6; }); ind.style.left = `${i * 25}%`; };
+
+      if (look === "build") {
+        earn.style.display = mk.style.display = "none";
+        setTab(0);
+        // 0.8 to 2.6 s: the dashboard assembles.
+        arrive(prog, 0.8, { y: 10 });
+        arrive(cat.querySelector(".spec"), 1.0, { y: 8 });
+        [...tiles.children].forEach((t, i) => arrive(t, 1.1 + i * 0.1, { y: 10, dur: 0.5 }));
+        countUp(1.2, 1.3);
+        arrive(sec, 1.5, { y: 8 });
+        fillCatalogs(1.6);
+        arrive(add, 1.6 + cards.length * 0.35, { y: 10, dur: 0.5 });
+
+        // Taps, in UI coordinates (the 372 px phone grid); layout ignores the transforms.
+        const pos = (node) => { let x = 0, y = 0, n = node; while (n && n !== ui) { x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; } return [x, y, node.offsetWidth, node.offsetHeight]; };
+        const centre = (node, fx = 0.5, fy = 0.5) => { const [x, y, w, h] = pos(node); return [x + w * fx, y + h * fy]; };
+        const TAPS = [
+          { at: 3.0, on: () => centre(cards[0].card, 0.5, 0.35) },               // open the main catalog
+          { at: 4.75, on: () => centre(prodEls[p.topPick].querySelector(".st")) }, // star a top pick
+          { at: 5.6, on: () => centre(addBtn) },                                 // + Add Product
+          { at: 7.25, on: () => centre(resEls[0]) },                             // pick the search result
+        ];
+        tick((t) => {
+          let shown = 0, press = 1, rk = -1, xy = [0, 0];
+          for (const tp of TAPS) {
+            const d = t - tp.at;
+            if (d > -0.35 && d < 0.3) {
+              xy = tp.on();
+              shown = d < 0 ? Motion.clamp((d + 0.35) / 0.15) : Motion.clamp(1 - (d - 0.15) / 0.15);
+              press = 1 - 0.22 * Math.max(0, 1 - Math.abs(d) / 0.08);
+            }
+            if (d >= 0 && d < 0.45) { xy = tp.on(); rk = d / 0.45; }
+          }
+          tapDot.style.opacity = shown;
+          tapDot.style.transform = `translate(${xy[0]}px, ${xy[1]}px) scale(${press})`;
+          ripple.style.opacity = rk < 0 ? 0 : 1 - rk;
+          ripple.style.transform = `translate(${xy[0]}px, ${xy[1]}px) scale(${1 + 1.6 * Math.max(0, rk)})`;
+
+          // Catalog page out, detail in, after the first tap.
+          const sw = outCubic(progress(t, 3.1, 0.4));
+          cat.style.opacity = 1 - sw;
+          cat.style.transform = `translateX(${-40 * sw}px)`;
+          detail.style.opacity = sw;
+          detail.style.transform = `translateX(${40 * (1 - sw)}px)`;
+          detail.style.visibility = sw > 0 ? "visible" : "hidden";
+
+          // Products list in one by one; the count follows them.
+          const listIn = (i) => progress(t, 3.4 + i * 0.13, 0.35);
+          prodEls.forEach((r, i) => { const k = outCubic(listIn(i)); r.style.opacity = k; r.style.transform = `translateY(${12 * (1 - k)}px)`; });
+          const added = progress(t, 7.6, 0.5);
+          fresh.style.display = added > 0 ? "flex" : "none";
+          fresh.style.opacity = outCubic(added);
+          fresh.style.transform = `scale(${1 + 0.06 * (1 - outCubic(added))})`;
+          const listed = prodEls.filter((_, i) => listIn(i) > 0.5).length + (added > 0.3 ? 1 : 0);
+          dCount.textContent = `${listed} of 8`;
+
+          // The star turns amber and the Top Pick badge drops on.
+          const pk = progress(t, 4.8, 0.25);
+          const tp = prodEls[p.topPick];
+          tp.querySelector(".st path").setAttribute("fill", pk > 0 ? "#f6ae2d" : "none");
+          tp.querySelector(".st path").setAttribute("stroke", pk > 0 ? "#f6ae2d" : "#b9b29c");
+          let badge = tp.querySelector(".pick");
+          if (!badge) badge = el("span", { class: "pick", text: "Top Pick" }, tp.querySelector("b"));
+          badge.style.opacity = outCubic(pk);
+
+          // The add sheet: up after + Add Product, the search types, a result is picked, down.
+          const up = outCubic(progress(t, 5.7, 0.4)) * (1 - outCubic(progress(t, 7.4, 0.35)));
+          sheet.style.transform = `translateY(${(1 - up) * 340}px)`;
+          shade.style.opacity = up;
+          field.querySelector(".q").textContent = p.search.slice(0, Math.floor(progress(t, 6.15, 0.55) * p.search.length + 0.001));
+          field.querySelector(".caret").style.opacity = Math.floor(t * 3) % 2 ? 1 : 0.2;
+          resEls.forEach((r, i) => { r.style.opacity = outCubic(progress(t, 6.8 + i * 0.1, 0.3)); });
+          resEls[0].style.borderColor = t >= 7.25 ? "#f6ae2d" : "";
+        });
+      }
+
+      if (look !== "build") [detail, shade, sheet, tapDot, ripple].forEach((n) => { n.style.display = "none"; });
+      if (look === "tour") {
+        countUp(0.6, 1.2);
+        fillCatalogs(0.6);
+        // Catalog until 2.0 s, Earnings 2.0 to 3.9 s, Marketing from 3.9 s.
+        const T = 6000, swap = (node, from, to) => node.animate(
+          [{ opacity: 0, transform: "translateX(40px)", offset: 0 },
+           { opacity: 0, transform: "translateX(40px)", offset: Math.max(0, from / T - 0.0001) },
+           { opacity: 1, transform: "none", offset: Math.min(1, (from + 350) / T) },
+           ...(to < T ? [{ opacity: 1, transform: "none", offset: (to - 0.0001) / T }, { opacity: 0, transform: "translateX(-40px)", offset: Math.min(1, (to + 250) / T) }] : []),
+           { opacity: to < T ? 0 : 1, transform: to < T ? "translateX(-40px)" : "none", offset: 1 }],
+          { duration: T, fill: "both" });
+        cat.animate([{ opacity: 1, offset: 0 }, { opacity: 1, offset: 2000 / T }, { opacity: 0, transform: "translateX(-40px)", offset: 2250 / T }, { opacity: 0, transform: "translateX(-40px)", offset: 1 }], { duration: T, fill: "both" });
+        swap(earn, 2000, 3900);
+        swap(mk, 3900, T);
+        barEls.forEach(({ b, em, v }, i) => {
+          const at = 2.25 + i * 0.25;
+          b.animate([{ transform: "scaleY(0)" }, { transform: "scaleY(1)" }], { duration: 600, delay: at * 1000, easing: Motion.ease.arrive, fill: "both" });
+          tick((t) => { em.textContent = fmt(v * outCubic(progress(t, at, 0.6))); });
+        });
+        rows.forEach((r, i) => arrive(r, 2.7 + i * 0.15, { y: 8, dur: 0.45 }));
+        [k1, k2, k3, k4, k5].forEach((k, i) => arrive(k, 4.1 + i * 0.18, { y: 10, dur: 0.5 }));
+        tick((t) => setTab(t < 2.0 ? 0 : t < 3.9 ? 1 : 2));
+        // The amber indicator slides between tabs.
+        // Easing goes on each keyframe: an easing in the options would bend the whole timeline.
+        const e = Motion.ease.travel;
+        ind.animate([{ left: "0%", offset: 0 }, { left: "0%", offset: 1950 / T, easing: e }, { left: "25%", offset: 2250 / T }, { left: "25%", offset: 3850 / T, easing: e }, { left: "50%", offset: 4150 / T }, { left: "50%", offset: 1 }], { duration: T, fill: "both" });
+      }
+
+      if (look === "zoom") {
+        earn.style.display = mk.style.display = "none";
+        setTab(0);
+        countUp(2.0, 2.4);
+        fillCatalogs(0.8);
+        // The three stat tiles pop out of the phone toward the viewer and pulse in turn.
+        const pop = el("div", { class: "pop" }, stage);
+        const popTiles = el("div", { class: "tiles" }, pop);
+        const popVals = p.stats.map((s, i) => {
+          const t = el("div", { class: "tile" + (i === p.stats.length - 1 ? " dark" : "") }, popTiles);
+          el("div", { class: "k", text: s.label }, t);
+          return el("div", { class: "v", text: "0" }, t);
+        });
+        tick((t) => {
+          popVals.forEach((v, i) => { v.textContent = tileEls[i].textContent; });
+          // Where the tile row sits on the stage once the phone has landed (layout ignores transforms).
+          const u = 1.5 * p.size;
+          const x0 = p.x + p.size * (16 - 295) + u * (tiles.offsetLeft + cat.offsetLeft);
+          const y0 = p.y + p.size * (16 - 495) + u * (tiles.offsetTop + cat.offsetTop);
+          const k = outCubic(progress(t, 1.8, 0.6)), grow = 1 + 0.45 * k;
+          const w = 350 * u, h = tiles.offsetHeight * u;
+          pop.style.transform = `translate(${x0 - (w * (grow - 1)) / 2}px, ${y0 - (h * (grow - 1)) / 2 - 90 * k}px) scale(${u * grow})`;
+          pop.style.opacity = progress(t, 1.8, 0.1);
+          tiles.style.opacity = 1 - 0.7 * k;
+        });
+        popVals.forEach((v, i) => v.parentElement.animate(
+          [{ transform: "none", offset: 0 }, { transform: "none", offset: (3.9 + i * 0.4) / 6 }, { transform: "scale(1.12)", offset: (4.2 + i * 0.4) / 6 }, { transform: "none", offset: (4.6 + i * 0.4) / 6 }, { transform: "none", offset: 1 }],
+          { duration: 6000, fill: "both" }));
+      }
+    },
+  });
+</script>
+</body>
+</html>

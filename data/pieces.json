@@ -851,5 +851,55 @@
     "builtOn": "2026-10-18",
     "sample": false,
     "html": "M27-site-screen"
+  },
+  {
+    "id": "M28",
+    "name": "Pro Dashboard",
+    "version": 1,
+    "status": "live",
+    "description": "A pro's GearBook dashboard on a phone, drawn from the real member dashboard at phone width, popping forward over footage like M27's pop-out (transparent, for the presenter bit in the suit). Build taps into a climbing catalog, stars a Top Pick and adds a cam from search; Tour walks Catalog, Clicks and Marketing; Zoom pops the stat tiles out of the phone and counts them up.",
+    "covers": "The member dashboard on a phone: catalogs, products, clicks and sales counts, the marketing kit. No dollar figures by default. Sample member and numbers; the Marketing tab is still a placeholder on the live site.",
+    "preview": "pop",
+    "ground": "ink",
+    "variants": [
+      {
+        "label": "A · BUILD",
+        "ground": "ink",
+        "look": "build"
+      },
+      {
+        "label": "B · TOUR",
+        "ground": "ink",
+        "look": "tour"
+      },
+      {
+        "label": "C · ZOOM",
+        "ground": "ink",
+        "look": "zoom"
+      }
+    ],
+    "formats": [
+      "9:16"
+    ],
+    "variables": [
+      "x",
+      "y",
+      "size",
+      "name",
+      "role",
+      "specialty",
+      "stats",
+      "catalogs",
+      "products",
+      "topPick",
+      "search",
+      "added",
+      "clicks",
+      "topProducts",
+      "slug"
+    ],
+    "html": "M28-pro-dashboard",
+    "builtOn": "2026-10-18",
+    "sample": true
   }
 ]
