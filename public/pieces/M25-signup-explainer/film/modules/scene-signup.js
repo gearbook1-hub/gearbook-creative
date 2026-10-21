@@ -2,7 +2,7 @@ const { seg, eo, ei, eio, eob, lerp, TextFx } = kit;
 const STEPS = [
   [1.95, '1/5: Basics', 'Name', 'Your Name', 'Country of residence', 'United States', 'Next: Profile'],
   [2.55, '2/5: Profile', 'Your title', 'Avalanche educator', 'Specialties', 'Ski touring, ice climbing', 'Next: Links'],
-  [3.0, '3/5: Links', 'Social links', '@alex.outside', 'Company / Organization', 'Rivera Mountain School', 'Next: Outreach'],
+  [3.0, '3/5: Links', 'Social links', '@yourname', 'Company / Organization', 'Your Company', 'Next: Outreach'],
   [3.4, '4/5: Outreach', 'How do you recommend gear?', 'Clients and courses', 'How often?', 'Every week', 'Next: Payment'],
   [3.8, '5/5: Payment', 'Venmo handle', '@yourname', 'Weekly newsletter', 'Yes, email me', 'Submit Application'],
 ];
@@ -29,7 +29,7 @@ kit.scene('signup', {
       '<div style="top:40px;width:52px;height:52px;background:var(--main);display:flex;align-items:center;justify-content:center"><svg width="30" height="30" viewBox="0 0 30 30"><path class="signup-k" d="M7 15.5 L13 21.5 L24 9" pathLength="1" style="fill:none;stroke:var(--ground);stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round"/></svg></div>' +
       '<p class="gb-label" style="top:118px">Application Submitted</p>' +
       '<h3 class="gb-h" style="top:142px">That&#39;s everything we need.</h3>' +
-      '<div class="gb-card signup-slug" style="top:226px;border-radius:16px;padding:14px 16px;font-family:var(--mono, ui-monospace, monospace);font-size:15px">gearbook.shop/catalog/alex-rivera</div>' +
+      '<div class="gb-card signup-slug" style="top:226px;border-radius:16px;padding:14px 16px;font-family:var(--mono, ui-monospace, monospace);font-size:15px">gearbook.shop/catalog/yourname</div>' +
       '<div class="signup-next-up" style="top:300px;border:2px solid color-mix(in srgb, var(--main) 40%, transparent);background:color-mix(in srgb, var(--main) 6%, var(--ground));border-radius:20px;padding:18px">' +
       '<p class="gb-h" style="font-size:20px;margin:0 0 8px">Next up: your gear</p><p class="gb-p" style="margin:0">Approval unlocks your dashboard, and that&#39;s where you&#39;ll add your products.</p></div></div>';
     kit.stage.append(kit.h('<div class="ground"><div class="signup-map" style="position:absolute;inset:0">' + GB.topo('signup') + '</div>' +
