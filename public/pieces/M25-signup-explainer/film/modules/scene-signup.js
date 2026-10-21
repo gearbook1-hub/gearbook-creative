@@ -1,12 +1,13 @@
 const { seg, eo, ei, eio, eob, lerp, TextFx } = kit;
 const STEPS = [
+  // Each step holds 1.5 s so its labels and answers can be read (Luke, 2026-10-21: it was 0.45 s).
   [1.95, '1/5: Basics', 'Name', 'Your Name', 'Country of residence', 'United States', 'Next: Profile'],
-  [2.55, '2/5: Profile', 'Your title', 'Avalanche educator', 'Specialties', 'Ski touring, ice climbing', 'Next: Links'],
-  [3.0, '3/5: Links', 'Social links', '@yourname', 'Company / Organization', 'Your Company', 'Next: Outreach'],
-  [3.4, '4/5: Outreach', 'How do you recommend gear?', 'Clients and courses', 'How often?', 'Every week', 'Next: Payment'],
-  [3.8, '5/5: Payment', 'Venmo handle', '@yourname', 'Weekly newsletter', 'Yes, email me', 'Submit Application'],
+  [3.45, '2/5: Profile', 'Your title', 'Avalanche educator', 'Specialties', 'Ski touring, ice climbing', 'Next: Links'],
+  [4.95, '3/5: Links', 'Social links', '@yourname', 'Company / Organization', 'Your Company', 'Next: Outreach'],
+  [6.45, '4/5: Outreach', 'How do you recommend gear?', 'Clients and courses', 'How often?', 'Every week', 'Next: Payment'],
+  [7.95, '5/5: Payment', 'Venmo handle', '@yourname', 'Weekly newsletter', 'Yes, email me', 'Submit Application'],
 ];
-const TAPS = [1.5, 2.45, 2.9, 3.3, 3.7, 4.2];
+const TAPS = [1.5, 3.3, 4.8, 6.3, 7.8, 9.3];
 const GATE_Y = 403, NEXT_Y = 565;
 kit.scene('signup', {
   init(kit) {
@@ -47,19 +48,19 @@ kit.scene('signup', {
     this.k = q('.signup-k').style; this.k.strokeDasharray = '1 1';
   },
   render(t) {
-    this.map.transform = 'scale(' + lerp(1.0, 1.025, seg(t, 0, 6)) + ')';
-    const e = eo(seg(t, -0.7, -0.3)), x = ei(seg(t, 6.15, 6.4));
+    this.map.transform = 'scale(' + lerp(1.0, 1.025, seg(t, 0, 11.1)) + ')';
+    const e = eo(seg(t, -0.7, -0.3)), x = ei(seg(t, 11.25, 11.5));
     this.eye.opacity = String(e * (1 - x));
     this.eye.transform = 'translateX(' + (lerp(26, 0, e) - 26 * x) + 'px)';
     if (t < 1.3) TextFx.fadeFromRight(this.hook, t, -0.85); else TextFx.fadeOutLeft(this.hook, t, 1.3);
-    if (t < 6.15) TextFx.fadeFromRight(this.line, t, 2.3);
-    else TextFx.fadeOutLeft(this.line, t, 6.15);
+    if (t < 11.25) TextFx.fadeFromRight(this.line, t, 2.3);
+    else TextFx.fadeOutLeft(this.line, t, 11.25);
     const rise = seg(t, 0, 0.95);
     this.phone.transform = 'translateY(' + lerp(1150, 0, eo(rise)) + 'px) rotate(' + lerp(-4, 0, eo(rise)) + 'deg) scale(' + GB.PH.s + ')';
-    const ab = eio(seg(t, 1.75, 2.05)), bc = eio(seg(t, 4.35, 4.65));
+    const ab = eio(seg(t, 1.75, 2.05)), bc = eio(seg(t, 9.45, 9.75));
     this.a.transform = 'translateX(' + lerp(0, -340, ab) + 'px)';
     this.b.transform = 'translateX(' + (lerp(340, 0, ab) + lerp(0, -340, bc)) + 'px)';
-    const out = ei(seg(t, 6.2, 6.5));
+    const out = ei(seg(t, 11.3, 11.6));
     this.c.transform = 'translateX(' + (lerp(340, 0, bc) - 200 * out) + 'px)';
     this.c.opacity = String(1 - out);
     let si = 0;
@@ -68,7 +69,8 @@ kit.scene('signup', {
     this.estep.textContent = S[1]; this.el1.textContent = S[2]; this.el2.textContent = S[4];
     this.enext.textContent = S[6];
     this.enext.classList.toggle('amber', si === 4);
-    const p1 = seg(u, 0.05, 0.28), p2 = seg(u, 0.2, 0.4);
+    // Typed at a readable pace, then a beat to read before Next.
+    const p1 = seg(u, 0.1, 0.6), p2 = seg(u, 0.5, 0.95);
     this.et1.textContent = S[3].slice(0, Math.round(S[3].length * p1));
     this.et2.textContent = S[5].slice(0, Math.round(S[5].length * p2));
     this.c1.opacity = p1 > 0 && p1 < 1 ? '1' : '0';
@@ -84,15 +86,15 @@ kit.scene('signup', {
     this.g.transform = tap === 1.5 ? 'scale(' + (1 - 0.04 * dip) + ')' : 'none';
     this.next.transform = tap > 1.5 ? 'scale(' + (1 - 0.04 * dip) + ')' : 'none';
     GB.finger(this.fin, t, [[0.8, 270, 640], [1.3, 170, GATE_Y], [1.75, 170, GATE_Y], [2.25, 170, NEXT_Y]]);
-    this.fin.opacity = String(eo(seg(t, 0.85, 1.1)) * (1 - eo(seg(t, 4.3, 4.5))));
+    this.fin.opacity = String(eo(seg(t, 0.85, 1.1)) * (1 - eo(seg(t, 9.4, 9.6))));
     this.fin.transform = 'scale(' + (1 - 0.18 * dip) + ')';
     this.ring.left = '170px'; this.ring.top = (tap === 1.5 ? GATE_Y : NEXT_Y) + 'px';
     GB.ripple(this.ring, t, tap);
     const gp = seg(t, tap, tap + 0.9);
     this.glowG.opacity = String(tap > 0 ? 0.9 * (1 - gp) : 0);
     GB.glow(this.mapEl, 540, 962, lerp(420, 820, eo(gp)));
-    this.k.strokeDashoffset = String(1 - eo(seg(t, 4.65, 5.0)));
-    const s1 = eo(seg(t, 4.85, 5.2)), s2 = eo(seg(t, 5.05, 5.4));
+    this.k.strokeDashoffset = String(1 - eo(seg(t, 9.75, 10.1)));
+    const s1 = eo(seg(t, 9.95, 10.3)), s2 = eo(seg(t, 10.15, 10.5));
     this.slug.opacity = String(s1); this.slug.transform = 'translateY(' + lerp(14, 0, s1) + 'px)';
     this['next-up'].opacity = String(s2); this['next-up'].transform = 'translateY(' + lerp(14, 0, s2) + 'px)';
   },
