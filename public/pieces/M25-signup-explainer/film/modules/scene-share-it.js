@@ -46,7 +46,7 @@ kit.scene('share-it', {
     const dip = Math.sin(Math.PI * seg(t, tap, tap + 0.18));
     GB.finger(this.fin, t, [[0, 250, 720], [0.4, SEND[0], SEND[1]], [0.75, SEND[0], SEND[1]], [1.2, 240, 720], [3.3, 240, 720], [3.6, SEND[0], SEND[1]], [3.95, SEND[0], SEND[1]], [4.4, 240, 720]]);
     this.fin.opacity = String(eo(seg(t, 0.05, 0.25)) * (1 - eo(seg(t, 4.3, 4.6))));
-    this.fin.transform = 'scale(' + (1 - 0.14 * dip) + ')';
+    this.fin.transform = 'scale(' + (1 - 0.18 * dip) + ')';
     this.ring.left = SEND[0] + 'px'; this.ring.top = SEND[1] + 'px';
     GB.ripple(this.ring, t, tap);
     const gp = seg(t, tap, tap + 0.9);

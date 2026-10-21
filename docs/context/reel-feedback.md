@@ -13,7 +13,8 @@ Their reactions to reels and pieces Claude made, kept so the next one starts clo
 From the first review: the seven animated reels R03 to R09, built and reviewed 2026-10-19.
 
 ### Firm
-- **Say they get paid.** Every reel aimed at pros mentions, somewhere, that they get paid when people buy (never an amount). (R03, R05; 2026-10-19)
+- **Members, not pros.** Since 2026-10-21 GearBook has two member types, outdoor professionals and enthusiasts, and the site says Members ("Meet the Members", /members). Copy calls people on GearBook "members"; "pro" or "professional" only where it means the professional type specifically (a pro's own dashboard, a certification). Luke: "the copy needs to be coherent with our updates from outdoor pros to members." (2026-10-21)
+- **Say they get paid.** Every reel aimed at members mentions, somewhere, that they get paid when people buy (never an amount). (R03, R05; 2026-10-19)
 - **Sample people get an obviously placeholder name, like "Sam Appleseed".** Not a realistic name such as "Sam Rivera". (R03, R04; 2026-10-19)
 - **Keep it brisk.** Cut dead time and hold each beat only as long as it takes to read; repeated actions (products dropping in) go quickly. (R04 "watches a bit slow", R06 "speed up them being added"; 2026-10-19)
 - **Show the behaviour GearBook needs from members: adding products, with descriptions.** Never model skipping them as the fast way; show the quoted blurb on a product as part of doing it right. (R05; 2026-10-19)
@@ -29,18 +30,22 @@ From the first review: the seven animated reels R03 to R09, built and reviewed 2
 - **Mix the order of a sequence** so similar items don't bunch up (all the mountain sports first, all the ocean ones last read as redundant). (R07; 2026-10-19)
 - **Copy has to fit what's on screen.** A joke about something that isn't shown reads as weird ("the other glove" with no gloves in the catalog), and adding the thing to fit the joke doesn't fix it. (R06; 2026-10-19)
 - **Copy that says something is happening should move.** "Loading" text needs to change as it loads, not sit as one static line. (R06; 2026-10-19)
-- **Guide titles are fine for specific disciplines:** "Rock guide", "Spearfishing guide", "Mountain guide", "Dive instructor". "Outdoor professional" or "pro" is still the word for members in general. (R07; 2026-10-19)
+- **Guide titles are fine for specific disciplines:** "Rock guide", "Spearfishing guide", "Mountain guide", "Dive instructor". (R07; 2026-10-19)
 - **More colour: use GearBook's blue (slate), less brown (bark), and make drawn textures more pronounced.** (R07; 2026-10-19)
 - **Partner logos add colour and credibility**, matched to each sport (Luke asked for them on R07; files from gearbook `public/logos/`). (R07; 2026-10-19)
 - **The playful, game-like framing works** ("really fun to watch"), as long as it doesn't model a bad habit. When a reel is game themed, commit to it: the graphics go game style too (8-bit, pixel art), and it can break the usual house structure (cream, topo, Roca). The pixel font is right for titles, HUD and labels; message cards and anything people read as copy use Outfit, because condensed display caps (Anton) on those cards "look like AI made them". (R05; 2026-10-19)
 - **A screen with a lot on it (a title, a list and logos) needs about 2.5 s.** 1.7 s per sport wasn't enough to read everything, and 2.3 s still wanted 0.3 s more. (R07 v2 and v3; 2026-10-19)
 - **No amber as a full background.** Amber is for the one thing that matters, not a ground ("I don't like the yellow background"). (R07; 2026-10-19)
-- **Sound: few, soft, natural effects, only on moments that matter.** Matt was critical of the signup reel's effects (a pop per bubble, a tick per keystroke, boings, rising pitched pops); his exact words aren't recorded. Kit and rules: `motion-pieces.md` "Sound". (Luke, 2026-10-19; R01)
-- **The synthesised sound kit isn't good enough yet** ("the sounds aren't great and will need to be redone"). Don't build more on it until it's redone; it's on hold. (R03 to R09; 2026-10-19)
+- **Sound has to sound natural: real, light clicks and soft air, not bumps, bonks or loud whooshes.** Luke on the CC0 kit (2026-10-21): "the sounds are still awful", "unnatural. Lots of weird bumps and bonks rather than clicks. The whooshes are loud and unnatural." Matt had said the same of the signup reel's pops, boings and rising pitches. Free game-UI packs (Kenney) and amateur Freesound previews failed twice; nothing ships until Luke or Matt has listened and said yes. (R01, R03 to R09; 2026-10-19 and 2026-10-21)
+- **Audition sounds first, in minutes, before building anything around them.** Send a short clip of the candidate sounds, get a yes or no, then wire them in. On 2026-10-21 an hour went into mixing and loudness tooling around sounds Luke then rejected on first listen. (2026-10-21)
+- **When a click is the moment, use a click.** A tap or a cursor click is a short, light, high click; impacts (thumps, knocks) only for something heavy landing, and rarely. Whooshes stay quiet, short and under everything else, or are left out. (2026-10-21)
 
 ## Log
 | Date | Reel | Verdict | What they said | What changed |
 |---|---|---|---|---|
+| 2026-10-21 | all (sound) | drop | The CC0 kit (Kenney, Freesound): "the sounds are still awful", "unnatural. Lots of weird bumps and bonks rather than clicks. The whooshes are loud and unnatural." Also: an hour was too long for it. | Kit stays off; rules above; source sounds to be auditioned before any build |
+| 2026-10-21 | R01 Signup | change | "You still didn't change the cursor on the signup reel." | Touch dot replaced by M27's arrow cursor |
+| 2026-10-21 | all (copy) | change | "The copy needs to be coherent with our updates from outdoor pros to members." | Reel and piece copy says members; pro only for the professional type |
 | 2026-10-19 | all | change | "the sounds aren't great and will need to be redone. Hold off on that for now." | Sound on hold; cues left in place, not reworked |
 | 2026-10-19 | R03 Your clients ask | keep, change | "I like this a lot as is." Use a different name than Sam Rivera, "like Sam Appleseed". "We should mention they get paid as well." | Sam Appleseed; a get-paid line |
 | 2026-10-19 | R04 One click | keep, change | "I also like this a lot as is", same name change. "The content is really really good, but watches a bit slow. Find places where you can speed it up." | Sam Appleseed; tightened |

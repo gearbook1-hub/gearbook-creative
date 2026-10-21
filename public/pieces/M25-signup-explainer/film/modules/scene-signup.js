@@ -33,7 +33,7 @@ kit.scene('signup', {
       '<div class="signup-next-up" style="top:300px;border:2px solid color-mix(in srgb, var(--main) 40%, transparent);background:color-mix(in srgb, var(--main) 6%, var(--ground));border-radius:20px;padding:18px">' +
       '<p class="gb-h" style="font-size:20px;margin:0 0 8px">Next up: your gear</p><p class="gb-p" style="margin:0">Approval unlocks your dashboard, and that&#39;s where you&#39;ll add your products.</p></div></div>';
     kit.stage.append(kit.h('<div class="ground"><div class="signup-map" style="position:absolute;inset:0">' + GB.topo('signup') + '</div>' +
-      '<div class="words cap"><p class="eyebrow signup-eye">For outdoor professionals</p><h2 class="line signup-hook">Your gear catalog, made easy</h2><h2 class="line signup-apply" style="position:absolute;left:0;right:0;bottom:0">Apply in about 5 minutes</h2></div>' +
+      '<div class="words cap"><p class="eyebrow signup-eye">For pros and enthusiasts</p><h2 class="line signup-hook">Your gear catalog, made easy</h2><h2 class="line signup-apply" style="position:absolute;left:0;right:0;bottom:0">Apply in about 5 minutes</h2></div>' +
       GB.phone(v1 + v2 + v3 + '<div class="ring signup-ring"></div><div class="finger signup-fin"></div>') + '</div>'));
     const q = (s) => kit.stage.querySelector(s);
     this.mapEl = q('.signup-map');
@@ -85,7 +85,7 @@ kit.scene('signup', {
     this.next.transform = tap > 1.5 ? 'scale(' + (1 - 0.04 * dip) + ')' : 'none';
     GB.finger(this.fin, t, [[0.8, 270, 640], [1.3, 170, GATE_Y], [1.75, 170, GATE_Y], [2.25, 170, NEXT_Y]]);
     this.fin.opacity = String(eo(seg(t, 0.85, 1.1)) * (1 - eo(seg(t, 4.3, 4.5))));
-    this.fin.transform = 'scale(' + (1 - 0.14 * dip) + ')';
+    this.fin.transform = 'scale(' + (1 - 0.18 * dip) + ')';
     this.ring.left = '170px'; this.ring.top = (tap === 1.5 ? GATE_Y : NEXT_Y) + 'px';
     GB.ripple(this.ring, t, tap);
     const gp = seg(t, tap, tap + 0.9);

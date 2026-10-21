@@ -15,7 +15,7 @@ kit.scene('questions', {
       bubbles += '<div class="questions-b ' + (side[0] === 'l' ? 'l' : 'r') + '" style="' + side + ';top:' + top + 'px"><span class="gb-label">' + who + '</span><p>' + text + '</p></div>';
     });
     kit.stage.append(kit.h('<div class="ground"><div class="questions-map" style="position:absolute;inset:0">' + GB.topo('questions') + '</div>' + bubbles +
-      '<div class="words cap"><p class="eyebrow questions-eye">For outdoor professionals</p><h2 class="line questions-b2">Your gear catalog, made easy</h2>' +
+      '<div class="words cap"><p class="eyebrow questions-eye">For pros and enthusiasts</p><h2 class="line questions-b2">Your gear catalog, made easy</h2>' +
       '<h2 class="line questions-b1" style="position:absolute;left:0;right:0;bottom:0">Sound familiar?</h2></div></div>'));
     const q = (s) => kit.stage.querySelector(s);
     this.map = q('.questions-map');

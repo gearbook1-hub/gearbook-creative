@@ -70,7 +70,7 @@ kit.scene('add-product', {
     this.btn.transform = tap === 4.0 ? 'scale(' + (1 - 0.04 * dip) + ')' : 'none';
     GB.finger(this.fin, t, [[0, 290, 640], [0.35, 170, SEARCH_Y], [0.6, 170, SEARCH_Y], [1.5, 170, ROW_Y], [1.85, 170, ROW_Y], [3.65, 170, BTN_Y], [4.1, 170, BTN_Y], [4.6, 290, 640]]);
     this.fin.opacity = String(eo(seg(t, 0.05, 0.25)) * (1 - eo(seg(t, 4.2, 4.5))));
-    this.fin.transform = 'scale(' + (1 - 0.14 * dip) + ')';
+    this.fin.transform = 'scale(' + (1 - 0.18 * dip) + ')';
     this.ring.left = '170px'; this.ring.top = (tap === 0.45 ? SEARCH_Y : tap === 1.8 ? ROW_Y : BTN_Y) + 'px';
     GB.ripple(this.ring, t, tap);
     const gp = seg(t, tap, tap + 0.9);
