@@ -58,12 +58,14 @@ export function resolve(cues, kit = manifest()) {
   return [...cues].sort((a, b) => a.t - b.t).map((c) => {
     const slot = kit.slots[c.name];
     if (!slot) throw new Error(`unknown sound "${c.name}" (kit: ${Object.keys(kit.slots).join(", ")})`);
-    const files = slot.candidates[c.pick ?? slot.pick].files;
+    // A slot with no approved sound yet plays nothing (the kit was emptied 2026-10-21).
+    const files = slot.candidates[c.pick ?? slot.pick]?.files ?? [];
+    if (!files.length) return null;
     const n = (seen[c.name] = (seen[c.name] ?? -1) + 1);
     const f = files[n % files.length];
     // Files are peaked at -1 dBTP; lifting a spiky one more than 6 dB would make a click.
     return { ...c, file: path.join(KIT, f.file), gainDb: Math.min(6, slot.level - (f.momentary ?? f.lufs)) + db(c.gain ?? 1) };
-  });
+  }).filter(Boolean);
 }
 
 /**

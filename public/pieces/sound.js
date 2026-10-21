@@ -30,7 +30,8 @@
     return cues.slice().sort((a, b) => a.t - b.t).map((c) => {
       const slot = kit.slots[c.name];
       if (!slot) { console.warn("unknown sound", c.name); return null; }
-      const files = (slot.candidates[c.pick] || slot.candidates[slot.pick]).files;
+      const files = (slot.candidates[c.pick] || slot.candidates[slot.pick])?.files ?? [];
+      if (!files.length) return null;
       const n = (seen[c.name] = (seen[c.name] ?? -1) + 1);
       const f = files[n % files.length];
       return { t: c.t, file: f.file, gainDb: Math.min(6, slot.level - (f.momentary ?? f.lufs)) + 20 * Math.log10(c.gain) };

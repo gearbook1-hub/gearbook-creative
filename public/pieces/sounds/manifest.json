@@ -9,404 +9,44 @@
   "tap": {
    "what": "A finger on glass or a button press.",
    "level": -24,
-   "pick": "A",
-   "candidates": {
-    "A": {
-     "note": "Recorded mouse click, two takes",
-     "files": [
-      {
-       "file": "tap/a1.wav",
-       "momentary": -20.6,
-       "lufs": -20.6,
-       "phone": -20.6,
-       "truePeak": -1,
-       "length": 0.056
-      },
-      {
-       "file": "tap/a2.wav",
-       "momentary": -22.9,
-       "lufs": -22.9,
-       "phone": -23,
-       "truePeak": -1,
-       "length": 0.062
-      }
-     ]
-    },
-    "B": {
-     "note": "Short soft click",
-     "files": [
-      {
-       "file": "tap/b1.wav",
-       "momentary": -23.7,
-       "lufs": -23.7,
-       "phone": -24.4,
-       "truePeak": -1,
-       "length": 0.097
-      },
-      {
-       "file": "tap/b2.wav",
-       "momentary": -22.8,
-       "lufs": -22.8,
-       "phone": -23.1,
-       "truePeak": -1,
-       "length": 0.012
-      }
-     ]
-    },
-    "C": {
-     "note": "Select, a little brighter",
-     "files": [
-      {
-       "file": "tap/c1.wav",
-       "momentary": -19.8,
-       "lufs": -19.9,
-       "phone": -19.9,
-       "truePeak": -1,
-       "length": 0.04
-      },
-      {
-       "file": "tap/c2.wav",
-       "momentary": -19.8,
-       "lufs": -19.8,
-       "phone": -19.9,
-       "truePeak": -1,
-       "length": 0.04
-      }
-     ]
-    }
-   }
+   "pick": null,
+   "candidates": {}
   },
   "tick": {
    "what": "A counter stepping up. Never one per keystroke.",
    "level": -28,
-   "pick": "A",
-   "candidates": {
-    "A": {
-     "note": "Tick",
-     "files": [
-      {
-       "file": "tick/a1.wav",
-       "momentary": -25.6,
-       "lufs": -25.6,
-       "phone": -25.6,
-       "truePeak": -5.7,
-       "length": 0.055
-      },
-      {
-       "file": "tick/a2.wav",
-       "momentary": -23.8,
-       "lufs": -23.8,
-       "phone": -23.8,
-       "truePeak": -1,
-       "length": 0.02
-      }
-     ]
-    },
-    "B": {
-     "note": "Tiny recorded switch",
-     "files": [
-      {
-       "file": "tick/b1.wav",
-       "momentary": -24,
-       "lufs": -24,
-       "phone": -24,
-       "truePeak": -1,
-       "length": 0.025
-      },
-      {
-       "file": "tick/b2.wav",
-       "momentary": -23.8,
-       "lufs": -23.8,
-       "phone": -23.8,
-       "truePeak": -1,
-       "length": 0.035
-      }
-     ]
-    },
-    "C": {
-     "note": "Short toggle",
-     "files": [
-      {
-       "file": "tick/c1.wav",
-       "momentary": -21.8,
-       "lufs": -21.8,
-       "phone": -21.8,
-       "truePeak": -6.1,
-       "length": 0.063
-      }
-     ]
-    }
-   }
+   "pick": null,
+   "candidates": {}
   },
   "whoosh": {
    "what": "Air moving past: a ground wiping in or a big move. Peaks on the fastest frame.",
    "level": -23,
-   "pick": "A",
-   "candidates": {
-    "A": {
-     "note": "Stick swung through the air",
-     "files": [
-      {
-       "file": "whoosh/a1.wav",
-       "momentary": -17.6,
-       "lufs": -18.2,
-       "phone": -18.4,
-       "truePeak": -1,
-       "length": 0.535
-      }
-     ]
-    },
-    "B": {
-     "note": "Swish wipe",
-     "files": [
-      {
-       "file": "whoosh/b1.wav",
-       "momentary": -15.7,
-       "lufs": -17.8,
-       "phone": -19.1,
-       "truePeak": -1,
-       "length": 0.43
-      }
-     ]
-    },
-    "C": {
-     "note": "Bamboo through the air",
-     "files": [
-      {
-       "file": "whoosh/c1.wav",
-       "momentary": -19,
-       "lufs": -19,
-       "phone": -19.9,
-       "truePeak": -1,
-       "length": 0.452
-      }
-     ]
-    }
-   }
+   "pick": null,
+   "candidates": {}
   },
   "swoosh": {
    "what": "A shorter, lighter move: something settling or leaving.",
    "level": -25,
-   "pick": "A",
-   "candidates": {
-    "A": {
-     "note": "Staff swing, short",
-     "files": [
-      {
-       "file": "swoosh/a1.wav",
-       "momentary": -20.3,
-       "lufs": -20.3,
-       "phone": -21.4,
-       "truePeak": -1,
-       "length": 0.275
-      }
-     ]
-    },
-    "B": {
-     "note": "Swosh",
-     "files": [
-      {
-       "file": "swoosh/b1.wav",
-       "momentary": -21,
-       "lufs": -21,
-       "phone": -21.9,
-       "truePeak": -1,
-       "length": 0.277
-      }
-     ]
-    },
-    "C": {
-     "note": "Long bamboo stick",
-     "files": [
-      {
-       "file": "swoosh/c1.wav",
-       "momentary": -18.2,
-       "lufs": -19.5,
-       "phone": -19.9,
-       "truePeak": -1,
-       "length": 0.5
-      }
-     ]
-    }
-   }
+   "pick": null,
+   "candidates": {}
   },
   "thump": {
    "what": "A soft landing: a word, a card or the end-card logo settling. Body a phone can play.",
    "level": -21,
-   "pick": "A",
-   "candidates": {
-    "A": {
-     "note": "Light wood knock, three takes",
-     "files": [
-      {
-       "file": "thump/a1.wav",
-       "momentary": -17,
-       "lufs": -17,
-       "phone": -17.9,
-       "truePeak": -1,
-       "length": 0.263
-      },
-      {
-       "file": "thump/a2.wav",
-       "momentary": -16.8,
-       "lufs": -16.8,
-       "phone": -17.9,
-       "truePeak": -1,
-       "length": 0.263
-      },
-      {
-       "file": "thump/a3.wav",
-       "momentary": -16.9,
-       "lufs": -16.9,
-       "phone": -17.5,
-       "truePeak": -1,
-       "length": 0.263
-      }
-     ]
-    },
-    "B": {
-     "note": "Soft generic impact, three takes",
-     "files": [
-      {
-       "file": "thump/b1.wav",
-       "momentary": -16.9,
-       "lufs": -16.9,
-       "phone": -17.3,
-       "truePeak": -1,
-       "length": 0.161
-      },
-      {
-       "file": "thump/b2.wav",
-       "momentary": -16.7,
-       "lufs": -16.7,
-       "phone": -17.1,
-       "truePeak": -1,
-       "length": 0.161
-      },
-      {
-       "file": "thump/b3.wav",
-       "momentary": -16.9,
-       "lufs": -16.9,
-       "phone": -17.4,
-       "truePeak": -1,
-       "length": 0.137
-      }
-     ]
-    },
-    "C": {
-     "note": "Footstep on carpet (muffled)",
-     "files": [
-      {
-       "file": "thump/c1.wav",
-       "momentary": -17,
-       "lufs": -17,
-       "phone": -18.9,
-       "truePeak": -1,
-       "length": 0.142
-      },
-      {
-       "file": "thump/c2.wav",
-       "momentary": -17.9,
-       "lufs": -17.9,
-       "phone": -20.1,
-       "truePeak": -1,
-       "length": 0.142
-      }
-     ]
-    }
-   }
+   "pick": null,
+   "candidates": {}
   },
   "chime": {
    "what": "The payoff (the sale lands). Once per reel at most.",
    "level": -22,
-   "pick": "A",
-   "candidates": {
-    "A": {
-     "note": "Marimba note",
-     "files": [
-      {
-       "file": "chime/a1.wav",
-       "momentary": -18,
-       "lufs": -22.5,
-       "phone": -21.4,
-       "truePeak": -1,
-       "length": 0.837
-      }
-     ]
-    },
-    "B": {
-     "note": "Glass ping",
-     "files": [
-      {
-       "file": "chime/b1.wav",
-       "momentary": -19.2,
-       "lufs": -19.2,
-       "phone": -19.2,
-       "truePeak": -2.8,
-       "length": 0.276
-      }
-     ]
-    },
-    "C": {
-     "note": "Struck note F#",
-     "files": [
-      {
-       "file": "chime/c1.wav",
-       "momentary": -17,
-       "lufs": -23,
-       "phone": -23,
-       "truePeak": -0.8,
-       "length": 1.4
-      }
-     ]
-    }
-   }
+   "pick": null,
+   "candidates": {}
   },
   "paper": {
    "what": "A dry paper or card slide. For the poster.",
    "level": -25,
-   "pick": "A",
-   "candidates": {
-    "A": {
-     "note": "Playing card slide",
-     "files": [
-      {
-       "file": "paper/a1.wav",
-       "momentary": -13.8,
-       "lufs": -14.8,
-       "phone": -14.8,
-       "truePeak": -0.2,
-       "length": 0.257
-      }
-     ]
-    },
-    "B": {
-     "note": "Paper slide",
-     "files": [
-      {
-       "file": "paper/b1.wav",
-       "momentary": -13,
-       "lufs": -14.7,
-       "phone": -14.7,
-       "truePeak": -0.6,
-       "length": 0.6
-      }
-     ]
-    },
-    "C": {
-     "note": "Page turn",
-     "files": [
-      {
-       "file": "paper/c1.wav",
-       "momentary": -21.3,
-       "lufs": -23,
-       "phone": -23.5,
-       "truePeak": -1,
-       "length": 0.6
-      }
-     ]
-    }
-   }
+   "pick": null,
+   "candidates": {}
   },
   "ding": {
    "what": "A phone notification only. Three a reel at most.",
@@ -414,7 +54,7 @@
    "pick": "A",
    "candidates": {
     "A": {
-     "note": "M26's existing ding (source not recorded; added by Matt 2026-10-18)",
+     "note": "M26's original ding (added by Matt 2026-10-18; used in the Huss valley cut; source not recorded)",
      "files": [
       {
        "file": "ding/a1.wav",
@@ -423,32 +63,6 @@
        "phone": -12.5,
        "truePeak": -1,
        "length": 0.9
-      }
-     ]
-    },
-    "B": {
-     "note": "Phone notification",
-     "files": [
-      {
-       "file": "ding/b1.wav",
-       "momentary": -16,
-       "lufs": -18.6,
-       "phone": -19.2,
-       "truePeak": -1,
-       "length": 0.596
-      }
-     ]
-    },
-    "C": {
-     "note": "Chime notification",
-     "files": [
-      {
-       "file": "ding/c1.wav",
-       "momentary": -12.5,
-       "lufs": -15.9,
-       "phone": -15.9,
-       "truePeak": -0.9,
-       "length": 0.324
       }
      ]
     }

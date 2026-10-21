@@ -33,6 +33,7 @@ if (!fs.existsSync(piece)) {
   await p.close();
   if (!raw.length) { console.log(`${piece} cues no sounds.`); process.exit(0); }
   cues = resolve(raw, kit);
+  if (!cues.length) { console.log(`${piece}: the kit has no approved sounds for its ${raw.length} cues yet; nothing to check.`); process.exit(0); }
   file = path.join(fs.mkdtempSync(path.join(os.tmpdir(), "sound-check-")), `${piece}.wav`);
   mix(cues, seconds, file, kit);
   if (!kit.enabled) notes.push("the kit is on hold (manifest enabled: false); this checks the mix a render would make with --sound");

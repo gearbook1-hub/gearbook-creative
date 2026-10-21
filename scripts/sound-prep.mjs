@@ -72,13 +72,13 @@ const manifest = {
   slots: {},
 };
 for (const [name, slot] of Object.entries(src.slots)) {
-  fs.mkdirSync(path.join(KIT, name), { recursive: true });
-  const out = { what: slot.what, level: slot.level, pick: prev.slots?.[name]?.pick ?? slot.pick, candidates: {} };
+  const out = { what: slot.what, level: slot.level, pick: Object.keys(slot.candidates).length ? prev.slots?.[name]?.pick ?? slot.pick : null, candidates: {} };
   for (const [key, cand] of Object.entries(slot.candidates)) {
     const files = [];
     for (const [i, from] of cand.from.entries()) {
       const input = await sourceFile(from);
       const rel = `${name}/${key.toLowerCase()}${i + 1}.wav`;
+      fs.mkdirSync(path.join(KIT, name), { recursive: true });
       const tmp = path.join(CACHE, "tmp.wav"), tmp2 = path.join(CACHE, "tmp2.wav");
       // Cut to the first transient (keep 3 ms before it), then to the slot's length.
       ff(["-i", input, "-af", `aformat=channel_layouts=mono,aresample=${RATE}:resampler=soxr,silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.003,highpass=f=120,atrim=0:${slot.maxLen}`, "-c:a", "pcm_f32le", tmp]);

@@ -64,6 +64,7 @@
     for (const [name, slot] of Object.entries(m.slots)) {
       const s = document.createElement("section");
       s.innerHTML = `<h2>${name}</h2><p class="what">${slot.what}</p>`;
+      if (!Object.keys(slot.candidates).length) s.insertAdjacentHTML("beforeend", '<p class="what">No approved sound yet.</p>');
       for (const [key, c] of Object.entries(slot.candidates)) {
         const row = document.createElement("div");
         row.className = "cand";
