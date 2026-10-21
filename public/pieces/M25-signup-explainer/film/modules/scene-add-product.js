@@ -1,22 +1,24 @@
 const { seg, eo, ei, eio, eob, lerp, TextFx } = kit;
-const QUERY = 'sony a7r';
-const NOTE = 'My go to body for every backcountry shoot.';
+// A rock guide adds the cam they place first (Luke, 2026-10-21: the sign up is for a rock
+// climbing guide; it was a camera). Photo: Backcountry's listing, cut out.
+const QUERY = 'camalot c4';
+const NOTE = 'The first cam on my rack, every trad day.';
 const TAPS = [0.45, 1.8, 4.0];
 const SEARCH_Y = 206, ROW_Y = 275, BTN_Y = 531;
 kit.scene('add-product', {
   init(kit) {
     const row = (img, name, cls) => '<div class="gb-card gb-row ' + cls + '"><div class="gb-thumb">' + GB.gear(img) + '</div>' +
-      '<div><p class="gb-label" style="margin:0 0 3px;font-size:11px">Adorama</p><p class="gb-name" style="margin:0">' + name + '</p></div></div>';
+      '<div><p class="gb-label" style="margin:0 0 3px;font-size:11px">Backcountry</p><p class="gb-name" style="margin:0">' + name + '</p></div></div>';
     const slot = (img, name, x) => '<div class="gb-card" style="position:absolute;left:' + x + 'px;top:0;width:93px;height:118px;border-radius:16px;padding:8px;display:flex;flex-direction:column;gap:6px">' +
       '<div style="height:62px;display:flex;align-items:center;justify-content:center">' + (img ? GB.gear(img) : '') + '</div><p style="margin:0;font-size:12px;font-weight:600;line-height:1.15">' + name + '</p></div>';
     const v = '<div class="view add-product-view">' +
       '<p class="gb-label" style="top:22px">Dashboard</p>' +
       '<h3 class="gb-h" style="top:44px">Add a Product</h3>' +
       '<div class="gb-input add-product-search" style="top:94px"><span class="add-product-q"></span><i class="caret add-product-c1"></i><span class="add-product-ph" style="color:#6B6450;font-size:15px">Search our retailers</span></div>' +
-      '<div class="add-product-res" style="top:154px;display:flex;flex-direction:column;gap:8px">' + row('gear-camera.webp', 'Sony Alpha a7R VI', 'add-product-r1') + row('gear-camera.webp', 'Sony Alpha a7R V', '') + '</div>' +
+      '<div class="add-product-res" style="top:154px;display:flex;flex-direction:column;gap:8px">' + row('gear-cam.webp', 'Black Diamond Camalot C4', 'add-product-r1') + row('gear-cam.webp', 'Camalot C4 Package', '') + '</div>' +
       '<div class="add-product-form" style="top:0;left:0;right:0;height:592px">' +
-      '<p class="gb-p" style="position:absolute;left:20px;right:20px;top:154px;margin:0;font-size:14px;text-wrap:balance">Filled in from Adorama&#39;s catalog. Edit anything below.</p>' +
-      '<div class="add-product-pick" style="position:absolute;left:20px;right:20px;top:204px">' + row('gear-camera.webp', 'Sony Alpha a7R VI', '') + '</div>' +
+      '<p class="gb-p" style="position:absolute;left:20px;right:20px;top:154px;margin:0;font-size:14px;text-wrap:balance">Filled in from Backcountry&#39;s catalog. Edit anything below.</p>' +
+      '<div class="add-product-pick" style="position:absolute;left:20px;right:20px;top:204px">' + row('gear-cam.webp', 'Black Diamond Camalot C4', '') + '</div>' +
       '<p class="gb-label" style="position:absolute;left:20px;right:20px;top:286px;margin:0">Why you recommend it</p>' +
       '<div class="gb-input add-product-ta" style="position:absolute;left:20px;right:20px;top:308px;height:92px;align-items:flex-start;padding-top:12px;white-space:normal;line-height:1.4"><span><span class="add-product-t"></span><i class="caret add-product-c2"></i></span></div>' +
       '<div class="gb-btn add-product-btn" style="position:absolute;left:20px;right:20px;top:418px">Add to My Catalog</div></div>' +
@@ -26,7 +28,7 @@ kit.scene('add-product', {
       '<div style="position:absolute;left:0;top:0;width:93px;height:118px;border:2px dashed color-mix(in srgb, var(--second) 22%, var(--ground));border-radius:16px;box-sizing:border-box"></div>' +
       slot('gear-shoes.webp', 'Climbing shoes', 103) + slot('gear-rope.webp', 'Climbing rope', 206) + '</div>' +
       '<p class="gb-p add-product-live" style="position:absolute;left:0;right:0;top:162px;margin:0;font-size:14px">It usually appears right away.</p></div>' +
-      '<div class="add-product-new" style="top:178px;left:20px;right:auto;width:93px;height:118px">' + slot('gear-camera.webp', 'Sony a7R VI', 0) + '</div></div>';
+      '<div class="add-product-new" style="top:178px;left:20px;right:auto;width:93px;height:118px">' + slot('gear-cam.webp', 'Camalot C4', 0) + '</div></div>';
     kit.stage.append(kit.h('<div class="ground"><div class="add-product-map" style="position:absolute;inset:0">' + GB.topo('addp') + '</div>' +
       '<div class="words cap"><p class="eyebrow add-product-eye">Once you&#39;re approved</p><h2 class="line">Add gear with one search</h2></div>' +
       GB.phone(v + '<div class="ring add-product-ring"></div><div class="finger add-product-fin"></div>') + '</div>'));

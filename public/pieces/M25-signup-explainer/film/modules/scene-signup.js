@@ -3,7 +3,7 @@ const STEPS = [
   // Steps 1 to 3 hold 1.5 s so they can be read (they were 0.45 s); 4 and 5 go quicker, 0.8 s,
   // once the viewer has the idea (Luke, 2026-10-21: all five at 1.5 s was too slow).
   [1.95, '1/5: Basics', 'Name', 'Your Name', 'Country of residence', 'United States', 'Next: Profile'],
-  [3.45, '2/5: Profile', 'Your title', 'Avalanche educator', 'Specialties', 'Ski touring, ice climbing', 'Next: Links'],
+  [3.45, '2/5: Profile', 'Your title', 'Rock guide', 'Specialties', 'Trad, multi-pitch, sport', 'Next: Links'],
   [4.95, '3/5: Links', 'Social links', '@yourname', 'Company / Organization', 'Your Company', 'Next: Outreach'],
   [6.45, '4/5: Outreach', 'How do you recommend gear?', 'Clients and courses', 'How often?', 'Every week', 'Next: Payment'],
   [7.25, '5/5: Payment', 'Venmo handle', '@yourname', 'Weekly newsletter', 'Yes, email me', 'Submit Application'],

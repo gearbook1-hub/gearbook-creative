@@ -131,7 +131,7 @@ window.GB = (function () {
         '<img alt="" src="' + kit.assets.url('share-photo.webp') + '" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover">' +
         '<i class="gb-link-shade"></i><i class="gb-link-bar"><b style="flex:1;background:#34668a"></b><b style="width:52px;background:var(--main)"></b><b style="width:28px;background:var(--accent)"></b></i>' +
         '<img alt="GearBook" src="' + kit.assets.url('logo-white.svg') + '" style="position:absolute;left:86px;top:10px;width:64px">' +
-        '<div class="gb-link-who"><b>Your Name</b><span>My #1 pick</span><em>Sony Alpha a7R VI</em></div></div>' +
+        '<div class="gb-link-who"><b>Your Name</b><span>My #1 pick</span><em>Black Diamond Camalot C4</em></div></div>' +
         '<div class="gb-link-meta"><p>Your Name&#39;s Gear Picks: Real Recommendations | GearBook</p><span>gearbook.shop</span></div></div>';
     },
     // A message thread. items: [who, text | null for the link, top]; each item gets the class <cls>-m<i>.

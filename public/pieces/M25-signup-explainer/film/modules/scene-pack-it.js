@@ -1,7 +1,8 @@
 const { seg, eo, ei, eio, eob, lerp, TextFx } = kit;
 // Gear is tossed into an open pack from alternating sides; the last two stick out of the top until the lid flips shut.
 // [asset, width, height, landing x, landing y]: landing centres sit below the front rim (y ~690), rope and jacket peek out.
-const GEAR = [['gear-camera.webp', 230, 156, 470, 795], ['gear-binos.webp', 210, 152, 615, 790], ['gear-shoes.webp', 220, 155, 520, 775],
+// A rock guide's pack (2026-10-21): the cam and harness replace the camera and binoculars.
+const GEAR = [['gear-cam.webp', 104, 224, 470, 795], ['gear-harness.webp', 186, 216, 615, 790], ['gear-shoes.webp', 220, 155, 520, 775],
   ['gear-belay.webp', 127, 200, 420, 805], ['gear-rope.webp', 64, 250, 410, 700], ['gear-jacket.webp', 165, 240, 652, 690]];
 const T0 = 0.3, GAP = 0.2, FALL = 0.45, D = 0.4;
 const LID = [1.85, 2.17], BUCKLES = [2.25, 2.35], LOGO = [2.45, 3.0];

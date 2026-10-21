@@ -2,7 +2,7 @@ const { seg, eo, ei, eio, eob, lerp, TextFx } = kit;
 // The opener: the questions every pro gets about their gear, then the answer line that signup opens on.
 // [who, question, left or right edge, top, entrance time]
 const QS = [['Client', 'What boots are you wearing?', 'left:64px', 470, -0.35], ['Student', 'Which rope should I get?', 'right:64px', 680, 0.2],
-  ['Friend', 'Link to that jacket?', 'left:100px', 890, 0.5], ['Client', 'What camera do you shoot with?', 'right:64px', 1100, 0.8],
+  ['Friend', 'Link to that jacket?', 'left:100px', 890, 0.5], ['Client', 'Which cams do you climb on?', 'right:64px', 1100, 0.8],
   ['Friend', 'Send me your packing list!', 'left:64px', 1310, 1.1]];
 const OUT = 1.55, LINE_B = 1.85;
 kit.scene('questions', {
