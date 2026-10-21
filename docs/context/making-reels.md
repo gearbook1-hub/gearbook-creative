@@ -19,7 +19,7 @@ How to make an animated reel so it lands in fewer rounds. Learned making R03 to 
 5. **Keep scenes in one reel at the same level of detail, and make each graphic its subject.** No generic textures; drawn things obey the scene (tracks stay on the snow and only go downhill).
 6. **Type:** Roca and Outfit by default; a game-themed reel can use a pixel font for titles, HUD and labels, but cards and copy stay in Outfit. No Anton-style condensed caps.
 7. **Colour:** pieces.css colours, plenty of slate blue, little bark, never amber as a full background. Different colours per scene are welcome.
-8. **Sample people:** "Sam Appleseed", marked sample.
+8. **Sample people:** "Your Name" (handle @yourname, slug yourname), marked sample.
 9. **Sound: get a yes on the sounds before any tooling.** Claude can't hear, so the sounds themselves are the risk, not the mix. First send Luke a short clip of candidates (or ask for a reel whose sound he likes, or which paid pack to use) and wait for a yes; only then wire them in, cue the piece by `motion-pieces.md` "Sound" and run `npm run sound:check -- <piece>`. The 2026-10-21 rebuild did it the other way round: an hour on the mixer and loudness checks, then "still awful" on first listen. The kit stays off (`"enabled": false`) until a person has said yes.
 12. **Keep Luke posted and keep it short.** When a step will take more than a few minutes, say so first and offer a quicker cut. Long silent runs read as slow even when the work is right.
 10. **Check with strips, then say what a strip can't show.** Every handover says what was seen only in stills (timing, motion smoothness, sound).

@@ -15,7 +15,7 @@ From the first review: the seven animated reels R03 to R09, built and reviewed 2
 ### Firm
 - **Members, not pros.** Since 2026-10-21 GearBook has two member types, outdoor professionals and enthusiasts, and the site says Members ("Meet the Members", /members). Copy calls people on GearBook "members"; "pro" or "professional" only where it means the professional type specifically (a pro's own dashboard, a certification). Luke: "the copy needs to be coherent with our updates from outdoor pros to members." (2026-10-21)
 - **Say they get paid.** Every reel aimed at members mentions, somewhere, that they get paid when people buy (never an amount). (R03, R05; 2026-10-19)
-- **Sample people get an obviously placeholder name, like "Sam Appleseed".** Not a realistic name such as "Sam Rivera". (R03, R04; 2026-10-19)
+- **Sample people are "Your Name"** (@yourname, catalog slug yourname): ambiguous, so it reads as the viewer and never as a real person. Replaced "Sam Appleseed" (Luke, 2026-10-21: "make the example name ambiguous"), which had replaced the realistic "Sam Rivera". (R03, R04; 2026-10-19, 2026-10-21)
 - **Keep it brisk.** Cut dead time and hold each beat only as long as it takes to read; repeated actions (products dropping in) go quickly. (R04 "watches a bit slow", R06 "speed up them being added"; 2026-10-19)
 - **Show the behaviour GearBook needs from members: adding products, with descriptions.** Never model skipping them as the fast way; show the quoted blurb on a product as part of doing it right. (R05; 2026-10-19)
 
@@ -45,6 +45,7 @@ From the first review: the seven animated reels R03 to R09, built and reviewed 2
 |---|---|---|---|---|
 | 2026-10-21 | all (sound) | drop | The CC0 kit (Kenney, Freesound): "the sounds are still awful", "unnatural. Lots of weird bumps and bonks rather than clicks. The whooshes are loud and unnatural." Also: an hour was too long for it. | Kit stays off; rules above; source sounds to be auditioned before any build |
 | 2026-10-21 | R01 Signup | change | "You still didn't change the cursor on the signup reel." | Touch dot replaced by M27's arrow cursor |
+| 2026-10-21 | all | change | "Make the example name ambiguous." Picked "Your Name" over a neutral first name. | Sam Appleseed, Alex Rivera and Sam Rivera became "Your Name" (@yourname) |
 | 2026-10-21 | all (copy) | change | "The copy needs to be coherent with our updates from outdoor pros to members." | Reel and piece copy says members; pro only for the professional type |
 | 2026-10-19 | all | change | "the sounds aren't great and will need to be redone. Hold off on that for now." | Sound on hold; cues left in place, not reworked |
 | 2026-10-19 | R03 Your clients ask | keep, change | "I like this a lot as is." Use a different name than Sam Rivera, "like Sam Appleseed". "We should mention they get paid as well." | Sam Appleseed; a get-paid line |

@@ -1,10 +1,10 @@
 const { seg, eo, ei, eio, eob, lerp, TextFx } = kit;
 const STEPS = [
-  [1.95, '1/5: Basics', 'Name', 'Alex Rivera', 'Country of residence', 'United States', 'Next: Profile'],
+  [1.95, '1/5: Basics', 'Name', 'Your Name', 'Country of residence', 'United States', 'Next: Profile'],
   [2.55, '2/5: Profile', 'Your title', 'Avalanche educator', 'Specialties', 'Ski touring, ice climbing', 'Next: Links'],
   [3.0, '3/5: Links', 'Social links', '@alex.outside', 'Company / Organization', 'Rivera Mountain School', 'Next: Outreach'],
   [3.4, '4/5: Outreach', 'How do you recommend gear?', 'Clients and courses', 'How often?', 'Every week', 'Next: Payment'],
-  [3.8, '5/5: Payment', 'Venmo handle', '@alexrivera', 'Weekly newsletter', 'Yes, email me', 'Submit Application'],
+  [3.8, '5/5: Payment', 'Venmo handle', '@yourname', 'Weekly newsletter', 'Yes, email me', 'Submit Application'],
 ];
 const TAPS = [1.5, 2.45, 2.9, 3.3, 3.7, 4.2];
 const GATE_Y = 403, NEXT_Y = 565;

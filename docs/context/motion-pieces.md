@@ -16,7 +16,7 @@ Luke's rule from M28 (2026-10-18): a mockup of GearBook must show what GearBook 
 - **The Marketing tab is a "coming soon" placeholder** for pros on the live site (gearbook `components/dashboard/dashboard-nav.ts`, `NEXT_PUBLIC_MARKETING_TAB`). M28's Tour look shows the full kit; don't post that look until the tab ships, or say it is coming.
 - **No dollar figures by default.** Earnings tiles would read as a promise of earnings; M28 shows clicks, sales counts and conversion only.
 - **Logos** come from `public/brand/`, one colour only (black on light, white on dark), as a CSS mask of `gearbook-full-length-bw.svg` (M27, M28). Never redraw the wordmark.
-- **Mark sample people and numbers** as sample in the defaults (M28's "Sam Rivera", "(sample)" in the specialty line).
+- **Mark sample people and numbers** as sample in the defaults ("Your Name", "(sample)" in the specialty line).
 
 ## Example catalogs and products
 - **Every product is real and belongs in its catalog.** Luke turned down a first pass where an "Alpine Rack" cover showed a rope bag and crag gear (2026-10-18). Pick products a working pro would actually carry for that catalog's purpose, from partner retailers.
