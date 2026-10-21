@@ -190,7 +190,7 @@
         [{ clipPath: "inset(100% 0 0 0)", easing: "cubic-bezier(.7,0,.2,1)" }, { clipPath: "inset(0 0 0 0)" }],
         { duration: 380, delay: (e - 0.05) * 1000, fill: "both" },
       );
-      Sound.cue(e + 0.3, "swoosh", { gain: 0.5 }); // the end card settling; no chime
+      Sound.cue(e + 0.05, "swoosh", { gain: 0.5 }); // the end card wipes in (peaks on its fastest frame); no chime
       const logo = el("div", { class: "logo", role: "img", "aria-label": "GearBook" }, end);
       arrive(logo, e + 0.2, { y: 20 });
       words(el("div", { class: "title" }, end), p.endTitle, e + 0.45);

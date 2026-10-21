@@ -525,11 +525,11 @@
       // first and last cuts get air, one quiet tick marks the move into water, the bands get one
       // thump once all seven have landed, and the end card one swoosh. No chime: no single payoff needs it.
       const firstWater = Math.max(1, sports.findIndex((s) => s.water));
-      Sound.cue(OPEN, "whoosh", { gain: 0.6 });                      // first cut
+      Sound.cue(OPEN - 0.1, "whoosh", { gain: 0.6 });                // first cut (peaks on it)
       Sound.cue(OPEN + firstWater * BEAT, "tick", { gain: 0.4 });    // cut to the first water beat (diving in v4)
-      Sound.cue(OPEN + 6 * BEAT, "whoosh", { gain: 0.5 });           // last cut
+      Sound.cue(OPEN + 6 * BEAT - 0.1, "whoosh", { gain: 0.5 });     // last cut (peaks on it)
       Sound.cue(ALL + 0.05 + 6 * 0.09 + 0.15, "thump", { gain: 0.8 }); // seventh band settles
-      Sound.cue(END + 0.05, "swoosh", { gain: 0.5 });                // end card lands
+      Sound.cue(END, "swoosh", { gain: 0.5 });                       // end card lands
 
       // Hard cuts: exactly one layer on screen at a time; textures move only while their beat shows.
       tick((t) => {

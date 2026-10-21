@@ -90,7 +90,7 @@ export interface EditList {
   drivePath: string;
   fps: number;
   shots: { clip: string; in: number; out: number; beat: string; why: string }[];
-  graphics: { piece: string; look: string; shot: number; offset: number; why: string; glass?: boolean; sound?: string }[];
+  graphics: { piece: string; look: string; shot: number; offset: number; why: string; glass?: boolean; sound?: string; soundOffset?: number; soundGain?: number }[];
   dropped: { clip: string; why: string }[];
 }
 

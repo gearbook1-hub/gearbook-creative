@@ -91,7 +91,7 @@ export default function Reels() {
         {ready.map(full)}
 
         {drafts.length > 0 && (
-          <Section label={`Drafts · ${drafts.length} to review`} title="Made by Claude, waiting on you" id="drafts" intro="Each one plays live; open it full screen to watch it bigger. Say what works and what doesn't; the comments go into docs/context/reel-feedback.md so the next ones start closer. Sound is on hold until it's redone.">
+          <Section label={`Drafts · ${drafts.length} to review`} title="Made by Claude, waiting on you" id="drafts" intro="Each one plays live; open it full screen to watch it bigger. Say what works and what doesn't; the comments go into docs/context/reel-feedback.md so the next ones start closer. Sound is on hold until the new kit is picked: listen and choose on the sound audition page (pieces/sounds/).">
             <div className="grid g3">
               {drafts.map((r) => (
                 <div key={r.id} id={r.id}>

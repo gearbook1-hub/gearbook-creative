@@ -729,10 +729,12 @@
       });
 
       // ---------- Sound: on hold, a few cues only at the moments that matter ----------
-      Sound.cue(1.8, "thump", { gain: 0.7 });                                      // PRESS START
-      LV.slice(0, 4).forEach((a) => Sound.cue(a + 0.05, "tick", { gain: 0.6 }));  // level ups
+      Sound.cue(1.75, "thump", { gain: 0.7 });                                     // PRESS START
+      LV.slice(0, 2).forEach((a) => Sound.cue(a + 0.05, "tick", { gain: 0.6 }));  // level ups 1 and 2
+      Sound.cue(GHOST[1], "thump", { gain: 0.5 });                                 // the ghost hits the closed gate (DQ)
+      LV.slice(2, 4).forEach((a) => Sound.cue(a + 0.05, "tick", { gain: 0.6 }));  // level ups 3 and 4
       Sound.cue(LV[4], "chime", { gain: 1 });                                      // the castle: first sale
-      Sound.cue(T_WIPE2, "whoosh", { gain: 0.5 });                                 // into Quest Complete
+      Sound.cue(T_WIPE2 + 0.2, "whoosh", { gain: 0.5 });                           // into Quest Complete (peaks at full cover)
     },
   });
 </script>

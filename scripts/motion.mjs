@@ -60,12 +60,9 @@ export async function openPiece(piece, { look, props } = {}) {
       await page.evaluate((s) => window.Motion.seek(s), t);
       await page.screenshot({ path: out, type: "png", omitBackground: overlay });
     },
-    /** The piece's sound cues (public/pieces/sound.js) mixed to a WAV file, or false if it has none. */
-    async audio(seconds, out) {
-      const b64 = await page.evaluate((s) => (window.Sound ? window.Sound.wav(s) : null), seconds);
-      if (!b64) return false;
-      fs.writeFileSync(out, Buffer.from(b64, "base64"));
-      return true;
+    /** The piece's sound cues (public/pieces/sound.js), mixed by scripts/sound.mjs. */
+    async cues() {
+      return page.evaluate(() => (window.Sound ? window.Sound.cues : []));
     },
     async close() {
       await browser.close();
@@ -98,5 +95,8 @@ export function args() {
     fps: Number(flag("fps") || 60),
     t: flag("t"),
     over: flag("over"),
+    // --sound mixes the kit in even while it's on hold; --pick=tap:B,whoosh:C auditions candidates.
+    sound: a.includes("--sound"),
+    pick: Object.fromEntries((flag("pick") || "").split(",").filter(Boolean).map((x) => x.split(":"))),
   };
 }

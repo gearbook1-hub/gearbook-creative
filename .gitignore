@@ -17,3 +17,4 @@ inbox/sheets/
 stills/out/
 screenshots/raw/
 .DS_Store
+.cache/

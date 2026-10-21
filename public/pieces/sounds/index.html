@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sound kit audition</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@600&family=Outfit:wght@400;600&display=swap">
+<style>
+  /* Lists every kit slot's candidates so Luke or Matt can listen and pick. Data: manifest.json. */
+  :root { --bark: #3d3522; --sage: #6a8d73; --cream: #eef5ed; --amber: #f6ae2d; --ink-muted: #6b6450; --white: #fff; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--cream); color: var(--bark); font: 16px/1.5 Outfit, system-ui, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 64px; }
+  h1 { font-size: 28px; margin: 0 0 4px; }
+  .lead { color: var(--ink-muted); margin: 0 0 16px; }
+  .bar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 20px; }
+  label { display: flex; gap: 6px; align-items: center; cursor: pointer; }
+  section { background: var(--white); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
+  h2 { font: 600 13px/1 "Afacad Flux", system-ui, sans-serif; letter-spacing: .2em; text-transform: uppercase; margin: 0 0 4px; }
+  .what { color: var(--ink-muted); margin: 0 0 10px; font-size: 14px; }
+  .cand { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 6px 0; border-top: 1px solid #e4e9e2; }
+  .key { font-weight: 600; width: 22px; }
+  .note { flex: 1 1 200px; font-size: 14px; }
+  .pick { font: 600 11px/1 system-ui; background: var(--amber); border-radius: 999px; padding: 4px 8px; }
+  button { font: 600 13px/1 system-ui, sans-serif; padding: 8px 12px; border-radius: 999px; border: 1px solid var(--sage); background: var(--white); color: var(--bark); cursor: pointer; }
+  button:hover, button:focus-visible { background: var(--sage); color: var(--white); outline: none; }
+  a { color: var(--bark); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Sound kit audition</h1>
+  <p class="lead">Every sound is a CC0 recording (sources in <a href="sources.json">sources.json</a>), trimmed and set to its level. Play each candidate, then say which letter to keep per sound. The pill marks the current pick.</p>
+  <div class="bar">
+    <label><input type="checkbox" id="phone"> Hear it like a phone speaker</label>
+    <span id="reels"></span>
+  </div>
+  <div id="slots">Loading…</div>
+</main>
+<script>
+  let ctx, kit;
+  const phone = document.getElementById("phone");
+  const cache = {};
+  async function play(file, gainDb) {
+    ctx ??= new AudioContext();
+    cache[file] ??= await ctx.decodeAudioData(await (await fetch(file)).arrayBuffer());
+    const src = ctx.createBufferSource(), g = ctx.createGain();
+    src.buffer = cache[file];
+    g.gain.value = Math.pow(10, gainDb / 20);
+    let node = src.connect(g);
+    // A phone speaker plays little under about 200 Hz or over about 10 kHz.
+    if (phone.checked) {
+      const hp = ctx.createBiquadFilter(), lp = ctx.createBiquadFilter();
+      hp.type = "highpass"; hp.frequency.value = 220; lp.type = "lowpass"; lp.frequency.value = 9000;
+      node = node.connect(hp).connect(lp);
+    }
+    node.connect(ctx.destination);
+    src.start();
+  }
+  fetch("manifest.json").then((r) => r.json()).then((m) => {
+    kit = m;
+    const root = document.getElementById("slots");
+    root.textContent = "";
+    for (const [name, slot] of Object.entries(m.slots)) {
+      const s = document.createElement("section");
+      s.innerHTML = `<h2>${name}</h2><p class="what">${slot.what}</p>`;
+      for (const [key, c] of Object.entries(slot.candidates)) {
+        const row = document.createElement("div");
+        row.className = "cand";
+        row.innerHTML = `<span class="key">${key}</span><span class="note">${c.note}</span>${key === slot.pick ? '<span class="pick">current</span>' : ""}`;
+        c.files.forEach((f, i) => {
+          const b = document.createElement("button");
+          b.type = "button";
+          b.textContent = c.files.length > 1 ? `Play ${i + 1}` : "Play";
+          // The same gain the mixer gives it, less 7 dB so the loudest file can't clip.
+          b.addEventListener("click", () => play(f.file, Math.min(6, slot.level - (f.momentary ?? f.lufs)) - 7));
+          row.appendChild(b);
+        });
+        s.appendChild(row);
+      }
+      root.appendChild(s);
+    }
+    // In context: the reels with their cues, playing a chosen candidate set.
+    const reels = ["R03-clients-ask", "R04-one-click", "R06-season-loading", "R09-motion-poster"];
+    document.getElementById("reels").innerHTML = "In a reel: " + reels.map((r) => `<a href="../${r}/?sound=1">${r.slice(0, 3)}</a>`).join(" · ") + " (press Sound)";
+  });
+</script>
+</body>
+</html>

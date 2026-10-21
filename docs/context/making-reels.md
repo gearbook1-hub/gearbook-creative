@@ -19,12 +19,12 @@ How to make an animated reel so it lands in fewer rounds. Learned making R03 to 
 6. **Type:** Roca and Outfit by default; a game-themed reel can use a pixel font for titles, HUD and labels, but cards and copy stay in Outfit. No Anton-style condensed caps.
 7. **Colour:** pieces.css colours, plenty of slate blue, little bark, never amber as a full background. Different colours per scene are welcome.
 8. **Sample people:** "Sam Appleseed", marked sample.
-9. **Sound is on hold** (`sound.js`, `ENABLED`): don't build on the current kit. When it's redone, someone has to listen before it ships; Claude can't hear it.
+9. **Sound is on hold until someone listens** (2026-10-21: the kit is now real CC0 recordings, `"enabled": false` in `public/pieces/sounds/manifest.json`). Cue a piece by the rules in `motion-pieces.md` "Sound", run `npm run sound:check -- <piece>` before handing over, and say a person still has to listen; Claude can't hear it.
 10. **Check with strips, then say what a strip can't show.** Every handover says what was seen only in stills (timing, motion smoothness, sound).
 11. **Fix the shape, not the symptom.** When a drawn path misbehaves, change the model it's generated from rather than clamping points.
 
 ## Working in parallel
-- One builder per reel, each in its own `public/pieces/<id>-<slug>/` folder, with a shared brief (where to work, house rules, facts, rules, how to check, what to report). No builder edits shared files; the lead updates `data/`, `app/`, `sound.js`, `runtime.js` and the docs after reviewing each strip.
+- One builder per reel, each in its own `public/pieces/<id>-<slug>/` folder, with a shared brief (where to work, house rules, facts, rules, how to check, what to report). No builder edits shared files; the lead updates `data/`, `app/`, `sound.js`, the sound kit, `runtime.js` and the docs after reviewing each strip.
 - Builders are lost when the Claude session restarts. Keep the brief in a file and the state in the repo (reels.json, reel-feedback.md), so a new builder can pick up from the code.
 - Review every strip yourself before calling a reel done; builders miss things the strip shows (a covered "(sample)", an avalanche-kit blurb, a brown-tinted "deep blue").
 

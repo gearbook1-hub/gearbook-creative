@@ -431,12 +431,11 @@
       end.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 450, delay: 11.45 * 1000, easing: Motion.ease.travel, fill: "both" });
       // ---------- Sound: few, soft cues on the moments that matter ----------
       Sound.cue(2.55, "tap", { gain: 0.7 });    // the client taps the C4
-      Sound.cue(2.9, "whoosh", { gain: 0.6 });  // camera follows the trail to the retailer
+      Sound.cue(3.45, "whoosh", { gain: 0.6 }); // camera follows the trail to the retailer (peaks on its fastest frame, ~3.55)
       Sound.cue(5.0, "tap", { gain: 0.7 });     // Buy
-      Sound.cue(5.6, "whoosh", { gain: 0.5 });  // the credit travels to the dashboard
+      Sound.cue(6.35, "whoosh", { gain: 0.5 }); // the credit travels to the dashboard (peaks mid-trail, ~6.45)
       Sound.cue(7.55, "tick", { gain: 0.5 });   // Clicks +1
-      Sound.cue(8.05, "tick", { gain: 0.5 });  // Sales +1
-      Sound.cue(8.15, "chime", { gain: 1 });   // the sale lands: the payoff
+      Sound.cue(8.05, "chime", { gain: 1 });   // Sales +1: the sale lands, the payoff
       Sound.cue(11.6, "thump", { gain: 0.6 }); // end card logo lands
       end.querySelector(".full").animate([{ opacity: 0, transform: "scale(.94)" }, { opacity: 1, transform: "none" }], { duration: 600, delay: 11.6 * 1000, easing: Motion.ease.arrive, fill: "both" });
     },

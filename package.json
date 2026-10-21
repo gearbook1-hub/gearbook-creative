@@ -11,6 +11,8 @@
     "stills": "node scripts/render-stills.mjs",
     "render": "node scripts/render-piece.mjs",
     "render:check": "node scripts/render-check.mjs",
+    "sound:prep": "node scripts/sound-prep.mjs",
+    "sound:check": "node scripts/sound-check.mjs",
     "scout": "node scripts/scout.mjs",
     "transcribe": "node scripts/transcribe.mjs",
     "setup:check": "node scripts/setup-check.mjs",

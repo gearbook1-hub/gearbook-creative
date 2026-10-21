@@ -214,13 +214,13 @@
       words(el("div", { class: "line" }, card), p.endLine, CARD + 0.6, 0.1);
       arrive(el("div", { class: "cta", text: p.cta }, card), CARD + 1.0);
 
-      // Sound (on hold, 2026-10-19; cues only moved to the new beats): title lands; first and
+      // Sound (on hold, 2026-10-19; retimed 2026-10-21): the season word slides in; first and
       // last tile only; the 99% stall stays silent; one chime on 100%; one whoosh for the card.
-      Sound.cue(0.55, "thump", { gain: 0.6 });
+      Sound.cue(0.3, "swoosh", { gain: 0.4 });           // the season word slides in (no contact, so no thump)
       Sound.cue(land(0), "thump", { gain: 0.8 });
       Sound.cue(land(n - 1), "thump", { gain: 0.8 });
       Sound.cue(DONE, "chime", { gain: 1 });
-      Sound.cue(CARD, "whoosh", { gain: 0.6 });
+      Sound.cue(CARD + 0.1, "whoosh", { gain: 0.6 });    // the card rises (peaks on its fastest frame, ~7.41)
 
       // Fit the season word to the safe width once fonts are in (any season, any length).
       let fitted = false;

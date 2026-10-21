@@ -1,0 +1,83 @@
+{
+  "about": "Every recording in the kit, where it comes from and its licence. Only CC0 goes here: the repo and the hub are public, so these files are redistributed. `npm run sound:prep` downloads each source, trims, fades and levels it, and writes the kit and manifest.json. Edit this file, not the generated ones.",
+  "packs": {
+    "kenney-ui-audio": { "title": "UI Audio (Kenney)", "page": "https://kenney.nl/assets/ui-audio", "zip": "https://kenney.nl/media/pages/assets/ui-audio/490d233f68-1677590494/kenney_ui-audio.zip", "license": "CC0 1.0" },
+    "kenney-interface-sounds": { "title": "Interface Sounds (Kenney)", "page": "https://kenney.nl/assets/interface-sounds", "zip": "https://kenney.nl/media/pages/assets/interface-sounds/fa43c1dd4d-1677589452/kenney_interface-sounds.zip", "license": "CC0 1.0" },
+    "kenney-impact-sounds": { "title": "Impact Sounds (Kenney)", "page": "https://kenney.nl/assets/impact-sounds", "zip": "https://kenney.nl/media/pages/assets/impact-sounds/87b4ddecda-1677589768/kenney_impact-sounds.zip", "license": "CC0 1.0" }
+  },
+  "target": { "momentary": -16, "truePeak": -1.5 },
+  "slots": {
+    "tap": {
+      "what": "A finger on glass or a button press.",
+      "level": -24, "maxLen": 0.15, "pick": "A",
+      "candidates": {
+        "A": { "note": "Recorded mouse click, two takes", "from": [{ "pack": "kenney-ui-audio", "file": "Audio/mouseclick1.ogg" }, { "pack": "kenney-ui-audio", "file": "Audio/click3.ogg" }] },
+        "B": { "note": "Short soft click", "from": [{ "pack": "kenney-interface-sounds", "file": "Audio/click_001.ogg" }, { "pack": "kenney-interface-sounds", "file": "Audio/click_002.ogg" }] },
+        "C": { "note": "Select, a little brighter", "from": [{ "pack": "kenney-interface-sounds", "file": "Audio/select_001.ogg" }, { "pack": "kenney-interface-sounds", "file": "Audio/select_002.ogg" }] }
+      }
+    },
+    "tick": {
+      "what": "A counter stepping up. Never one per keystroke.",
+      "level": -28, "maxLen": 0.08, "pick": "A",
+      "candidates": {
+        "A": { "note": "Tick", "from": [{ "pack": "kenney-interface-sounds", "file": "Audio/tick_004.ogg" }, { "pack": "kenney-interface-sounds", "file": "Audio/tick_002.ogg" }] },
+        "B": { "note": "Tiny recorded switch", "from": [{ "pack": "kenney-ui-audio", "file": "Audio/switch13.ogg" }, { "pack": "kenney-ui-audio", "file": "Audio/switch14.ogg" }] },
+        "C": { "note": "Short toggle", "from": [{ "pack": "kenney-interface-sounds", "file": "Audio/toggle_004.ogg" }] }
+      }
+    },
+    "whoosh": {
+      "what": "Air moving past: a ground wiping in or a big move. Peaks on the fastest frame.",
+      "level": -23, "maxLen": 0.7, "pick": "A",
+      "candidates": {
+        "A": { "note": "Stick swung through the air", "from": [{ "freesound": 352719, "user": "Dalesome", "title": "Woosh (stick swung in the air)" }] },
+        "B": { "note": "Swish wipe", "from": [{ "freesound": 667419, "user": "hz37", "title": "Swish wipe HZA 16-05-2022.wav" }] },
+        "C": { "note": "Bamboo through the air", "from": [{ "freesound": 719637, "user": "zapsplat.com", "title": "Fast whoosh, bamboo swoosh through air, version 2" }] }
+      }
+    },
+    "swoosh": {
+      "what": "A shorter, lighter move: something settling or leaving.",
+      "level": -25, "maxLen": 0.5, "pick": "A",
+      "candidates": {
+        "A": { "note": "Staff swing, short", "from": [{ "freesound": 422513, "user": "Nightflame", "title": "Swinging staff whoosh (strong) 04.wav" }] },
+        "B": { "note": "Swosh", "from": [{ "freesound": 59988, "user": "qubodup", "title": "SWOSH-01 44.1kHz" }] },
+        "C": { "note": "Long bamboo stick", "from": [{ "freesound": 855844, "user": "Sadiquecat", "title": "Whoosh - Long Bamboo stick - OS ST 13" }] }
+      }
+    },
+    "thump": {
+      "what": "A soft landing: a word, a card or the end-card logo settling. Body a phone can play.",
+      "level": -21, "maxLen": 0.3, "pick": "A",
+      "candidates": {
+        "A": { "note": "Light wood knock, three takes", "from": [{ "pack": "kenney-impact-sounds", "file": "Audio/impactWood_light_000.ogg" }, { "pack": "kenney-impact-sounds", "file": "Audio/impactWood_light_002.ogg" }, { "pack": "kenney-impact-sounds", "file": "Audio/impactWood_light_004.ogg" }] },
+        "B": { "note": "Soft generic impact, three takes", "from": [{ "pack": "kenney-impact-sounds", "file": "Audio/impactGeneric_light_000.ogg" }, { "pack": "kenney-impact-sounds", "file": "Audio/impactGeneric_light_002.ogg" }, { "pack": "kenney-impact-sounds", "file": "Audio/impactGeneric_light_004.ogg" }] },
+        "C": { "note": "Footstep on carpet (muffled)", "from": [{ "pack": "kenney-impact-sounds", "file": "Audio/footstep_carpet_001.ogg" }, { "pack": "kenney-impact-sounds", "file": "Audio/footstep_carpet_003.ogg" }] }
+      }
+    },
+    "chime": {
+      "what": "The payoff (the sale lands). Once per reel at most.",
+      "level": -22, "maxLen": 1.4, "pick": "A",
+      "candidates": {
+        "A": { "note": "Marimba note", "from": [{ "freesound": 185833, "user": "LloydEvans09", "title": "Marimba note struck" }] },
+        "B": { "note": "Glass ping", "from": [{ "pack": "kenney-interface-sounds", "file": "Audio/glass_001.ogg" }] },
+        "C": { "note": "Struck note F#", "from": [{ "freesound": 88264, "user": "ttptp", "title": "F#(2).wav" }] }
+      }
+    },
+    "paper": {
+      "what": "A dry paper or card slide. For the poster.",
+      "level": -25, "maxLen": 0.6, "pick": "A",
+      "candidates": {
+        "A": { "note": "Playing card slide", "from": [{ "freesound": 571581, "user": "el_boss", "title": "Playing Card Slide Right" }] },
+        "B": { "note": "Paper slide", "from": [{ "freesound": 464302, "user": "eyesonlegs", "title": "PaperSlide.wav" }] },
+        "C": { "note": "Page turn", "from": [{ "freesound": 397550, "user": "LilMati", "title": "Page Turn 03" }] }
+      }
+    },
+    "ding": {
+      "what": "A phone notification only. Three a reel at most.",
+      "level": -20, "maxLen": 1, "pick": "A",
+      "candidates": {
+        "A": { "note": "M26's existing ding (source not recorded; added by Matt 2026-10-18)", "from": [{ "local": "public/pieces/M26-ping/ding.wav" }] },
+        "B": { "note": "Phone notification", "from": [{ "freesound": 782969, "user": "qubodup", "title": "Good Phone Notification Sound" }] },
+        "C": { "note": "Chime notification", "from": [{ "freesound": 380482, "user": "Jofae", "title": "Chime Notification" }] }
+      }
+    }
+  }
+}
