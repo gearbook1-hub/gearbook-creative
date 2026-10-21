@@ -11,7 +11,16 @@
     "html": "M25-signup-explainer",
     "pieces": [],
     "master": "Google Drive: GearBook/Marketing/Reels/Signup Reel/GearBook-Signup-Reel.mp4 (with captions and without)",
-    "was": "M25"
+    "was": "M25",
+    "music": {
+      "track": "Soul Jazz Midnight Club",
+      "artist": "alex-morgan",
+      "source": "https://pixabay.com/music/modern-jazz-soul-jazz-midnight-club-568183/",
+      "license": "Pixabay Content License",
+      "from": 208.3,
+      "endsAt": "the track's hard stop (3:48.15) on the logo pop, about 19.85 s",
+      "lufs": -16
+    }
   },
   {
     "id": "R02",
@@ -24,7 +33,10 @@
     "madeOn": "2026-10-18",
     "edit": "S08-huss-valley",
     "source": "S08",
-    "pieces": ["M26", "M27"],
+    "pieces": [
+      "M26",
+      "M27"
+    ],
     "master": "Google Drive: GearBook/Marketing/Reels/Huss valley (the clips; the final goes next to them when Matt or Luke says so)"
   },
   {
@@ -51,7 +63,16 @@
     "seconds": 14,
     "html": "R04-one-click",
     "pieces": [],
-    "master": "Not rendered yet: npm run render -- R04-one-click once approved."
+    "master": "Not rendered yet: npm run render -- R04-one-click once approved.",
+    "music": {
+      "track": "Funk Pop Pulse Groove Minimal",
+      "artist": "Yegorr",
+      "source": "https://pixabay.com/music/funk-funk-pop-pulse-groove-minimal-572817/",
+      "license": "Pixabay Content License",
+      "from": 106.35,
+      "endsAt": "the track's hard stop (1:58.2) on the end-card logo, about 11.85 s",
+      "lufs": -16
+    }
   },
   {
     "id": "R05",
