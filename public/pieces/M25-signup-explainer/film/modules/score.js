@@ -5,10 +5,10 @@ kit.score(function (S, T) {
   [0, 0.2, 0.5, 0.8, 1.1].forEach((x, i) => S.fx('pop', qs + x, { vel: 58 + i * 2, pitch: [0, 4, 2, 7, 5][i] }));
   // Sign up: the phone settles, then one click per tap (TAPS in scene-signup.js).
   S.fx('thud', su + 0.8, { vel: 40 });
-  [1.5, 3.3, 4.8, 6.3, 7.8].forEach((x) => S.fx('click', su + x, { vel: 66 }));
-  S.fx('click', su + 9.3, { vel: 80 });
-  S.fx('pop', su + 9.82, { vel: 64, pitch: 7 });
-  S.fx('pop', su + 10.18, { vel: 40, pitch: 4 });
+  [1.5, 3.3, 4.8, 6.3, 7.1].forEach((x) => S.fx('click', su + x, { vel: 66 }));
+  S.fx('click', su + 7.9, { vel: 80 });
+  S.fx('pop', su + 8.42, { vel: 64, pitch: 7 });
+  S.fx('pop', su + 8.78, { vel: 40, pitch: 4 });
   // Add a product: tap the search, keystrokes, results, tap the row, the testimonial, tap Add, the card lands.
   S.fx('click', ap + 0.45, { vel: 64 });
   for (let i = 0; i < 8; i++) S.fx('tick', ap + 0.6 + i * 0.05, { vel: 38 });

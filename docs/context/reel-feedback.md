@@ -45,6 +45,7 @@ From the first review: the seven animated reels R03 to R09, built and reviewed 2
 |---|---|---|---|---|
 | 2026-10-21 | all (sound) | drop | The CC0 kit (Kenney, Freesound): "the sounds are still awful", "unnatural. Lots of weird bumps and bonks rather than clicks. The whooshes are loud and unnatural." Also: an hour was too long for it. | Kit stays off; rules above; source sounds to be auditioned before any build |
 | 2026-10-21 | R01 Signup | change | "You still didn't change the cursor on the signup reel." | Touch dot replaced by M27's arrow cursor |
+| 2026-10-21 | R01 Signup | change | "After step 3 you can speed it back up. It's kinda too slow now." | Steps 1 to 3 stay at 1.5 s; steps 4 and 5 at 0.8 s with typing twice as fast (reel 30 s) |
 | 2026-10-21 | R01 Signup | change | "Only one example of a friend being messaged." "Slow down the intake form part by a good bit so you can at least read some of the text." | Client thread cut, only the friend thread; each form step 0.45 s to 1.5 s with slower typing (reel 28 to 31 s) |
 | 2026-10-21 | all | change | "Make the example name ambiguous." Picked "Your Name" over a neutral first name. | Sam Appleseed, Alex Rivera and Sam Rivera became "Your Name" (@yourname) |
 | 2026-10-21 | all (copy) | change | "The copy needs to be coherent with our updates from outdoor pros to members." | Reel and piece copy says members; pro only for the professional type |
