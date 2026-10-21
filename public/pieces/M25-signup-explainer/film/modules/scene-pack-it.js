@@ -52,7 +52,7 @@ kit.scene('pack-it', {
       '<div class="pack-it-logo" style="position:absolute;left:160px;top:528px;width:760px"><img class="logo-img" alt="GearBook" src="' + kit.assets.url('share-logo-cutout.png') + '"></div>' +
       '<div class="words" style="left:96px;right:96px;top:770px;gap:22px;align-items:center;text-align:center"><h2 class="line pack-it-endline" style="font-size:76px;white-space:nowrap">Get your free catalog</h2>' +
       '<p class="sub pack-it-url" style="font-size:50px;font-weight:600;color:var(--second);position:relative">www.gearbook.shop<i class="pack-it-ul" style="position:absolute;left:0;right:0;bottom:-14px;height:10px;border-radius:5px;background:var(--accent);transform-origin:0 50%"></i></p></div>' +
-      faces + '<p class="sub pack-it-join" style="position:absolute;left:0;right:0;top:1352px;margin:0;text-align:center;font-size:44px;font-weight:600;color:var(--second)">Join our first members</p>' +
+      faces + '<p class="sub pack-it-join" style="position:absolute;left:0;right:0;top:1352px;margin:0;text-align:center;font-size:44px;font-weight:600;color:var(--second)">Become a member today</p>' +
       '<div class="words cap"><p class="eyebrow pack-it-eye">Shoppers buy through your links</p><h2 class="line pack-it-capline">You earn commission</h2></div></div>'));
     const q = (s) => kit.stage.querySelector(s);
     this.mapEl = q('.pack-it-map');
