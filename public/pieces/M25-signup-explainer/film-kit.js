@@ -88,7 +88,19 @@
     if (i < 0) i = scenes.length - 1;
     scenes.forEach((s, j) => { s.box.style.display = j === i ? "" : "none"; });
     const s = scenes[i];
-    s.def.render.call(s.def, t - s.start, s.kit);
+    s.def.render.call(s.def, warp(s.warp, t - s.start), s.kit);
+  }
+
+  // A scene's optional "warp" in scenes.json: [[reel seconds, scene seconds], ...] knots, linear
+  // between them, so a stretch of a scene plays faster or slower without retiming its code.
+  // Added 2026-10-21 to trim the reel to 23 s.
+  function warp(knots, t) {
+    if (!knots) return t;
+    for (let k = 1; k < knots.length; k++) {
+      const [a0, b0] = knots[k - 1], [a1, b1] = knots[k];
+      if (t <= a1 || k === knots.length - 1) return b0 + ((t - a0) * (b1 - b0)) / (a1 - a0);
+    }
+    return t;
   }
 
   function fit(stage) {
@@ -126,11 +138,12 @@
       box.style.cssText = "position:absolute;inset:0;overflow:hidden";
       stage.appendChild(box);
       const kit = makeKit(box);
-      kit.dur = s.dur;
+      // The scene's code keeps its own length; the reel plays it in s.dur.
+      kit.dur = s.warp ? s.warp[s.warp.length - 1][1] : s.dur;
       kit.start = start;
       const idx = SCENE_FILES.indexOf(s.id);
       if (idx >= 0) run(codes[idx], kit, "scene-" + s.id + ".js");
-      scenes.push({ id: s.id, start, dur: s.dur, box, kit, def: registry[s.id] });
+      scenes.push({ id: s.id, start, dur: s.dur, warp: s.warp, box, kit, def: registry[s.id] });
       start += s.dur;
     }
     duration = start;
